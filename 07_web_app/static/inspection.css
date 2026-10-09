@@ -6,3 +6,9 @@ body.dark{color-scheme:dark;--bg:#0b1421;--surface:#122033;--subtle:#0e1a2b;--te
 @media(max-width:850px){.sidebar{position:static;width:100%;padding:14px}.brand{margin-bottom:15px}.sidebar nav{grid-template-columns:repeat(4,1fr);gap:5px}.nav-caption{display:none}.sidebar-foot{display:flex;justify-content:space-between;margin-top:12px;gap:12px}.sidebar-foot small{display:none}nav button{display:block;font-size:12px;text-align:center;padding:9px}nav small,nav span{display:none}main{margin:0;padding:18px}.setup-grid,.test-grid,.production-grid{grid-template-columns:1fr}.settings{max-height:none;min-height:0}.image-card{position:static}.canvas-wrap{min-height:230px}.recipe-bar{flex-wrap:wrap}.recipe-bar label{min-width:0;width:100%}.header-actions .badge{white-space:normal}header{align-items:flex-start}h1{font-size:25px}.review-row{grid-template-columns:20px 90px 1fr}.review-row img{width:90px}.toolbar select{max-width:100%;width:100%}.metrics{grid-template-columns:repeat(2,1fr)}footer{display:block}}
 
 .image-footer{flex-wrap:wrap}#image-size{min-width:0;overflow-wrap:anywhere}
+
+/* Existing library tools stay folded into Setup/Test/Review. */
+.library-previews{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0}
+.library-previews img{width:140px;height:110px;object-fit:contain}
+.record-json,#legacy-job-result{white-space:pre-wrap;overflow-wrap:anywhere;max-height:360px;overflow:auto}
+.data-library details,#job-library details,#legacy-history details{margin:14px 0}

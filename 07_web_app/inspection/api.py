@@ -168,7 +168,7 @@ def make_router(service):
                 "capabilities":{"opencv":True,"anomalib":(service.root/".venv-inspection/Scripts/python.exe").is_file(),
                     "basler_sdk":importlib.util.find_spec("pypylon") is not None,
                     "detection":"TorchVision detection and segmentation; reviewed annotations and independent validation required",
-                    "legacy":"Existing models remain available in Engineering; never automatically promoted"}}
+                    "legacy":"Existing models and jobs are available in Inspection Test history; never automatically promoted"}}
 
     @router.get("/recipes")
     def recipes():

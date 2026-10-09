@@ -11,7 +11,7 @@ Backend หลักของ Generic Visual Inspection Workspace (FastAPI)
   - คง legacy detector/training endpoints ไว้เฉพาะเพื่ออ่านข้อมูลย้อนหลังระหว่าง migration
 
 หลักการสำคัญสำหรับผู้รับช่วง:
-  - เส้นทางหลักใหม่ใช้ inspection/ (recipe, pipeline, decision, runtime); normal_reference เป็น legacy engineering เท่านั้น
+  - เส้นทางหลักใหม่ใช้ inspection/ (recipe, pipeline, decision, runtime); normal_reference ยังรองรับ legacy live runtime ที่รอ field validation
   - งานกล้องและงาน train ใช้ shared state + lock; การแก้ state ต้องรักษาขอบเขต lock เดิม
   - endpoint ที่แก้ dataset ต้องเรียก dataset_mutation_blocked_response ระหว่าง train
   - upload ZIP ต้องผ่าน staging และ extract_zip_safely ห้าม extract path จากผู้ใช้โดยตรง
@@ -222,7 +222,7 @@ def serialized_workflow(function):
         from inspection.ownership import InspectionBusy
         with WORKFLOW_LOCK:
             try:
-                with vision_service.runtime.ownership.hold('Web engineering operation'):
+                with vision_service.runtime.ownership.hold('Web legacy operation'):
                     return function(*args, **kwargs)
             except InspectionBusy as exc:
                 return JSONResponse({'ok':False,'error':str(exc)},status_code=409)
@@ -1831,43 +1831,6 @@ def copy_images_from_staging(staging_dir: Path, destination_root: Path, prefix: 
     return copied
 
 
-def install_upload(category: str, staging_dir: Path) -> dict:
-    """ย้ายข้อมูลจาก staging ไปยังโฟลเดอร์ที่ pipeline train ใช้อยู่จริง."""
-    if category == "airbag":
-        installed = install_yolov8_exports_from_staging(staging_dir)
-        return {
-            "installed_paths": installed,
-            "installed_exports": len(installed),
-            "images": count_images(staging_dir),
-        }
-
-    if category in {"toyota", "honda"}:
-        class_name = "Toyota" if category == "toyota" else "Honda"
-        destination = copytree_unique(
-            staging_dir,
-            BRAND_EXPORTS_DIR / class_name,
-            f"{timestamp_name()}_{category}",
-        )
-        return {
-            "installed_paths": [str(destination)],
-            "installed_exports": count_yolov8_exports(destination),
-            "images": count_images(destination),
-        }
-
-    if category == "background":
-        # Detection background ถูกแบ่งเป็น train/eval แบบอัตโนมัติ ส่วน Brand classifier
-        # ยังคงรับสำเนาครบชุดตาม workflow เดิม จึงไม่กระทบระบบจำแนกแบรนด์
-        airbag_split = install_background_upload(staging_dir, AIRBAG_BACKGROUND_DIR)
-        brand_images = copy_images_from_staging(staging_dir, BRAND_BACKGROUND_DIR, "unknown")
-        return {
-            "installed_paths": [str(AIRBAG_BACKGROUND_DIR), str(BRAND_BACKGROUND_DIR)],
-            "airbag_background_images": airbag_split["installed"],
-            "airbag_background_split": airbag_split,
-            "brand_unknown_images": brand_images,
-            "images": count_images(staging_dir),
-        }
-
-    raise ValueError(f"Unknown upload category: {category}")
 
 
 # ===== Dataset Workspace และ metadata =====
@@ -2025,50 +1988,14 @@ def infer_dataset_meta(folder_path: Path) -> dict:
 
 
 def ensure_dataset_meta(folder_path: Path) -> dict:
+    """Resolve metadata for display without writing or confirming dataset images."""
     meta = read_dataset_meta(folder_path)
-    if meta:
-        normalized_type = {"Detection": "Known-good Reference", "Classification": "Brand Reference"}.get(
-            meta.get("dataset_type"), meta.get("dataset_type")
-        )
-        if meta.get("review_status") == "reviewed" and meta.get("auto_filled") is False:
-            if normalized_type != meta.get("dataset_type"):
-                meta = dict(meta)
-                meta["dataset_type"] = normalized_type
-                meta["updated_at"] = now_iso()
-                write_json(dataset_meta_path(folder_path), meta)
-            return meta
-        has_exports = count_yolov8_exports(folder_path) > 0
-        lowered_name = folder_path.name.lower()
-        invalid_type = normalized_type not in {"Known-good Reference", "Brand Reference", "Negative / Background"}
-        should_be_detection = has_exports and normalized_type not in {"Known-good Reference", "Brand Reference"}
-        should_be_background = (
-            not has_exports
-            and any(word in lowered_name for word in ["background", "negative", "unknown"])
-            and normalized_type != "Negative / Background"
-        )
-        if invalid_type or should_be_detection or should_be_background:
-            repaired = dict(meta)
-            if should_be_detection:
-                repaired["dataset_type"] = "Known-good Reference"
-            elif should_be_background:
-                repaired["dataset_type"] = "Negative / Background"
-            else:
-                repaired["dataset_type"] = "Known-good Reference" if count_images(folder_path) else ""
-            repaired["updated_at"] = now_iso()
-            write_json(dataset_meta_path(folder_path), repaired)
-            return repaired
-        if normalized_type != meta.get("dataset_type"):
-            meta = dict(meta)
-            meta["dataset_type"] = normalized_type
-            meta["updated_at"] = now_iso()
-            write_json(dataset_meta_path(folder_path), meta)
-        return meta
-    if count_yolov8_exports(folder_path) or count_images(folder_path):
-        meta = infer_dataset_meta(folder_path)
-        meta["created_at"] = meta["updated_at"]
-        write_json(dataset_meta_path(folder_path), meta)
-        return meta
-    return {}
+    if not meta:
+        return infer_dataset_meta(folder_path) if count_yolov8_exports(folder_path) or count_images(folder_path) else {}
+    meta = dict(meta)
+    meta["dataset_type"] = {"Detection": "Known-good Reference", "Classification": "Brand Reference"}.get(
+        meta.get("dataset_type"), meta.get("dataset_type"))
+    return meta
 
 
 def write_dataset_meta(folder_path: Path, payload: dict) -> dict:
@@ -2183,7 +2110,8 @@ def validate_reference_recipe(datasets: list[dict]) -> None:
 
 
 def deleted_dataset_records() -> list[dict]:
-    DELETED_DATASETS_DIR.mkdir(parents=True, exist_ok=True)
+    if not DELETED_DATASETS_DIR.exists():
+        return []
     records = []
     for path in sorted(
         (item for item in DELETED_DATASETS_DIR.iterdir() if item.is_dir()),
@@ -2264,261 +2192,10 @@ def detection_train_stats() -> dict:
     }
 
 
-def train_compute_profile() -> dict:
-    has_cuda = False
-    device_label = "CPU"
-    try:
-        import torch
-
-        has_cuda = bool(torch.cuda.is_available())
-        if has_cuda:
-            device_label = torch.cuda.get_device_name(0) or "CUDA GPU"
-    except Exception:
-        try:
-            result = subprocess.run(
-                ["nvidia-smi", "--query-gpu=name", "--format=csv,noheader"],
-                capture_output=True,
-                text=True,
-                timeout=3,
-                check=False,
-            )
-            names = [line.strip() for line in result.stdout.splitlines() if line.strip()]
-            has_cuda = result.returncode == 0 and bool(names)
-            if has_cuda:
-                device_label = names[0]
-        except Exception:
-            has_cuda = False
-
-    return {
-        "has_cuda": has_cuda,
-        "device": "cuda" if has_cuda else "cpu",
-        "device_label": device_label,
-    }
 
 
-def _compute_recommended_train_settings(train_type: str) -> dict:
-    profile = train_compute_profile()
-    history = latest_run_summary(train_type)
-    reasons: list[str] = []
-
-    def estimate_seconds_per_epoch(images: int, imgsz: int, baseline_imgsz: int) -> tuple[float, str, str]:
-        calibrated = calibrated_seconds_per_epoch(train_type, images, imgsz, baseline_imgsz)
-        if calibrated:
-            return calibrated, "high", "median_recent_runs"
-        if history.get("seconds_per_epoch"):
-            scale = (imgsz / baseline_imgsz) ** 2
-            return max(30.0, float(history["seconds_per_epoch"]) * scale), "medium", "latest_run"
-        batch_count = max(1, math.ceil(max(1, images) / 16))
-        if profile["has_cuda"]:
-            return batch_count * (0.8 + (imgsz / baseline_imgsz) ** 2), "low", "hardware_formula"
-        return batch_count * (4.5 * (imgsz / baseline_imgsz) ** 2 + 2.0), "low", "hardware_formula"
-
-    def finish_payload(
-        *,
-        epochs: int,
-        imgsz: int,
-        stats: dict,
-        analysis: dict,
-        baseline_imgsz: int,
-        mode: str,
-    ) -> dict:
-        # Detector training should estimate from the dataset that YOLO will really
-        # read after merge/filter/rebalance, not from every source export image.
-        # For classifier runs this field is absent, so the original image count is used.
-        images = int(
-            stats.get("train_ready_images")
-            or stats.get("combined_images")
-            or stats.get("images")
-            or analysis.get("images")
-            or 0
-        )
-        seconds_per_epoch, estimate_confidence, estimate_source = estimate_seconds_per_epoch(
-            images,
-            imgsz,
-            baseline_imgsz,
-        )
-        estimate_seconds = int(seconds_per_epoch * epochs)
-        history_epochs = int(history.get("epochs") or 0)
-        best_map50 = history.get("best_map50")
-        latest_loss = history.get("latest_loss")
-        strong_metrics = best_map50 is not None and float(best_map50) >= 0.9
-        stable_loss = latest_loss is not None and float(latest_loss) <= 1.65
-        should_stop_current_run = (
-            history.get("status") == "training"
-            and history_epochs >= epochs
-            and (strong_metrics or stable_loss)
-        )
-        return {
-            "train_type": train_type,
-            "epochs": epochs,
-            "imgsz": imgsz,
-            "mode": mode,
-            "profile": profile,
-            "stats": stats,
-            "analysis": analysis,
-            "history": history,
-            "reasons": reasons,
-            "warnings": analysis.get("warnings", []),
-            "estimated_seconds_per_epoch": round(seconds_per_epoch, 1),
-            "estimated_total_seconds": estimate_seconds,
-            "estimate_confidence": estimate_confidence,
-            "estimate_source": estimate_source,
-            "should_stop_current_run": should_stop_current_run,
-            "stop_reason": (
-                f"Current run already reached {history_epochs} epochs and metrics/loss meet the smart recommendation."
-                if should_stop_current_run
-                else ""
-            ),
-            "reason": " ".join(reasons) if reasons else "Recommended from dataset and hardware analysis.",
-        }
-
-    if train_type == "brand_classifier":
-        stats = brand_train_stats()
-        images = int(stats.get("images") or 0)
-        classes = int(stats.get("classes") or 0)
-        background_images = int(stats.get("background_images") or 0)
-        if profile["has_cuda"]:
-            epochs = 60 if images >= 1500 else 45
-            imgsz = 320
-            reasons.append("GPU available, using quality-focused classifier settings.")
-        else:
-            epochs = 30 if images >= 800 else 40
-            imgsz = 224
-            reasons.append("CPU training detected, using smaller classifier settings.")
-        if classes <= 2 and images >= 1500:
-            epochs = max(20, epochs - 8)
-            reasons.append("Only two classes with many images, so fewer epochs are enough.")
-        if background_images < 30:
-            reasons.append("Background examples are low; keep validation metrics under review.")
-        if history.get("best_map50") and float(history["best_map50"]) >= 0.9:
-            epochs = min(epochs, 25 if not profile["has_cuda"] else 40)
-            reasons.append("Previous run already reached strong metrics, avoiding unnecessary retraining.")
-        analysis = {
-            "images": images,
-            "classes": classes,
-            "background_images": background_images,
-            "warnings": [] if background_images >= 30 else ["Unknown/background images are low."],
-            "quality_score": 85 if classes >= 2 and images >= 800 else 65,
-        }
-        return finish_payload(
-            epochs=epochs,
-            imgsz=imgsz,
-            stats=stats,
-            analysis=analysis,
-            baseline_imgsz=320,
-            mode="gpu_quality" if profile["has_cuda"] else "cpu_balanced",
-        )
-
-    project_config = read_project_config()
-    target_classes = list(project_config.get("target_classes") or [])
-    analysis = detector_dataset_analysis(str(project_config.get("primary_class") or "Airbag"))
-    combined_quality = combined_dataset_quality_stats(target_classes) if target_classes else None
-    stats = {
-        "folders": analysis.get("folders", 0),
-        "exports": analysis.get("exports", 0),
-        # Source export count is useful for audit, but it is not the same as the
-        # train-ready combined dataset after unsafe augmentation artifacts are removed.
-        "images": analysis.get("images", 0),
-        "source_images": analysis.get("images", 0),
-    }
-    if combined_quality:
-        split_images = sum(int((split or {}).get("images") or 0) for split in combined_quality.get("splits", {}).values())
-        empty_label_images = sum(int((split or {}).get("empty_labels") or 0) for split in combined_quality.get("splits", {}).values())
-        if split_images:
-            stats["combined_images"] = split_images
-            stats["train_ready_images"] = split_images
-            stats["train_ready_background_images"] = empty_label_images
-            stats["train_ready_detection_images"] = max(0, split_images - empty_label_images)
-            stats["filtered_images"] = max(0, int(stats.get("source_images") or 0) - stats["train_ready_detection_images"])
-        analysis["combined_quality"] = combined_quality
-    images = int(stats.get("train_ready_images") or stats.get("combined_images") or analysis.get("images") or 0)
-    objects = int(analysis.get("labels", {}).get("object_count") or 0)
-    quality_score = int(analysis.get("quality_score") or 0)
-    tiny_box_ratio = float(analysis.get("labels", {}).get("tiny_box_ratio") or 0.0)
-    best_map50 = history.get("best_map50")
-    latest_metrics = history.get("latest_metrics") or {}
-    if profile["has_cuda"]:
-        if tiny_box_ratio > 0.2:
-            imgsz = 768
-            reasons.append("Many objects are tiny, increasing image size for detection detail.")
-        else:
-            imgsz = 640
-        if quality_score >= 85 and images >= 1500:
-            epochs = 60
-        elif images >= 800:
-            epochs = 70
-        else:
-            epochs = 80
-        reasons.append("GPU available, using quality-focused detector settings.")
-    else:
-        imgsz = 512 if tiny_box_ratio > 0.25 and images < 1000 else 416
-        if quality_score >= 80 and images >= 1500 and objects >= 1500:
-            epochs = 24
-        elif images >= 800:
-            epochs = 30
-        else:
-            epochs = 40
-        reasons.append("CPU training detected, reducing detector settings to avoid multi-day runs.")
-
-    if best_map50 is not None and float(best_map50) >= 0.93 and float(latest_metrics.get("recall") or 0) >= 0.9:
-        epochs = min(epochs, 20 if not profile["has_cuda"] else 45)
-        reasons.append("Previous detector metrics are already strong, so fewer epochs are recommended.")
-    elif history.get("epochs", 0) >= 10 and history.get("latest_loss") is not None:
-        recent_losses = [item["total_loss"] for item in history.get("loss_history", [])]
-        if len(recent_losses) >= 5:
-            improvement = recent_losses[0] - recent_losses[-1]
-            if improvement < 0.03:
-                epochs = min(epochs, 20 if not profile["has_cuda"] else 50)
-                reasons.append("Recent loss improvement is small, avoiding extra epochs.")
-
-    if analysis.get("class_mismatches"):
-        reasons.append("Class names differ in some exports; labels will be mapped to the selected target class.")
-    if analysis.get("warnings"):
-        reasons.append("Dataset health warnings were found; recommendation stays conservative.")
-    if combined_quality:
-        duplicate_info = combined_quality.get("cross_split_duplicates") or {}
-        exact_pairs = int(duplicate_info.get("exact_pairs") or 0)
-        near_pairs = int(duplicate_info.get("near_pairs") or 0)
-        test_counts = (combined_quality.get("splits", {}).get("test") or {}).get("class_counts") or {}
-        missing_test_classes = [name for name in target_classes if int(test_counts.get(name) or 0) <= 0]
-        total_rows = sum(int((split or {}).get("rows") or 0) for split in combined_quality.get("splits", {}).values())
-        full_frame_boxes = sum(int((split or {}).get("full_frame_boxes") or 0) for split in combined_quality.get("splits", {}).values())
-        if exact_pairs or near_pairs:
-            epochs = min(epochs, 24 if not profile["has_cuda"] else 55)
-            analysis.setdefault("warnings", []).append(
-                f"Combined dataset has cross-split duplicates: exact {exact_pairs}, near {near_pairs}."
-            )
-            reasons.append("Cross-split duplicate risk found, so recommendation avoids over-training leakage.")
-        elif total_rows:
-            reasons.append("Combined split has no cross-split duplicate leak in the latest quality report.")
-        if missing_test_classes:
-            epochs = max(epochs, 30 if not profile["has_cuda"] else 70)
-            analysis.setdefault("warnings", []).append(
-                f"Test split is missing target classes: {', '.join(missing_test_classes)}."
-            )
-            reasons.append("Test split is missing some target classes, so validation reliability is lower until dataset is fixed.")
-        if total_rows and full_frame_boxes / total_rows > 0.25:
-            epochs = min(max(epochs, 24), 32 if not profile["has_cuda"] else 65)
-            analysis.setdefault("warnings", []).append(
-                f"Full-frame labels are high: {full_frame_boxes}/{total_rows} rows."
-            )
-            reasons.append("Many labels are full-frame boxes; keep settings balanced because extra epochs cannot fix annotation quality.")
-
-    return finish_payload(
-        epochs=epochs,
-        imgsz=imgsz,
-        stats=stats,
-        analysis=analysis,
-        baseline_imgsz=640,
-        mode="gpu_quality" if profile["has_cuda"] else "cpu_balanced",
-    )
 
 
-def recommended_train_settings(train_type: str) -> dict:
-    return cached_analysis(
-        f"recommended:{train_type}",
-        lambda: _compute_recommended_train_settings(train_type),
-    )
 
 
 def brand_train_stats() -> dict:
@@ -2924,10 +2601,14 @@ def record_latest_dataset_upload(folder_path: Path, installed_paths: list[str]) 
     """บันทึกรูปของ upload รอบล่าสุดเท่านั้น เพื่อส่งต่อจาก Upload ไปหน้า Train โดยไม่ปนรูปเก่า."""
     folder_root = folder_path.resolve()
     relative_paths: list[str] = []
+    undo_files = {}
     for raw_path in installed_paths:
         installed_path = Path(str(raw_path)).resolve()
         if installed_path != folder_root and folder_root not in installed_path.parents:
             continue
+        for item in ([installed_path] if installed_path.is_file() else installed_path.rglob('*')):
+            if item.is_file() and not item.is_symlink() and folder_root in item.resolve().parents:
+                undo_files[item.relative_to(folder_root).as_posix()] = hashlib.sha256(item.read_bytes()).hexdigest()
         candidates = [installed_path] if is_image_file(installed_path) else sorted(
             path for path in installed_path.rglob("*") if is_image_file(path)
         )
@@ -2942,6 +2623,8 @@ def record_latest_dataset_upload(folder_path: Path, installed_paths: list[str]) 
         "uploaded_at": now_iso(),
         "count": len(relative_paths),
         "relative_paths": relative_paths,
+        "undo_files": undo_files,
+        "upload_id": uuid.uuid4().hex,
     }
     write_json(folder_path / LATEST_UPLOAD_MANIFEST, manifest)
     return manifest
@@ -2964,6 +2647,8 @@ def latest_dataset_upload_page(folder_path: Path, offset: int = 0, limit: int = 
     return {
         "folder": folder_path.name,
         "uploaded_at": manifest.get("uploaded_at") or "",
+        "upload_id": manifest.get("upload_id"),
+        "can_undo": bool(manifest.get("undo_files")),
         "samples": page,
         "total": total,
         "offset": offset,
@@ -5510,16 +5195,6 @@ def detect_page_redirect() -> RedirectResponse:
     return RedirectResponse(url="/inspection", status_code=307)
 
 
-@app.get("/engineering", response_class=HTMLResponse)
-def training_page(request: Request) -> HTMLResponse:
-    """หน้าจัดการ dataset และสั่ง train จาก browser."""
-    return templates.TemplateResponse(
-        request,
-        "training.html",
-        {
-            "upload_categories": UPLOAD_CATEGORIES,
-        },
-    )
 
 
 @app.get("/annotation", include_in_schema=False)
@@ -5805,6 +5480,7 @@ async def api_upload_dataset_folder(
                 "latest_upload": {
                     "folder": latest_upload["folder"],
                     "uploaded_at": latest_upload["uploaded_at"],
+                    "upload_id": latest_upload["upload_id"],
                     "count": latest_upload["count"],
                 },
                 "folder": dataset_folder_record(target_folder),
@@ -5816,56 +5492,50 @@ async def api_upload_dataset_folder(
 
 
 @app.post("/api/dataset-folders/undo-upload")
+@serialized_workflow
 def api_undo_dataset_folder_upload(payload: dict = Body(...)) -> JSONResponse:
-    """ลบเฉพาะชุดข้อมูลที่เพิ่ง upload ล่าสุด โดยตรวจ path ให้อยู่ใน folder ปลายทางเท่านั้น."""
+    """Undo only the server-recorded latest batch, preserving it in existing Trash."""
     blocked = dataset_mutation_blocked_response()
     if blocked:
         return blocked
-    clear_analysis_cache()
     try:
-        folder_name = str(payload.get("folder") or "").strip()
-        installed_paths = payload.get("installed_paths") or []
-        remove_folder = bool(payload.get("remove_folder"))
-        if not folder_name:
-            return JSONResponse({"ok": False, "error": "Folder name is required."}, status_code=400)
-        if not isinstance(installed_paths, list):
-            return JSONResponse({"ok": False, "error": "Invalid upload paths."}, status_code=400)
-        folder_path = dataset_folder_path(folder_name)
-        if not folder_path.exists() or not folder_path.is_dir():
-            return JSONResponse({"ok": False, "error": "Folder not found."}, status_code=404)
-        if folder_path.parent.resolve() != AIRBAG_EXPORTS_DIR.resolve():
-            return JSONResponse({"ok": False, "error": "Only top-level dataset folders can be changed."}, status_code=400)
-        if remove_folder:
-            shutil.rmtree(folder_path)
-            return JSONResponse({"ok": True, "deleted": [str(folder_path)], "folder": None, "folders": list_dataset_folder_records()})
-        deleted: list[str] = []
-        folder_root = folder_path.resolve()
-        allowed_roots = [folder_root]
-        if ensure_dataset_meta(folder_path).get("dataset_type") == "Negative / Background":
-            allowed_roots.append(AIRBAG_BACKGROUND_DIR.resolve())
-        for raw_path in installed_paths:
-            target = Path(str(raw_path)).resolve()
-            if not any(target != allowed_root and allowed_root in target.parents for allowed_root in allowed_roots):
-                return JSONResponse({"ok": False, "error": "Invalid undo path."}, status_code=400)
-            if not target.exists():
-                continue
-            if target.is_dir():
-                shutil.rmtree(target)
-            else:
-                target.unlink()
-            deleted.append(str(target))
-        latest_upload_manifest = folder_path / LATEST_UPLOAD_MANIFEST
-        if latest_upload_manifest.exists():
-            latest_upload_manifest.unlink()
-        return JSONResponse(
-            {
-                "ok": True,
-                "deleted": deleted,
-                "folder": dataset_folder_record(folder_path) if folder_path.exists() else None,
-                "folders": list_dataset_folder_records(),
-            }
-        )
-    except Exception as exc:
+        folder = dataset_folder_path(str(payload.get("folder") or ""))
+        manifest_path = folder / LATEST_UPLOAD_MANIFEST
+        manifest = read_json(manifest_path, {})
+        if not manifest.get("upload_id") or payload.get("upload_id") != manifest["upload_id"]:
+            raise ValueError("Upload has changed or predates safe Undo. Refresh and use Trash for older data.")
+        files = manifest.get("undo_files") or {}
+        if not files:
+            raise ValueError("This upload cannot be undone safely; use the dataset Trash controls.")
+        targets = []
+        for relative, expected in files.items():
+            target = (folder / relative).resolve()
+            if folder not in target.parents or not target.is_file() or target.is_symlink():
+                raise ValueError("Upload files have changed; nothing moved.")
+            if hashlib.sha256(target.read_bytes()).hexdigest() != expected:
+                raise ValueError("Upload files have changed; nothing moved.")
+            targets.append((target, target.relative_to(folder)))
+        trash = unique_child_path(DELETED_DATASETS_DIR, "undo_" + manifest["upload_id"])
+        trash.mkdir()
+        moved = []
+        try:
+            for target, relative in targets:
+                dest = trash / relative
+                dest.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(target), str(dest))
+                moved.append((target, dest))
+            write_json(trash / "deletion.json", {"original_name": folder.name + "_upload_" + manifest["upload_id"][:8],
+                "deleted_at": now_iso(), "reason": "undo_upload", "source_folder": folder.name})
+            manifest_path.unlink()
+        except Exception:
+            for target, dest in reversed(moved):
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.move(str(dest), str(target))
+            raise
+        clear_analysis_cache()
+        return JSONResponse({"ok": True, "moved": len(moved), "trash_id": trash.name,
+                             "folders": list_dataset_folder_records()})
+    except (OSError, ValueError, TypeError) as exc:
         return JSONResponse({"ok": False, "error": str(exc)}, status_code=400)
 
 
@@ -5888,44 +5558,8 @@ def api_update_dataset_folder_metadata(folder_name: str, payload: dict = Body(..
         return JSONResponse({"ok": False, "error": str(exc)}, status_code=400)
 
 
-@app.get("/api/datasets/summary")
-def api_dataset_summary() -> JSONResponse:
-    """ส่งสรุป dataset ปัจจุบันให้หน้าเว็บ."""
-    return JSONResponse(dataset_summary())
 
 
-@app.post("/api/datasets/upload")
-async def api_upload_dataset(
-    category: str = Form(...),
-    files: list[UploadFile] = File(...),
-) -> JSONResponse:
-    """รับ dataset/background จากเว็บแล้วจัดเก็บลงโฟลเดอร์ train ที่ถูกต้อง."""
-    blocked = dataset_mutation_blocked_response()
-    if blocked:
-        return blocked
-    clear_analysis_cache()
-    if category not in UPLOAD_CATEGORIES:
-        return JSONResponse(
-            {"ok": False, "error": f"Unknown category: {category}"},
-            status_code=400,
-        )
-
-    try:
-        staging_dir, saved_count = await save_uploads_to_staging(files, category)
-        installed = install_upload(category, staging_dir)
-        shutil.rmtree(staging_dir, ignore_errors=True)
-        return JSONResponse(
-            {
-                "ok": True,
-                "category": category,
-                "saved_files": saved_count,
-                "staging_path": "",
-                "installed": installed,
-                "summary": dataset_summary(),
-            }
-        )
-    except Exception as exc:
-        return JSONResponse({"ok": False, "error": str(exc)}, status_code=500)
 
 
 # ===== HTTP routes: Training, Models และ Project config =====
@@ -5980,26 +5614,6 @@ def api_train_preflight(train_type: str = Query("airbag_detector")) -> JSONRespo
     return JSONResponse(train_preflight(train_type))
 
 
-@app.get("/api/train/recommended-settings")
-def api_train_recommended_settings(train_type: str = Query("airbag_detector")) -> JSONResponse:
-    if train_type == "normal_reference":
-        return JSONResponse({
-            "ok": True,
-            "settings": {
-                "epochs": 5,
-                "imgsz": 512,
-                "profile": {"device": str(detector.DEVICE), "device_label": str(detector.DEVICE).upper()},
-                "reason": "Train Generic Part Locator และ Deep Patch anomaly จากภาพ Known-good พร้อมชุดทดสอบแยก",
-                "warnings": [],
-                "estimated_total_seconds": 0,
-                "estimated_seconds_per_epoch": 0,
-                "estimate_confidence": "runtime",
-                "estimate_source": "normal_reference",
-            },
-        })
-    if train_type not in {"airbag_detector", "brand_classifier"}:
-        return JSONResponse({"ok": False, "error": "Unknown train type."}, status_code=400)
-    return JSONResponse({"ok": True, "settings": recommended_train_settings(train_type)})
 
 
 @app.get("/api/train/runs")
@@ -6107,7 +5721,7 @@ def api_train_evaluation_preview(tile_index: int) -> Response:
 @app.get("/api/models/registry")
 def api_models_registry() -> JSONResponse:
     """ส่งรายการโมเดลที่ระบบรู้จักและ path ของไฟล์จริง."""
-    return JSONResponse({"ok": True, "models": model_registry()})
+    return JSONResponse({"ok": True, "models": model_registry(), "inspection_models": vision_service.store.records("models")})
 
 
 @app.post("/api/models/activate")
@@ -6211,7 +5825,7 @@ def job_change_blocked():
 
 @app.get("/jobs", response_class=HTMLResponse)
 def jobs_page(request: Request):
-    return RedirectResponse(url="/training?view=results", status_code=307)
+    return RedirectResponse(url="/inspection#test", status_code=307)
 
 
 @app.get("/api/jobs")
@@ -6229,7 +5843,9 @@ def api_jobs():
         except (OSError, ValueError, KeyError, TypeError):
             jobs.append({"id": path.stem, "name": path.stem, "error": "Job file cannot be read"})
     return JSONResponse({"ok": True, "jobs": sorted(jobs, key=lambda j: j.get("created_at", ""), reverse=True),
-                         "active_model": Path(str(reference.get("active_model") or "")).name})
+                         "active_model": Path(str(reference.get("active_model") or "")).name,
+                         "test_reports": [{"id": p.stem} for p in sorted((WEB_APP_DIR / "logs" / "model_tests").glob("test_*.json"), reverse=True)
+                                          if re.fullmatch(r"test_[0-9a-f]{32}", p.stem)]})
 
 
 @app.post("/api/jobs/save-current")
@@ -8237,7 +7853,7 @@ def api_system_audit() -> JSONResponse:
     cvat_config = cvat_connection_config()
     cvat_health = cvat_connection_health()
     checks = [
-        {"label": "Training workspace", "status": "pass" if (WEB_APP_DIR / "templates" / "training.html").exists() else "fail", "detail": "single-page center ready"},
+        {"label": "Inspection workspace", "status": "pass" if (WEB_APP_DIR / "templates" / "inspection.html").exists() else "fail", "detail": "unified inspection workspace"},
         {
             "label": "OK reference dataset",
             "status": "pass" if reference_dataset and reference_dataset.get("review_status") == "reviewed" else "fail",

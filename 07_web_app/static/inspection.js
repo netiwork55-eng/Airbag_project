@@ -95,12 +95,12 @@ bind('stop',async()=>{await api('/production/stop',{});await poll();message('ห
 bind('rollback',async()=>{await api('/rollback',{});message('กลับไปใช้ Production รุ่นก่อนแล้ว');await refreshRecipes();await poll();});
 async function refreshReview(more=false){const r=await api('/evidence'+(more&&evidenceCursor?'?before='+encodeURIComponent(evidenceCursor):''));events=more?[...new Map([...events,...r.events].map(e=>[e.id,e])).values()]:r.events;evidenceCursor=r.next_cursor;$('more-evidence').hidden=!evidenceCursor;renderReview();}
 bind('more-evidence',()=>refreshReview(true));
-function renderReview(){const rows=events.filter(e=>$('review-filter').value==='all'||e.state!=='PASS');$('review-list').innerHTML=rows.length?rows.map(e=>`<article class="review-row"><input type="checkbox" data-event="${e.id}" aria-label="Select evidence"><a href="/api/vision/images/${e.image_id}" target="_blank"><img src="/api/vision/images/${e.image_id}" alt="Source evidence" loading="lazy"></a><div class="details">${badge(e.state)}<p>${esc(new Date(e.timestamp).toLocaleString())} · ${esc(e.source)}</p><p>${esc(e.reasons.join('; '))}</p><p>Image ${esc(e.image_id)}<br>Recipe ${esc(e.recipe_id)} · ${esc(e.recipe_hash)}</p>${inspectionDetails(e)}${e.areas.map(a=>`<p>${esc(a.name)}: <b class="${stateClass(a.state)}">${a.state}</b>${a.score!==undefined?' · '+a.score.toFixed(4):''}</p>`).join('')}${(e.anomaly_maps||e.areas.some(a=>a.detections?.length||a.source_polygon))?`<a href="/api/vision/evidence/${e.id}/preview" target="_blank">View aligned inspection areas</a>${e.anomaly_maps?` · <a href="/api/vision/evidence/${e.id}/maps">Download data</a><p>Map shows relative intensity, not defect probability.</p>`:""}`:''}</div><div class="review-actions">${[['confirmed_ng','Confirmed NG'],['false_alarm','False Alarm'],['needs_review','Needs Review']].map(([s,label])=>`<button class="${e.review?.status===s?'selected':''}" data-verdict="${s}" data-id="${e.id}">${label}</button>`).join('')}</div></article>`).join(''):'<div class="notice">ยังไม่มีผลตรวจในรายการนี้</div>';document.querySelectorAll('[data-verdict]').forEach(b=>b.onclick=async()=>{try{await api('/review/'+b.dataset.id,{status:b.dataset.verdict});await refreshReview();}catch(err){message(err.message,true);}});}
+function renderReview(){const rows=events.filter(e=>$('review-filter').value==='all'||e.state!=='PASS');$('review-list').innerHTML=rows.length?rows.map(e=>`<article class="review-row"><input type="checkbox" data-event="${e.id}" aria-label="Select evidence"><a href="/api/vision/images/${e.image_id}" target="_blank"><img src="/api/vision/images/${e.image_id}" alt="Source evidence" loading="lazy"></a><div class="details">${badge(e.state)} <small>Machine result · ${esc(e.source==='production'?'Production Evidence':e.source||'Source unknown')}</small><p>${esc(new Date(e.timestamp).toLocaleString())} · ${esc(e.source)}</p><p>${esc(e.reasons.join('; '))}</p><p>Image ${esc(e.image_id)}<br>Recipe ${esc(e.recipe_id)} · ${esc(e.recipe_hash)}</p>${inspectionDetails(e)}${e.areas.map(a=>`<p>${esc(a.name)}: <b class="${stateClass(a.state)}">${a.state}</b>${a.score!==undefined?' · '+a.score.toFixed(4):''}</p>`).join('')}${(e.anomaly_maps||e.areas.some(a=>a.detections?.length||a.source_polygon))?`<a href="/api/vision/evidence/${e.id}/preview" target="_blank">View aligned inspection areas</a>${e.anomaly_maps?` · <a href="/api/vision/evidence/${e.id}/maps">Download data</a><p>Map shows relative intensity, not defect probability.</p>`:""}`:''}</div><div class="review-actions">${[['confirmed_ng','Confirmed NG'],['false_alarm','False Alarm'],['needs_review','Needs Review']].map(([s,label])=>`<button class="${e.review?.status===s?'selected':''}" data-verdict="${s}" data-id="${e.id}">${label}</button>`).join('')}</div></article>`).join(''):'<div class="notice">ยังไม่มีผลตรวจในรายการนี้</div>';document.querySelectorAll('[data-verdict]').forEach(b=>b.onclick=async()=>{try{await api('/review/'+b.dataset.id,{status:b.dataset.verdict});await refreshReview();}catch(err){message(err.message,true);}});}
 $('review-filter').onchange=renderReview;bind('refresh-review',()=>refreshReview());
 bind('send-cvat',async()=>{const ids=[...document.querySelectorAll('[data-event]:checked')].map(e=>e.dataset.event);if(!ids.length)throw Error('เลือกภาพที่จะส่งและระบุผล Human Review ก่อน');message('กำลังส่งภาพที่เลือกไปยัง CVAT เดิม…');const r=await api('/cvat/send',{event_ids:ids});message(`ส่ง ${r.synced} ภาพไปยัง CVAT แล้ว`);});
 async function poll(){if(polling)return;polling=true;try{const s=await api('/status'),r=s.runtime,p=s.production;const active=recipes.find(x=>x.id===p?.recipe_id);$('active-label').textContent=p?'Production · '+(active?.config.product||p.recipe_hash.slice(0,8)):'Production ยังไม่เปิดใช้';if(p&&p.engine_version!==s.engine_version)$('active-label').textContent='Production ต้อง Validate ใหม่';$('active-label').className='badge '+(p?'pass':'neutral');$('production-product').textContent=active?.config.product||'ยังไม่มีสูตร Production';$('production-details').textContent=p?`Recipe ${p.recipe_hash.slice(0,12)} · เปิดใช้ ${new Date(p.activated_at).toLocaleString()}`:'ต้องผ่าน Validation ก่อนเปิดใช้งาน';$('live-state').textContent=r.state;$('live-state').className='badge '+stateClass(r.state);$('live-reason').textContent=(r.reasons||[]).join('; ');$('start').disabled=!p||p.engine_version!==s.engine_version||r.running||s.busy;$('stop').disabled=!r.running;$('rollback').disabled=!p?.previous||s.busy;$('train').disabled=s.busy;$('train-labelled').disabled=s.busy;$('save').disabled=s.busy;for(const id of ['capture-image','capture-test','validate'])$(id).disabled=s.busy;if(s.external_runtime){$('live-state').textContent='External runtime';$('live-state').className='badge neutral';$('live-reason').textContent=s.external_runtime.purpose+' · PID '+(s.external_runtime.pid??'unknown')+' · ผลสดอยู่ในโปรแกรมที่กำลังตรวจ หยุดโปรแกรมนั้นก่อนเปลี่ยนงานจากเว็บ';}if(activePage==='production'&&r.running){$('live-image').src='/api/vision/production/frame?t='+Date.now();$('live-image').hidden=false;$('live-empty').hidden=true;}else if(!r.running){$('live-image').hidden=true;$('live-empty').hidden=false;}$('stop-train').disabled=s.training?.status!=='running';$('stop-labelled').disabled=$('stop-train').disabled;if(s.training){$('train-status').textContent=s.training.status==='running'?'กำลังเรียนรู้ · '+s.training.algorithm:['failed','cancelled'].includes(s.training.status)?'หยุด/ไม่สำเร็จ: '+s.training.error:'สร้าง Candidate เสร็จ · '+s.training.algorithm;if(s.training.id===lastTrain&&s.training.status==='complete'){lastTrain=null;await refreshRecipes();if(!dirty&&saved?.id===s.training.recipe_id){$('recipe-select').value=s.training.candidate_id;await loadRecipe(s.training.candidate_id);}message('สร้าง Candidate เสร็จแล้ว · ใช้ภาพทดสอบแยกก่อนเปิด Production');}}$('labelled-train-status').textContent=$('train-status').textContent;$('runtime-note').textContent=!s.capabilities.basler_sdk?'Local processing · Basler SDK ยังไม่พบใน runtime นี้':'Local processing · Basler SDK available';}catch(e){$('live-state').textContent='UNABLE_TO_INSPECT';$('live-reason').textContent='ติดต่อระบบไม่ได้: '+e.message;$('live-image').hidden=true;$('start').disabled=true;}finally{polling=false;}}
 $('live-image').onerror=()=>{$('live-image').hidden=true;$('live-empty').hidden=false;};
-async function init(){const initialVersion=selectionVersion;try{await refreshAnnotations();await refreshLibrary();await refreshRecipes();const data=await fetch('/api/dataset-folders').then(r=>r.json());$('dataset-folder').innerHTML=(data.folders||[]).map(f=>`<option value="${esc(f.name)}">${esc(f.name)} · ${f.images} images</option>`).join('');if(recipes.length&&selectionVersion===initialVersion){$('recipe-select').value=recipes[0].id;await loadRecipe(recipes[0].id);}await poll();}catch(e){message(e.message,true);}setInterval(poll,1800);}
+async function init(){const initialVersion=selectionVersion;try{await refreshAnnotations();await refreshLibrary();await refreshRecipes();await refreshDatasetFolders();if(recipes.length&&selectionVersion===initialVersion){$('recipe-select').value=recipes[0].id;await loadRecipe(recipes[0].id);}if(location.hash==='#test')page('test');await poll();}catch(e){message(e.message,true);}setInterval(poll,1800);}
 init();
 
 new ResizeObserver(()=>draw()).observe($('canvas-wrap'));
@@ -133,3 +133,83 @@ bind('capture-test',async()=>{
     message(`Captured test: ${event.state} · ${event.reasons.join('; ')} · ดูภาพและตำแหน่งได้ใน Review`);
   }finally{$('capture-test').disabled=false;}
 });
+
+// Existing data/job/review services share this workspace; no parallel storage or inference.
+async function workspaceRequest(path, body, method='POST'){
+  const options=body===undefined?{cache:'no-store'}:body instanceof FormData?{method,body}:{method,headers:{'Content-Type':'application/json'},body:JSON.stringify(body)};
+  const response=await fetch(path,options);let data;
+  try{data=await response.json();}catch{throw Error(`HTTP ${response.status}: unreadable response`);}
+  if(!response.ok||data.ok===false)throw Error(data.error||data.detail||`HTTP ${response.status}`);
+  return data;
+}
+const datasetFields=['dataset_name','brand','model','target','dataset_type','notes'];
+let datasetFolders=[],latestUpload=null,datasetRevision=0;
+function selectedFolder(){const name=$('dataset-folder').value;if(!name)throw Error('เลือก Dataset ก่อน');return name;}
+function folderUrl(name=selectedFolder()){return '/api/dataset-folders/'+encodeURIComponent(name);}
+function selectDatasetMetadata(){
+  datasetRevision++;latestUpload=null;$('data-undo').disabled=true;$('data-preview-list').replaceChildren();
+  const folder=datasetFolders.find(f=>f.name===$('dataset-folder').value);
+  for(const key of datasetFields)$('data-meta-'+key).value=folder?.meta?.[key]||'';
+}
+async function refreshDatasetFolders(preferred=$('dataset-folder').value){
+  datasetFolders=(await workspaceRequest('/api/dataset-folders')).folders||[];
+  $('dataset-folder').innerHTML='<option value="">เลือก Dataset</option>'+datasetFolders.map(f=>`<option value="${esc(f.name)}">${esc(f.label||f.name)} · ${esc(f.images)} images</option>`).join('');
+  if(datasetFolders.some(f=>f.name===preferred))$('dataset-folder').value=preferred;
+  selectDatasetMetadata();
+}
+async function previewDataset(){
+  const name=selectedFolder(),revision=datasetRevision;
+  const [data,latest]=await Promise.all([workspaceRequest(folderUrl(name)+'/preview'),workspaceRequest(folderUrl(name)+'/latest-upload')]);
+  if(revision!==datasetRevision)return;
+  latestUpload=latest;$('data-undo').disabled=!latest.can_undo;
+  $('data-upload-status').textContent=`${data.preview.images} images · ${data.preview.labels} labels · Latest upload ${latest.total} images · ยังไม่ถือเป็น Human-confirmed`;
+  $('data-preview-list').innerHTML=(data.preview.samples||[]).map(x=>`<a href="${esc(x.url)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(x.url)}" alt="${esc(x.name||x.path||'Dataset image')}"></a>`).join('')||'<p>ไม่มีภาพ preview</p>';
+}
+async function refreshTrash(){
+  const data=await workspaceRequest('/api/deleted-dataset-folders');
+  $('data-trash-list').innerHTML=(data.folders||[]).map(x=>`<p>${esc(x.original_name)} · ${esc(x.deleted_at)} <button data-restore="${esc(x.id)}">Restore</button></p>`).join('')||'<p>Trash ว่าง</p>';
+  $('data-trash-list').querySelectorAll('[data-restore]').forEach(b=>b.onclick=async()=>{try{const data=await workspaceRequest('/api/deleted-dataset-folders/'+encodeURIComponent(b.dataset.restore)+'/restore',{});await refreshDatasetFolders(data.folder.name);await refreshTrash();message('Restore แล้ว · ไม่มีการเปลี่ยน Ground Truth');}catch(e){message(e.message,true);}});
+}
+$('dataset-folder').addEventListener('change',selectDatasetMetadata);
+bind('refresh-datasets',()=>refreshDatasetFolders());bind('data-preview',previewDataset);
+bind('data-create',async()=>{const name=$('data-new-name').value.trim();if(!name)throw Error('ระบุชื่อ Dataset');const r=await workspaceRequest('/api/dataset-folders',{name});await refreshDatasetFolders(r.folder.name);$('data-new-name').value='';});
+bind('data-upload',async()=>{
+  const folder=selectedFolder(),files=[...$('data-files').files,...$('data-directory').files];if(!files.length)throw Error('เลือกภาพ / ZIP / Folder ก่อน');
+  const form=new FormData();form.append('folder',folder);form.append('destination_mode','append');for(const file of files)form.append('files',file,file.webkitRelativePath||file.name);
+  $('data-upload').disabled=true;
+  try{const result=await workspaceRequest('/api/dataset-folders/upload',form);await refreshDatasetFolders(result.folder.name);await previewDataset();$('data-files').value='';$('data-directory').value='';message('Upload แล้ว · ยังไม่ยืนยัน GOOD/NG และไม่มีการ Train');}finally{$('data-upload').disabled=false;}
+});
+bind('data-save-meta',async()=>{const folder=selectedFolder();await workspaceRequest(folderUrl(folder)+'/metadata',Object.fromEntries(datasetFields.map(k=>[k,$('data-meta-'+k).value])));await refreshDatasetFolders(folder);message('บันทึก Metadata แล้ว · ไม่ใช่การยืนยันภาพ GOOD/NG');});
+bind('data-undo',async()=>{const folder=selectedFolder();if(!latestUpload?.can_undo)throw Error('Preview latest upload ก่อน');if(!confirm('ย้ายเฉพาะไฟล์จาก Upload ล่าสุดไป Trash? สามารถ Restore เป็น Dataset แยกได้'))return;await workspaceRequest('/api/dataset-folders/undo-upload',{folder,upload_id:latestUpload.upload_id});await refreshDatasetFolders(folder);await refreshTrash();message('Undo แล้ว · ไฟล์เก็บอยู่ใน Trash');});
+bind('data-trash',async()=>{const folder=selectedFolder();if(!confirm(`ย้าย Dataset ${folder} ไป Trash? สามารถ Restore ได้`))return;await workspaceRequest(folderUrl(folder),{},'DELETE');await refreshDatasetFolders();await refreshTrash();message('ย้ายไป Trash แล้ว');});
+bind('data-refresh-trash',refreshTrash);$('data-trash-panel').addEventListener('toggle',()=>{if($('data-trash-panel').open)refreshTrash().catch(e=>message(e.message,true));});
+function recordDetails(title,record){return `<details><summary>${esc(title)}</summary><pre class="record-json">${esc(JSON.stringify(record,null,2))}</pre></details>`;}
+async function refreshJobs(){
+  // Each service fails independently: damaged legacy history must not hide Core jobs.
+  const targets=[['/api/jobs','job-library-list',data=>{
+    $('legacy-job-select').innerHTML='<option value="">เลือก Legacy job</option>'+(data.jobs||[]).filter(j=>!j.error).map(j=>`<option value="${esc(j.id)}">${esc(j.name)}</option>`).join('');
+    return '<h3>Legacy jobs · Test only</h3>'+(data.jobs||[]).map(j=>recordDetails(j.name||j.id,j)).join('')+'<h3>Legacy test reports · ไม่ใช่ Production validation</h3>'+(data.test_reports||[]).map(j=>`<p><a href="/api/jobs/test-report/${encodeURIComponent(j.id)}" target="_blank" rel="noopener">${esc(j.id)}</a></p>`).join('');
+  }],['/api/models/registry','model-library-list',data=>'<h3>Inspection model artifacts</h3>'+(data.inspection_models||[]).map(m=>recordDetails(m.id,m)).join('')+'<h3>Legacy / optional models · ไม่ใช่ Core Production</h3>'+(data.models||[]).map(m=>recordDetails(m.name,m)).join('')]];
+  await Promise.all(targets.map(async([url,id,render])=>{try{$(id).innerHTML=render(await workspaceRequest(url));}catch(e){$(id).textContent=e.message;}}));
+  const history=await Promise.allSettled([api('/training'),workspaceRequest('/api/train/runs')]);
+  $('training-history-list').innerHTML=history.map((r,i)=>r.status==='fulfilled'?'<h3>'+['Candidate jobs','Legacy training history'][i]+'</h3>'+((i?r.value.runs:r.value.training)||[]).map(j=>recordDetails(`${j.id||j.job_id||j.name||j.module||'Job'} · ${j.status||''}`,j)).join(''):`<p>${esc(r.reason.message)}</p>`).join('');
+}
+bind('refresh-jobs',refreshJobs);$('job-library').addEventListener('toggle',()=>{if($('job-library').open)refreshJobs().catch(e=>message(e.message,true));});
+bind('legacy-job-test',async()=>{const id=$('legacy-job-select').value,file=$('legacy-job-image').files[0];if(!id||!file)throw Error('เลือก Legacy job และภาพทดสอบ');const data=new FormData();data.append('file',file);$('legacy-job-test').disabled=true;try{const result=await workspaceRequest('/api/jobs/'+encodeURIComponent(id)+'/test',data);$('legacy-job-result').textContent='Legacy Test · Machine result · ยังไม่ยืนยันโดยมนุษย์\n'+JSON.stringify(result,null,2);}finally{$('legacy-job-test').disabled=false;}});
+function legacyHumanStatus(record){
+  // Old machine NG is never inferred as confirmed, even if a timestamp is missing.
+  return record.reviewed_at&&['confirmed_ng','false_alarm','needs_review'].includes(record.status)?record.status+' · '+record.reviewed_at:'ยังไม่ยืนยันโดยมนุษย์';
+}
+function legacyReviewRow(x){
+  const id=encodeURIComponent(x.id),decision=x.decision||'Unknown machine result';
+  return `<article class="card"><h3>Legacy result · Machine: ${esc(decision)}</h3><p>Human review: ${esc(legacyHumanStatus(x))}</p><p>${esc(x.created_at)} · ${esc(x.source_name)} · score ${esc(x.anomaly_score)} / threshold ${esc(x.threshold)}</p><a href="/api/inspection/reviews/${id}/source" target="_blank" rel="noopener">Source image</a> · <a href="/api/inspection/reviews/${id}/preview" target="_blank" rel="noopener">Preview</a>${recordDetails('Original record',x)}<div class="review-actions">${[['confirmed_ng','Confirm NG'],['false_alarm','False alarm'],['needs_review','Needs review']].map(([v,label])=>`<button data-legacy-verdict="${v}" data-id="${esc(x.id)}">${label}</button>`).join('')}</div></article>`;
+}
+async function refreshLegacyHistory(){
+  const results=await Promise.allSettled([workspaceRequest('/api/inspection/parts?limit=100'),workspaceRequest('/api/inspection/reviews')]);
+  const parts=results[0],reviews=results[1];
+  let html=parts.status==='fulfilled'?'<h3>Legacy cycles · latest 100 · Machine result</h3>'+(parts.value.parts||[]).map(p=>recordDetails(`${p.decision||'Unknown'} · ${p.source||'Legacy'} · ${p.ended_at||''} · ${p.complete?'complete':'incomplete'}`,p)+(p.image?`<a href="/api/inspection/parts/${encodeURIComponent(p.id)}/image" target="_blank" rel="noopener">Image</a>`:'')).join('')+`<p>Unreadable: ${esc(parts.value.unreadable||0)}</p>`:esc(parts.reason.message);
+  html+=reviews.status==='fulfilled'?'<h3>Legacy human review</h3>'+(reviews.value.reviews||[]).map(legacyReviewRow).join(''):esc(reviews.reason.message);
+  $('legacy-history-list').innerHTML=html;
+  $('legacy-history-list').querySelectorAll('[data-legacy-verdict]').forEach(b=>b.onclick=async()=>{try{await workspaceRequest('/api/inspection/reviews/'+encodeURIComponent(b.dataset.id),{status:b.dataset.legacyVerdict});await refreshLegacyHistory();}catch(e){message(e.message,true);}});
+}
+bind('refresh-legacy-history',refreshLegacyHistory);$('legacy-history').addEventListener('toggle',()=>{if($('legacy-history').open)refreshLegacyHistory().catch(e=>message(e.message,true));});
