@@ -18,7 +18,7 @@ Terminal, capture utility เดิม และ Web workflow ใช้ project 
 Candidate แบบวาง–ยกต้องมี Locator; fixed/cropped recipe เดิมยังใช้ Test ภาพได้ แต่ไม่รับรอง live cycle โปรแกรม Core ใช้ resolution ที่ Recipe กำหนดและต้องตรง full-frame reference; legacy mode รักษาค่ากล้องเดิม
 ก่อน Production validation ต้องกำหนด Min defect recall ระดับชิ้นงานจาก requirement จริง ค่าเริ่มต้นเว้นว่าง; REVIEW/UNABLE ไม่นับเป็น NG rejection และ object recall ของ detector เป็นคนละเกณฑ์
 Engine 2026.10.09.1 ต้อง Validate ใหม่ก่อน Production รายงาน/Recipe/threshold เดิมไม่ได้แก้ย้อนหลัง
-Regression รอบล่าสุดผ่าน 327 tests และ 5 subtests รวม mock camera และการชนกันข้าม process จริง; JavaScript 2 suites ผ่าน ไม่ใช่หลักฐานตรวจตำหนิหรือกล้องจริง Browser automation ใช้ไม่ได้รอบนี้; HTTP smoke ผ่าน
+Regression Phase 2 หลัง Cleanup ผ่าน 317 tests และ 5 subtests รวม mock camera, cross-process ownership และ Dataset lifecycle; JavaScript 9 tests ผ่าน ไม่ใช่หลักฐานตรวจตำหนิหรือกล้องจริง Browser automation ใช้ไม่ได้รอบนี้; HTTP smoke ผ่าน
 รายละเอียด KEEP/MIGRATED/REMOVED/BLOCKED และจุดย้อนกลับ: work/RENOVATION_CONSOLIDATION_REPORT.md
 โค้ดใหม่มีผลเมื่อเปิดโปรแกรมครั้งถัดไป ไม่ได้ patch/restart process กล้องหรือ server ที่ผู้ใช้เปิดค้างก่อนแก้
 
@@ -102,7 +102,10 @@ ONNX Runtime ปิด telemetry; worker ไม่มี cloud logger หรื�
 license ของ library กับ pretrained weights อาจต่างกัน: TorchVision ระบุให้ตรวจเงื่อนไขข้อมูลที่ใช้สร้าง weights สำหรับการใช้งานนั้น ไม่ถือ BSD ของ code เป็นสิทธิ์ใช้ weights เชิงพาณิชย์โดยอัตโนมัติ
 
 ## ระบบเดิมที่ยังอยู่
-/engineering เก็บ workflow/data/model เดิมเพื่ออ่านและเปรียบเทียบจนสูตรใหม่ผ่านจริง
+/engineering และหน้า Training เดิมถอดแล้ว: Setup → Dataset library จัดการ Upload/Preview/Metadata/Undo/Trash/Restore; Test → Jobs/Models/Training history; Review → Legacy history อ่านข้อมูลเดิมโดยไม่คัดลอกและแยก Machine/Human result
+/jobs ส่งไป /inspection#test; /api/datasets/upload, /api/datasets/summary และ /api/train/recommended-settings ถูกถอด ใช้ Dataset folder API เดิมที่หน้า Inspection เรียก
+Legacy Live และ backend เฉพาะทางสำหรับ legacy reference/configuration ยังเก็บไว้จน Core replacement ผ่าน Field Validation; ไม่ใช่หน้า workflow คู่ขนาน
+Undo ใหม่ย้ายชุด Upload ล่าสุดไป Trash โดยตรวจ server manifest/hash; ชุดเก่าที่ไม่มี safe manifest ใช้ Dataset Trash/Restore แทน ไม่มีการลบข้อมูลย้อนหลัง
 DeepPatch/YOLO ไม่เป็นข้อบังคับของ engine ใหม่ แต่ compatibility shell ยัง import dependency เก่า
 ลบ Annotation Studio API/helper ที่ซ้ำ CVAT และไม่มีผู้เรียกแล้ว ไม่ลบ annotation/data เดิม
 หยุด auto-repair ตอน startup ที่อาจเลือกโมเดลอื่น ไม่มีการแทน active model ด้วยไฟล์ล่าสุดอัตโนมัติ

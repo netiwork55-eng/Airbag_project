@@ -37,7 +37,6 @@ import subprocess
 import zipfile
 import json
 import hashlib
-import math
 import uuid
 import re
 import os
@@ -534,22 +533,12 @@ def json_response_error(message: str, status_code: int = 400) -> JSONResponse:
     return JSONResponse({"ok": False, "error": message}, status_code=status_code)
 
 
-
-
 def new_id(prefix: str) -> str:
     return f"{prefix}_{uuid.uuid4().hex[:12]}"
 
 
 def now_iso() -> str:
     return datetime.now().isoformat(timespec="seconds")
-
-
-
-
-
-
-
-
 
 
 def write_json(path: Path, payload: dict) -> None:
@@ -1368,7 +1357,7 @@ async def save_uploads_to_staging(files: list[UploadFile], category: str) -> tup
     if not files:
         raise ValueError("No files uploaded.")
 
-    staging_dir = UPLOAD_STAGING_DIR / f"{timestamp_name()}_{safe_name(category)}"
+    staging_dir = UPLOAD_STAGING_DIR / f"{timestamp_name()}_{uuid.uuid4().hex}_{safe_name(category)}"
     staging_dir.mkdir(parents=True, exist_ok=True)
     saved_count = 0
     total_bytes = 0
@@ -1810,14 +1799,9 @@ def prepare_detection_upload(staging_dir: Path, destination_root: Path) -> dict:
     }
 
 
-def install_yolov8_exports_from_staging(staging_dir: Path) -> list[str]:
-    """ติดตั้ง YOLOv8 export ให้เป็น direct child ของ 01_yolov8_exports."""
-    return prepare_detection_upload(staging_dir, AIRBAG_EXPORTS_DIR)["installed_paths"]
-
-
 def copy_images_from_staging(staging_dir: Path, destination_root: Path, prefix: str) -> int:
     """copy เฉพาะรูปไปปลายทาง ใช้กับ background/negative images."""
-    destination_dir = destination_root / f"{timestamp_name()}_{safe_name(prefix)}"
+    destination_dir = unique_child_path(destination_root, f"{timestamp_name()}_{safe_name(prefix)}")
     copied = 0
     for image_path in sorted(path for path in staging_dir.rglob("*") if is_image_file(path)):
         try:
@@ -1829,8 +1813,6 @@ def copy_images_from_staging(staging_dir: Path, destination_root: Path, prefix: 
         shutil.copy2(image_path, target)
         copied += 1
     return copied
-
-
 
 
 # ===== Dataset Workspace และ metadata =====
@@ -2163,7 +2145,7 @@ def install_staging_to_dataset_folder(staging_dir: Path, target_folder: Path) ->
     copied_files = int(prepared["copied_files"])
     # ถ้าไม่มี label เลย ให้เก็บเป็นรูปดิบสำหรับนำไป Annotation แทนการเดาว่าเป็น negative
     if not installed_paths:
-        raw_destination = target_folder / "raw_images" / timestamp_name()
+        raw_destination = unique_child_path(target_folder / "raw_images", timestamp_name())
         copied_files += copy_images_from_staging(staging_dir, raw_destination, "images")
         installed_paths.append(str(raw_destination))
     return {
@@ -2190,12 +2172,6 @@ def detection_train_stats() -> dict:
         "exports": sum(int(item.get("exports") or 0) for item in folders),
         "images": sum(int(item.get("images") or 0) for item in folders),
     }
-
-
-
-
-
-
 
 
 def brand_train_stats() -> dict:
@@ -2263,210 +2239,6 @@ def read_yolo_class_names(dataset_root: Path) -> list[str]:
     if isinstance(names, list):
         return [str(name) for name in names]
     return []
-
-
-def yolo_label_files_for_export(dataset_root: Path) -> list[Path]:
-    label_files: list[Path] = []
-    for split in ("train", "valid", "test"):
-        _, labels_dir = yolo_split_dirs(dataset_root, split)
-        if labels_dir.exists():
-            label_files.extend(path for path in labels_dir.rglob("*.txt") if path.is_file())
-    return sorted(set(label_files))
-
-
-def analyze_yolo_label_files(label_files: list[Path]) -> dict:
-    object_count = 0
-    empty_files = 0
-    bad_lines = 0
-    labeled_files = 0
-    box_areas: list[float] = []
-    box_widths: list[float] = []
-    box_heights: list[float] = []
-
-    for label_file in label_files:
-        try:
-            lines = [line.strip() for line in label_file.read_text(encoding="utf-8").splitlines() if line.strip()]
-        except Exception:
-            bad_lines += 1
-            continue
-        if not lines:
-            empty_files += 1
-            continue
-        file_objects = 0
-        for line in lines:
-            parts = line.split()
-            try:
-                values = [float(part) for part in parts]
-            except ValueError:
-                bad_lines += 1
-                continue
-            if len(values) == 5:
-                _, x_center, y_center, width, height = values
-                if width <= 0.0 or height <= 0.0:
-                    bad_lines += 1
-                    continue
-                x1 = max(0.0, min(1.0, x_center - width / 2))
-                y1 = max(0.0, min(1.0, y_center - height / 2))
-                x2 = max(0.0, min(1.0, x_center + width / 2))
-                y2 = max(0.0, min(1.0, y_center + height / 2))
-                width = x2 - x1
-                height = y2 - y1
-                if width <= 0.0 or height <= 0.0:
-                    bad_lines += 1
-                    continue
-            elif len(values) >= 7:
-                coords = values[1:]
-                if len(coords) % 2 != 0:
-                    coords = coords[:-1]
-                if len(coords) < 6:
-                    bad_lines += 1
-                    continue
-                xs = [max(0.0, min(1.0, value)) for value in coords[0::2]]
-                ys = [max(0.0, min(1.0, value)) for value in coords[1::2]]
-                width = max(xs) - min(xs)
-                height = max(ys) - min(ys)
-                if width <= 0.0 or height <= 0.0:
-                    bad_lines += 1
-                    continue
-            else:
-                bad_lines += 1
-                continue
-            object_count += 1
-            file_objects += 1
-            box_widths.append(width)
-            box_heights.append(height)
-            box_areas.append(width * height)
-        if file_objects:
-            labeled_files += 1
-
-    def average(values: list[float]) -> float:
-        return round(sum(values) / len(values), 6) if values else 0.0
-
-    tiny_boxes = sum(1 for area in box_areas if area < 0.0025)
-    small_boxes = sum(1 for area in box_areas if area < 0.01)
-    return {
-        "label_files": len(label_files),
-        "labeled_files": labeled_files,
-        "empty_files": empty_files,
-        "object_count": object_count,
-        "bad_lines": bad_lines,
-        "discarded_label_lines": bad_lines,
-        "avg_objects_per_labeled_image": round(object_count / labeled_files, 3) if labeled_files else 0.0,
-        "avg_box_area": average(box_areas),
-        "avg_box_width": average(box_widths),
-        "avg_box_height": average(box_heights),
-        "tiny_box_ratio": round(tiny_boxes / object_count, 4) if object_count else 0.0,
-        "small_box_ratio": round(small_boxes / object_count, 4) if object_count else 0.0,
-    }
-
-
-def _compute_detector_dataset_analysis(target_class: str = "Airbag") -> dict:
-    folders = [
-        folder
-        for folder in list_dataset_folder_records()
-        if str(folder.get("meta", {}).get("dataset_type") or "").strip() == "Detection"
-    ]
-    exports = []
-    split_totals: dict[str, dict[str, int]] = {
-        "train": {"images": 0, "labels": 0, "missing_labels": 0},
-        "valid": {"images": 0, "labels": 0, "missing_labels": 0},
-        "test": {"images": 0, "labels": 0, "missing_labels": 0},
-    }
-    class_names: set[str] = set()
-    mismatch_exports: list[dict] = []
-    all_label_files: list[Path] = []
-    config = read_project_config()
-    class_lookup = project_class_lookup(config)
-
-    for folder in folders:
-        folder_path = dataset_folder_path(folder["id"])
-        for detail in folder_yolo_export_details(folder_path):
-            root = Path(detail["path"])
-            names = read_yolo_class_names(root)
-            for name in names:
-                class_names.add(name)
-            unmapped_names = [
-                name for name in names if normalized_class_key(name) not in class_lookup
-            ]
-            if unmapped_names:
-                mismatch_exports.append(
-                    {
-                        "export": detail["name"],
-                        "classes": names,
-                        "unmapped": unmapped_names,
-                    }
-                )
-            for split, split_detail in detail.get("splits", {}).items():
-                key = "valid" if split == "val" else split
-                if key in split_totals:
-                    split_totals[key]["images"] += int(split_detail.get("images") or 0)
-                    split_totals[key]["labels"] += int(split_detail.get("labels") or 0)
-                    split_totals[key]["missing_labels"] += int(split_detail.get("missing_labels") or 0)
-            all_label_files.extend(yolo_label_files_for_export(root))
-            exports.append({**detail, "classes": names, "folder": folder["label"]})
-
-    label_stats = analyze_yolo_label_files(all_label_files)
-    total_images = sum(split["images"] for split in split_totals.values())
-    validation_images = split_totals["valid"]["images"] + split_totals["test"]["images"]
-    train_images = split_totals["train"]["images"]
-    background_split = detection_background_summary(AIRBAG_BACKGROUND_DIR)
-    background_images = background_split["train"]
-
-    warnings: list[str] = []
-    score = 100
-    if total_images < 300:
-        warnings.append("Dataset is small for reliable detection.")
-        score -= 25
-    elif total_images < 800:
-        warnings.append("Dataset is usable but still limited for production detection.")
-        score -= 12
-    if label_stats["object_count"] < 300:
-        warnings.append("Object labels are low; detection may miss difficult cases.")
-        score -= 18
-    if validation_images < max(30, int(total_images * 0.05)):
-        warnings.append("Validation/test split is small; metrics may be unstable.")
-        score -= 12
-    if label_stats["bad_lines"]:
-        warnings.append(
-            f"Found {label_stats['bad_lines']} YOLO label lines that would be skipped after cleanup."
-        )
-        score -= 20
-    missing_labels = sum(split["missing_labels"] for split in split_totals.values())
-    if missing_labels:
-        warnings.append(f"Found {missing_labels} images without matching labels.")
-        score -= min(20, missing_labels)
-    if background_images < max(50, int(total_images * 0.03)):
-        warnings.append("Background/negative images are low for false-positive control.")
-        score -= 8
-    if mismatch_exports:
-        warnings.append("Some YOLO exports use class names that differ from the target.")
-        score -= 10
-    if label_stats["tiny_box_ratio"] > 0.25:
-        warnings.append("Many boxes are tiny; lower image size may reduce accuracy.")
-        score -= 8
-
-    return {
-        "folders": len(folders),
-        "exports": len(exports),
-        "images": total_images,
-        "train_images": train_images,
-        "validation_images": validation_images,
-        "background_images": background_images,
-        "background_split": background_split,
-        "splits": split_totals,
-        "classes": sorted(class_names),
-        "class_mismatches": mismatch_exports[:10],
-        "labels": label_stats,
-        "quality_score": max(0, min(100, score)),
-        "warnings": warnings,
-    }
-
-
-def detector_dataset_analysis(target_class: str = "Airbag") -> dict:
-    return cached_analysis(
-        f"detector-analysis:{normalized_class_key(target_class)}",
-        lambda: _compute_detector_dataset_analysis(target_class),
-    )
 
 
 def yolo_export_detail(dataset_root: Path) -> dict:
@@ -3323,38 +3095,6 @@ def parse_loss_history(log_path: str) -> list[dict]:
     return [history[epoch] for epoch in sorted(history)]
 
 
-def parse_validation_history(log_path: str) -> list[dict]:
-    text = read_log_for_metrics(log_path)
-    if not text:
-        return []
-    clean_text = re.sub(r"\x1b\[[0-9;?]*[ -/]*[@-~]", "", text).replace("\r", "\n")
-    validation_rows = []
-    current_epoch = 0
-    epoch_pattern = re.compile(r"^\s*(\d+)\s*/\s*(\d+)\s+\S+\s+", re.MULTILINE)
-    all_pattern = re.compile(
-        r"^\s*all\s+(\d+)\s+(\d+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)\s+([0-9.]+)",
-        re.MULTILINE,
-    )
-    for line in clean_text.splitlines():
-        epoch_match = epoch_pattern.search(line)
-        if epoch_match:
-            current_epoch = int(epoch_match.group(1))
-        all_match = all_pattern.search(line)
-        if all_match:
-            validation_rows.append(
-                {
-                    "epoch": current_epoch,
-                    "images": int(all_match.group(1)),
-                    "instances": int(all_match.group(2)),
-                    "precision": round(float(all_match.group(3)), 6),
-                    "recall": round(float(all_match.group(4)), 6),
-                    "map50": round(float(all_match.group(5)), 6),
-                    "map50_95": round(float(all_match.group(6)), 6),
-                }
-            )
-    return validation_rows
-
-
 def parse_duration_token(value: str) -> float:
     """แปลงเวลาจาก log ของ Ultralytics เช่น 51.8s, 5:14, 1:02:03 เป็นวินาที."""
     text = str(value or "").strip()
@@ -3547,59 +3287,6 @@ def parse_training_progress(log_path: str, started_at: float | None = None, stat
         "speed_text": speed_text,
         "line": progress_line[-220:],
         "confidence": confidence,
-    }
-
-
-def calibrated_seconds_per_epoch(train_type: str, images: int, imgsz: int, baseline_imgsz: int) -> float:
-    """ใช้ median จาก run จริงหลายรอบเป็นฐานเวลา แทนการยึด run ล่าสุดอันเดียว."""
-    if not TRAIN_LOG_DIR.exists():
-        return 0.0
-    samples: list[float] = []
-    for log_path in sorted(TRAIN_LOG_DIR.glob("*.log"), key=train_log_sort_key, reverse=True)[:12]:
-        if infer_train_type_from_log_path(str(log_path)) != train_type:
-            continue
-        elapsed, completed_epochs = logged_training_duration_summary(str(log_path))
-        if elapsed <= 0 or completed_epochs <= 0:
-            continue
-        seconds_per_epoch = elapsed / completed_epochs
-        if 20 <= seconds_per_epoch <= 7200:
-            samples.append(seconds_per_epoch)
-    if not samples:
-        return 0.0
-    samples.sort()
-    median = samples[len(samples) // 2]
-    return max(20.0, median * (imgsz / baseline_imgsz) ** 2)
-
-
-def latest_run_summary(train_type: str) -> dict:
-    if not TRAIN_LOG_DIR.exists():
-        return {}
-    logs = [
-        path
-        for path in TRAIN_LOG_DIR.glob("*.log")
-        if path.is_file() and infer_train_type_from_log_path(str(path)) == train_type
-    ]
-    if not logs:
-        return {}
-    log_path = max(logs, key=train_log_sort_key)
-    history = parse_loss_history(str(log_path))
-    validation = parse_validation_history(str(log_path))
-    inferred = infer_train_status_from_log(str(log_path))
-    elapsed_seconds, logged_epochs = logged_training_duration_summary(str(log_path))
-    completed_epochs = len(history) or logged_epochs
-    seconds_per_epoch = elapsed_seconds / logged_epochs if elapsed_seconds and logged_epochs else 0.0
-    return {
-        "log_path": str(log_path),
-        "status": inferred.get("status", "idle"),
-        "epochs": completed_epochs,
-        "elapsed_seconds": round(elapsed_seconds, 1),
-        "seconds_per_epoch": round(seconds_per_epoch, 1) if seconds_per_epoch else 0.0,
-        "latest_loss": history[-1]["total_loss"] if history else None,
-        "best_map50": max((row["map50"] for row in validation), default=None),
-        "best_map50_95": max((row["map50_95"] for row in validation), default=None),
-        "latest_metrics": validation[-1] if validation else None,
-        "loss_history": history[-10:],
-        "validation_history": validation[-10:],
     }
 
 
@@ -5195,8 +4882,6 @@ def detect_page_redirect() -> RedirectResponse:
     return RedirectResponse(url="/inspection", status_code=307)
 
 
-
-
 @app.get("/annotation", include_in_schema=False)
 def annotation_page_redirect() -> RedirectResponse:
     return RedirectResponse(url=cvat_connection_config()["base_url"], status_code=307)
@@ -5509,8 +5194,9 @@ def api_undo_dataset_folder_upload(payload: dict = Body(...)) -> JSONResponse:
             raise ValueError("This upload cannot be undone safely; use the dataset Trash controls.")
         targets = []
         for relative, expected in files.items():
-            target = (folder / relative).resolve()
-            if folder not in target.parents or not target.is_file() or target.is_symlink():
+            candidate = folder / relative
+            target = candidate.resolve()
+            if folder not in target.parents or not target.is_file() or candidate.is_symlink():
                 raise ValueError("Upload files have changed; nothing moved.")
             if hashlib.sha256(target.read_bytes()).hexdigest() != expected:
                 raise ValueError("Upload files have changed; nothing moved.")
@@ -5556,10 +5242,6 @@ def api_update_dataset_folder_metadata(folder_name: str, payload: dict = Body(..
         return JSONResponse({"ok": True, "folder": dataset_folder_record(folder_path), "folders": list_dataset_folder_records()})
     except Exception as exc:
         return JSONResponse({"ok": False, "error": str(exc)}, status_code=400)
-
-
-
-
 
 
 # ===== HTTP routes: Training, Models และ Project config =====
@@ -5612,8 +5294,6 @@ def api_train_preflight(train_type: str = Query("airbag_detector")) -> JSONRespo
     if train_type not in {"airbag_detector", "brand_classifier"}:
         return JSONResponse({"ok": False, "error": "Unknown train type."}, status_code=400)
     return JSONResponse(train_preflight(train_type))
-
-
 
 
 @app.get("/api/train/runs")

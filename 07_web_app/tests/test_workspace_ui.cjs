@@ -43,3 +43,8 @@ test('Job and model histories stay independently readable; refresh never mutates
  await ctx.refreshJobs();assert.ok(node('model-library-list').innerHTML.includes('model_candidate'));assert.ok(node('job-library-list').innerHTML.includes('/api/jobs/test-report/test_abc'));
  assert.ok(calls.every(([p,o])=>!o.method));
 });
+test('Legacy test uses existing endpoint and renders preview without dumping binary data',async()=>{
+ const {ctx,node,handlers,calls}=environment();node('legacy-job-select').value='job_old';node('legacy-job-image').files=[new Blob(['fixture'],{type:'image/png'})];
+ ctx.fetch=async(path,opts)=>{calls.push([path,opts]);return {ok:true,json:async()=>({decision:'NG',preview:'data:image/jpeg;base64,AA==',anomaly_map:[[1]],job_id:'job_old',use:'test'})};};
+ await handlers['legacy-job-test']();assert.equal(calls[0][0],'/api/jobs/job_old/test');assert.equal(node('legacy-job-preview').hidden,false);assert.ok(!node('legacy-job-result').textContent.includes('base64'));assert.ok(node('legacy-job-result').textContent.includes('ยังไม่ยืนยัน'));
+});

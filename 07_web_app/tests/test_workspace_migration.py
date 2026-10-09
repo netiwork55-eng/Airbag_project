@@ -122,3 +122,26 @@ def test_workspace_html_and_retired_routes(workspace):
         assert c.get(url).status_code==404
     assert c.post('/api/datasets/upload').status_code==404
     assert c.get('/jobs',follow_redirects=False).headers['location']=='/inspection#test'
+
+def test_uploads_in_same_second_do_not_overwrite_and_undo_preserves_prior_batch(workspace,monkeypatch):
+    c,root=workspace;monkeypatch.setattr(app,'timestamp_name',lambda:'same_second')
+    first=upload(c)
+    original=next((root/'exports/part').rglob('*.png'))
+    newer=cv2.imencode('.png',np.full((32,48,3),200,np.uint8))[1].tobytes()
+    r=c.post('/api/dataset-folders/upload',data={'folder':'part'},files=[('files',('sample.png',newer,'image/png'))])
+    assert r.status_code==200,r.text
+    assert original.read_bytes()==image_bytes()
+    assert len(list((root/'exports/part').rglob('*.png')))==2
+    result=c.post('/api/dataset-folders/undo-upload',json={'folder':'part','upload_id':r.json()['latest_upload']['upload_id']})
+    assert result.status_code==200,result.text
+    assert original.read_bytes()==image_bytes() and len(list((root/'exports/part').rglob('*.png')))==1
+
+
+def test_undo_checks_entire_batch_before_moving_labels(workspace):
+    c,root=workspace;folder=root/'exports/labelled';folder.mkdir();batch=folder/'batch';batch.mkdir()
+    (batch/'sample.png').write_bytes(image_bytes());label=batch/'sample.txt';label.write_text('0 .5 .5 .1 .1')
+    manifest=app.record_latest_dataset_upload(folder,[str(batch)])
+    label.write_text('changed annotation')
+    response=c.post('/api/dataset-folders/undo-upload',json={'folder':'labelled','upload_id':manifest['upload_id']})
+    assert response.status_code==400 and (batch/'sample.png').exists() and label.read_text()=='changed annotation'
+    assert not list((root/'trash').iterdir())
