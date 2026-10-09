@@ -1024,14 +1024,6 @@ def load_primary_object_locator(project_config):
     return None, None
 
 
-def locate_primary_object(locator_model, class_id, frame):
-    """Return the strongest plausible inspected-part box and confidence."""
-    analysis = analyze_primary_object(locator_model, class_id, frame)
-    if analysis is None:
-        return None
-    return analysis["box"], analysis["confidence"]
-
-
 def analyze_primary_object(locator_model, class_id, frame):
     """Use the same ROI contract as reference training; defect classes cannot vote."""
     web_dir = str(PROJECT_ROOT / "07_web_app")
@@ -1068,10 +1060,11 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
     web_app_dir = PROJECT_ROOT / "07_web_app"
     if str(web_app_dir) not in sys.path:
         sys.path.insert(0, str(web_app_dir))
-    from inspection.runtime import Cycle, evidence
-    from inspection.store import now as capture_time
+    from inspection.runtime import evidence
 
     cap = None
+    pump = None
+    camera_released = False
     cycle = None
     reference = dict(project_config.get("normal_reference") or {})
     window = "Generic OK/NG Inspection"
@@ -1085,11 +1078,10 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
                 raise ValueError('Active recipe camera does not match the existing terminal camera; no camera/settings were changed')
             if camera.exposure_us is not None or camera.gain is not None:
                 raise ValueError('Existing USB camera controls must be configured in its driver, not overridden by a recipe')
-            width,height = camera.width or CAMERA_WIDTH,camera.height or CAMERA_HEIGHT
-            if (width,height) != (pipeline.reference.shape[1],pipeline.reference.shape[0]):
+            if ((camera.width is not None and camera.width!=pipeline.reference.shape[1]) or
+                    (camera.height is not None and camera.height!=pipeline.reference.shape[0])):
                 raise ValueError('Recipe camera resolution must match its full-frame reference; no resizing or camera changes were applied')
-            settings = pipeline.recipe.decision
-            cycle = Cycle(settings.stable_frames,settings.release_frames,settings.release_ms/1000)
+            cycle = core_runtime.make_cycle(pipeline)
         else:
             from normal_reference import DecisionStabilizer, InspectionResult
             from deep_patch_reference import load_inspection_reference
@@ -1113,14 +1105,16 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
             width,height = CAMERA_WIDTH,CAMERA_HEIGHT
 
         cv2.setUseOptimized(True)
-        cap, selected_camera_index = open_available_camera(args.camera_index)
-        if core_runtime and selected_camera_index!=pipeline.recipe.camera.index:
-            raise ValueError('Selected camera differs from the validated recipe; refusing silent camera fallback')
-        # Preserve the established terminal capture settings. Never write project_config.
-        cap.set(cv2.CAP_PROP_BUFFERSIZE,1)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH,width)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
-        cap.set(cv2.CAP_PROP_FPS,CAMERA_FPS)
+        if core_runtime:
+            pump = core_runtime.open_capture(pipeline,terminal_fps=CAMERA_FPS)
+            selected_camera_index = pipeline.recipe.camera.index
+        else:
+            cap, selected_camera_index = open_available_camera(args.camera_index)
+            # Retained legacy branch: do not change the user's current camera settings.
+            cap.set(cv2.CAP_PROP_BUFFERSIZE,1)
+            cap.set(cv2.CAP_PROP_FRAME_WIDTH,width)
+            cap.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
+            cap.set(cv2.CAP_PROP_FPS,CAMERA_FPS)
         print(f"Inspection Core recipe {pipeline.saved['id']}" if core_runtime else f"Legacy Normal Reference: {model_path}; no activated Core replacement")
         if candidate_recipe_id:
             print('CANDIDATE TEST - NOT PRODUCTION. Results do not certify defect accuracy.')
@@ -1129,11 +1123,12 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
         last_time = time.perf_counter()
         sequence = 0
         while True:
-            success, frame = cap.read()
-            if not success or frame is None:
-                raise RuntimeError('Camera disconnected or failed to deliver a frame')
-            received, captured_at = time.monotonic(),capture_time()
-            sequence += 1
+            if core_runtime:
+                sequence,frame,received,captured_at = pump.next(sequence)
+            else:
+                success, frame = cap.read()
+                if not success or frame is None:
+                    raise RuntimeError('Camera disconnected or failed to deliver a frame')
             measured_result = None
             if core_runtime:
                 state,measured_result,maps = core_runtime.inspect_frame(pipeline,cycle,frame,received,captured_at,sequence)
@@ -1200,16 +1195,19 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
                     save_cycle(PROJECT_ROOT,cycle.finish('camera_stopped'),reference,f'camera_{selected_camera_index}')
         finally:
             try:
-                if cap is not None:
+                if pump is not None:
+                    pump.close()
+                elif cap is not None:
                     cap.release()
+                camera_released = True
             finally:
                 try:
                     if core_runtime:
                         core_runtime.anomaly.close()
                 finally:
-                    if cap is not None:
+                    if cap is not None or pump is not None:
                         cv2.destroyAllWindows()
-                        print('Camera released. Window closed.')
+                        print('Camera released. Window closed.' if camera_released else 'Window closed. Camera release failed; stop this process before another run.')
 
 
 def main(argv=None):

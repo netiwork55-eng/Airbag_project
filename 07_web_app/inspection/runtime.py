@@ -88,17 +88,21 @@ class Cycle:
 
 
 class OpenCVCamera:
-    def __init__(self, config):
+    def __init__(self, config, *, fps=None, buffer_size=None):
         self.config=config
         self.cap = cv2.VideoCapture(config.index,cv2.CAP_DSHOW)
         if not self.cap.isOpened():
             self.cap.release()
             raise RuntimeError(f"Camera {config.index} cannot be opened; no other camera was selected")
         try:
+            if buffer_size is not None:
+                self.cap.set(cv2.CAP_PROP_BUFFERSIZE,buffer_size)
             if config.width is not None:
                 self.cap.set(cv2.CAP_PROP_FRAME_WIDTH,config.width)
             if config.height is not None:
                 self.cap.set(cv2.CAP_PROP_FRAME_HEIGHT,config.height)
+            if fps is not None:
+                self.cap.set(cv2.CAP_PROP_FPS,fps)
             # OpenCV exposure units are device-dependent, not microseconds.
             if config.exposure_us is not None or config.gain is not None:
                 raise RuntimeError("Microsecond exposure/gain settings require the Basler SDK; configure USB camera controls in its driver")
@@ -207,15 +211,23 @@ def check_dimensions(frame, config):
 
 class FramePump:
     """Continuously drain capture into one latest-frame slot; never queue old frames."""
-    def __init__(self,camera):
+    def __init__(self,camera, *, ownership=None):
         self.camera=camera
         self.condition=threading.Condition()
         self.stopped=threading.Event()
         self.latest=None
         self.error=None
         self.sequence=0
-        self.thread=threading.Thread(target=self.read,daemon=True,name="camera-latest-frame")
-        self.thread.start()
+        try:
+            if ownership is None:
+                self.thread=threading.Thread(target=self.read,daemon=True,name="camera-latest-frame")
+                self.thread.start()
+            else:
+                # Capture retains ownership even if its caller times out while stopping.
+                self.thread=ownership.start_thread(self.read,daemon=True,name="camera-latest-frame")
+        except BaseException:
+            self.camera.close()
+            raise
 
     def read(self):
         try:
@@ -269,6 +281,7 @@ class Runtime:
         self.thread = None
         self.frame = None
         self.capture_pump = None
+        self.capture_metadata = None
         self.state = {"running":False,"state":"UNABLE_TO_INSPECT","reasons":["Production is stopped"],"last_event":None}
 
     @property
@@ -309,18 +322,40 @@ class Runtime:
                 raise ValueError("Production camera is already running")
             pipeline = self.production_pipeline()
             saved = pipeline.saved
-            camera_class = BaslerCamera if pipeline.recipe.camera.driver=="basler" else OpenCVCamera
-            camera = camera_class(pipeline.recipe.camera)
+            pump = self.open_capture(pipeline)
             self.stop_event.clear()
             self.frame = None
             self.state = {"running":True,"state":"UNABLE_TO_INSPECT","reasons":["Waiting for the first image"],"recipe_id":saved["id"],"recipe_hash":saved["hash"],"last_event":None}
             try:
-                self.thread = self.ownership.start_thread(self.loop,(camera,pipeline),daemon=True,name="production-inspection")
+                self.thread = self.ownership.start_thread(self.loop,(pump,pipeline),daemon=True,name="production-inspection")
             except BaseException:
                 self.state.update(running=False,state='UNABLE_TO_INSPECT',reasons=['Inspection worker could not start'])
-                camera.close()
+                pump.close()
                 raise
             return self.snapshot()
+
+    @staticmethod
+    def make_cycle(pipeline):
+        settings=pipeline.recipe.decision
+        return Cycle(settings.stable_frames,settings.release_frames,settings.release_ms/1000)
+
+    def open_capture(self, pipeline, *, terminal_fps=None):
+        """Same exact-device acquisition for Web and the existing Terminal window."""
+        with self.lock, self.ownership.hold('Live camera setup'):
+            if self.running:
+                raise ValueError('Camera capture is already running')
+            config=pipeline.recipe.camera
+            camera=(BaslerCamera(config) if config.driver=='basler' else
+                    OpenCVCamera(config,fps=terminal_fps,buffer_size=1 if terminal_fps is not None else None))
+            try:
+                self.capture_metadata={'requested':config.model_dump(),'actual':camera.metadata(),
+                    'timing_scope':'Host read completion; not sensor exposure time'}
+            except BaseException:
+                camera.close()
+                raise
+            pump=FramePump(camera,ownership=self.ownership)
+            self.capture_pump=pump
+            return pump
 
     def snapshot(self):
         with self.lock:
@@ -331,6 +366,8 @@ class Runtime:
         result,maps = pipeline.run(frame)
         result.update(captured_at=captured_at,frame_sequence=sequence)
         result['camera_requested']=pipeline.recipe.camera.model_dump()
+        if self.capture_metadata is not None:
+            result['capture']=self.capture_metadata
         age_ms=(time.monotonic()-received)*1000
         result["frame_age_ms"]=round(age_ms,3)
         if age_ms>pipeline.recipe.camera.max_frame_age_ms:
@@ -362,11 +399,8 @@ class Runtime:
                              source=self.source,complete=False)
             self.state["last_event"] = event["id"]
 
-    def loop(self, camera, pipeline):
-        settings=pipeline.recipe.decision
-        cycle = Cycle(settings.stable_frames,settings.release_frames,settings.release_ms/1000)
-        pump = FramePump(camera)
-        self.capture_pump = pump
+    def loop(self, pump, pipeline):
+        cycle = self.make_cycle(pipeline)
         sequence = 0
         try:
             while not self.stop_event.is_set():

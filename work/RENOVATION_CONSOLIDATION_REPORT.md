@@ -1,6 +1,104 @@
 # Airbag_Project — Renovation & Consolidation
 
-อัปเดต 9 ตุลาคม 2026 · Phase 2 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+อัปเดต 9 ตุลาคม 2026 · Phase 3 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+
+## Phase 3 — ผลที่ลงมือทำแล้ว
+
+Terminal **โหมด Core Candidate/Production** และ Web ใช้การรับภาพ, Recipe/Pipeline, Decision/Cycle และ Evidence ชุดเดียวกันเพิ่มขึ้นจริง ไม่สร้างแอปกล้อง/CLI/Pipeline ใหม่ ไม่เรียกกล้องจริงในรอบนี้ ไม่ Train หรือ Activate Production
+
+**ยังไม่ได้ถอด Legacy Live ทั้งสาย** และไม่ได้เปลี่ยน process กล้องที่ผู้ใช้เปิดอยู่ให้เป็น Core โดยอัตโนมัติ
+
+### MERGED / REFACTORED
+
+- `Runtime.open_capture()` ใน Core เดิมเป็นทางเปิดกล้องร่วม ใช้ `OpenCVCamera`/`BaslerCamera` และ `FramePump` เดิม; Web กับ Terminal Core ไม่ตั้งวงรับภาพคนละแบบอีก
+- Terminal USB ใช้ exact camera index ตาม Recipe ไม่เรียก fallback scanner; คงหน้าต่าง OpenCV, กรอบ, FPS, q/Esc, s/Space และ FPS/buffer settings เดิมไว้
+- Recipe ที่เว้น width/height ว่างใช้ขนาดจาก driver ไม่ยืม640×480จาก legacy defaults; ภาพที่ส่งมาต้องตรง reference/Recipe โดยไม่มีการ resize เพื่อให้ตรวจผ่าน
+- `FramePump` เก็บเฉพาะภาพล่าสุด ให้ frame sequence และเวลาที่ host รับภาพ เหมือนกันทั้ง Web/Terminal; `inspect_frame()` ตรวจอายุภาพรวมเวลาประมวลผลตามเกณฑ์เดิม
+- ใช้ `Runtime.make_cycle()` สร้าง Cycle จาก Decision settings ของ Recipe จุดเดียวกัน การถือผล/วาง–ยก/Evidence ยังใช้ Core เดิม
+- Live evidence เพิ่ม `capture.requested`, `capture.actual` และ timing scope ใช้ metadata จาก driver เดิม; เวลาเป็น host read completion **ไม่ใช่ sensor exposure timestamp** และ driver values ไม่ใช่หลักฐานว่า focus/แสงเหมาะสม
+- Capture thread ถือ project lease ของตัวเองจนอ่าน/คืนกล้องจบ ถ้า caller หยุด timeout แต่ reader ยังอยู่ process อื่นยังไม่ได้สิทธิ์; metadata/start-thread/worker-start failure คืนทรัพยากรตามเส้นทางที่ทดสอบ
+- ข้อความ Terminal ไม่แสดงว่า Camera released เมื่อการคืนกล้องล้มเหลว
+- Engine version `2026.10.09.2`: การเปลี่ยน acquisition/timing ต้อง Validate ใหม่ก่อน Production; ไม่แก้ reports/recipes/threshold/production pointer เดิมย้อนหลัง
+
+### REMOVED จริงใน Phase 3
+
+- การใช้ legacy camera scanner/fallback สำหรับ **Core branch** ใน Terminal
+- ลูป `cap.read()` และการสร้างเวลาภาพแบบ synchronous ที่ซ้ำกับ Core ใน branch ดังกล่าว ใช้ latest-frame pump แทน
+- การสร้าง Core Cycle และการตั้งค่ากล้องซ้ำใน Terminal ย้ายไป runtime เดิม
+- `locate_primary_object()` helper ที่ไม่มี caller หลังตรวจทั้ง Camera/Web/Training/Verification/tools และ tests; คง `analyze_primary_object()` ที่ผู้เรียกยังใช้อยู่
+- Import/timestamp assignment ที่หมดหน้าที่หลังใช้ FramePump
+
+ไม่ลบ scanner/cap.read ของ **Legacy branch** ที่ยังเป็นทางใช้งานจริง ไม่ลบ model weights/history และไม่ถอด dependencies ที่ยังใช้อยู่
+
+### KEEP / สิ่งที่ยังต้องพิสูจน์ก่อนย้าย
+
+| ความสามารถ | เหตุผลที่ยังไม่ถอด |
+|---|---|
+| YOLO Part Locator เดิม | `part_locator.analyze_part()` คืน box/confidence เป็นหลัก; Core ต้องมี transform, alignment limits และ source ROI polygon การแปลง box เป็น alignment เองจะเปลี่ยนความหมาย model/reference ต้องพิสูจน์ translation/rotation/scale/partial-part บนภาพจริงก่อน |
+| Optional Brand identification | Web/Terminal reuse classifier เดิมอยู่แล้ว; Core Recipe ยังไม่มี requirement ว่าต้องใช้ Brand เลือกงานใด ไม่เพิ่ม Brand เป็น defect gate หรือย้ายเข้า Core เพื่อให้ครบจำนวน |
+| Legacy stabilization / PartCycle | OK/REVIEW/NG, การถือ NG และ incomplete-cycle policy ต่างจาก Core PASS/NG/REVIEW/UNABLE; ไม่แทนที่จากชื่อ field ที่คล้ายกัน ต้องเทียบลำดับภาพและผลรายชิ้นกับงานจริง |
+| Deep Patch / legacy reference | Model/ROI/input contract ของงานจริงยังเป็น cropped/fixed; ยังไม่มี full-frame Candidate พร้อม NG validation ที่ใช้แทนได้ |
+| Legacy camera acquisition | คงค่ากล้อง/พฤติกรรม fallback ของ branch ที่ผู้ใช้กำลังใช้ ไม่เปลี่ยนร่วมกับการย้าย Core capture ในครั้งเดียว |
+
+Terminal Core รอบนี้ยังเป็น USB/OpenCV ตาม contract เดิม; Basler provider ของ Core/Web คงอยู่ ไม่อ้างว่าทดสอบ pylon หรือเพิ่ม Basler Terminal สำเร็จ
+
+### TESTED
+
+- **327 Python tests + 5 subtests ผ่าน** หลังการแก้และ Cleanup ทั้งหมด
+- **9 JavaScript tests ผ่าน** รวม navigation/data request/error/stale preview ของ Phase2 และ Core polling; ไม่ใช่ browser tests
+- ใหม่/ปรับ: Terminal/Web ใช้ Candidate และลำดับภาพ fixture เดียวกัน ให้ state/cycle/ROI/quality/capture/evidence เท่ากัน รวม NG; explicit Candidate ไม่เปลี่ยน Production pointer
+- ทดสอบ stale frames ไม่เป็น PASS, disconnect เก็บ incomplete UNABLE, ภาพเต็มไม่ถูกย่อ, camera index ไม่ fallback, blank resolution ไม่ใช้ legacy default, รูป/Recipe/capture metadata เชื่อมกัน
+- ใช้ real thread + OS file lock กับ **กล้องจำลอง** ทดสอบ capture ค้าง/close timeout, lock คงอยู่จน reader จบ, start failure และ metadata failure คืนทรัพยากร
+- Phase2 integration ยังผ่าน: Dataset lifecycle ใช้ temporary directories เท่านั้น, legacy/core records, jobs/models และ human confirmation ไม่เปลี่ยนความหมาย
+- HTTP smoke แบบอ่านอย่างเดียว: `/inspection` และ9 APIs ของ Dataset/Jobs/Models/Runs/Legacy history/Evidence/Status/Recipes ตอบ200บน temporary server8011
+- **Browser automation ยังใช้ไม่ได้**: `failed to write kernel assets ... os error 3`; ไม่รับรอง Layout/Button/Form ผ่าน browser จากผล HTTP/VM
+- Hash records/config ก่อน Phase3 **462ไฟล์** และ model artifacts **72ไฟล์** ไม่เปลี่ยน/ไม่หาย; `project_config.json` ไม่มี diff
+- temporary server8011 ปิดแล้ว กล้องเดิมและ server8000ไม่ได้ Restart ไม่ได้เปิดกล้องเพิ่ม
+
+คำสั่ง regression:
+
+```text
+.venv-inspection\Scripts\python.exe -B -m pytest 07_web_app/tests -q -p no:cacheprovider
+node --test 07_web_app/tests/test_live_polling.cjs 07_web_app/tests/test_workspace_ui.cjs 07_web_app/tests/test_inspection_validation_ui.cjs
+```
+
+### Candidate กับกล้องจริง — ยังไม่ได้ทำ / ต้องเก็บหลักฐาน
+
+สถานะที่อ่านได้: Recipe7รายการยังเป็น `fixed`, ไม่มี Production pointer จึงยังไม่มี Candidate ที่ใช้แทน live place/remove ได้ ห้ามเลือกสูตรเก่าแล้วบังคับผ่านหรือเดา threshold
+
+1. ผู้ใช้หยุดโปรแกรมที่ถือกล้องด้วย q/Esc ก่อนเริ่ม Candidate; อย่าเปิดสองโปรแกรมแย่งกล้อง จด serial/index, full resolution, focus, exposure/gain/driver settings และการจัดแสงจริง
+2. ใน Setup ใช้ภาพเต็มจริงจากกล้องเดียวกันและ capture groups ที่ยืนยันได้ ทำ Candidate แยก เลือก Template/Features ตามการเคลื่อนจริง ตั้ง ROI หลัง alignment และใช้ model/reference/input setup ที่เข้ากันได้ โมเดลจาก cropped recipe เดิมไม่ถือว่าใช้แทนได้อัตโนมัติ
+3. ถ้าข้อมูลยังไม่พอ calibrate quality/locator/anomaly หรือโมเดลยังไม่ตรง input contract ให้หยุดเก็บข้อมูล ไม่ Train/เปลี่ยนค่าเพื่อทำให้ผ่าน; การ Train ด้วยข้อมูลจริงต้องเป็นงานที่ผู้ใช้อนุญาต
+4. เริ่ม **ไฟล์เดิม** จาก Project root โดยแทน placeholders ด้วย Recipe ID/index จริง:
+
+```text
+..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe <saved_recipe_id> --camera-index <actual_index>
+```
+
+5. ตรวจข้อความ `CANDIDATE TEST - NOT PRODUCTION`, ขนาดเต็ม, ภาพสด/กรอบ/FPS, Quality/Locator และ ROI บนชิ้นงานจริง ทดสอบ GOOD/NG ที่คนยืนยัน, การเลื่อน/หมุนในขอบเขต, ชิ้นงานขาดขอบ, blur/แสงผิด, วาง–ยก และทำซ้ำแต่ละชิ้น
+6. เก็บ Evidence ID, image/recipe hash, camera requested/actual, source polygon, score/threshold, frame age/sequence, decision/complete/cycle time และ ground truth/capture group แยกจาก machine result; s/Space เป็น sample ไม่ใช่ Human confirmation
+7. ทดสอบหยุด/ถอดกล้องระหว่างชิ้นงาน: ต้องไม่เกิด complete PASS ที่ยังตรวจไม่จบ และต้องคืนกล้องก่อนเริ่มรอบใหม่ FramePump อาจข้ามเฟรมเมื่อ inference ช้า ต้องวัด latency และความเสถียรจริง ไม่ใช้ unit-test timing รับรอง throughput
+8. ตรวจ source=`candidate`/`candidate_sample`, Production pointer ไม่เปลี่ยน, หนึ่งผลต่อรอบที่สมบูรณ์ ใช้ independent GOOD/NG ประเมิน False Accept/False Reject/Defect Recall, repeatability และเวลา/ชิ้น
+9. ถอด Legacy Live ได้เมื่อ full-frame Candidate ครอบคลุมงานเดิม, alignment/ROI/optional product identification ได้รับการยืนยัน, fail-safe/cycle/evidence ผ่านกล้องจริง และ independent validation ผ่านเกณฑ์ที่เจ้าของงานกำหนดแล้ว
+
+### Phase2 Manual Browser Verification ที่ยังค้าง
+
+หลังเริ่ม serverด้วยโค้ดล่าสุดตามวิธีเดิมและ Hard refresh:
+- Setup → Dataset library: Preview/Metadata ถูกต้อง ใช้ **temporary dataset แยกเท่านั้น** สำหรับ Upload→Undo→Trash→Restore ตรวจว่าไม่เปลี่ยน Ground Truth และไม่กระทบชุดก่อน
+- Test → Jobs/Models/History: Core/Legacy แยกชัด การเปิดรายการไม่ Train/Activate, Legacy Test แสดงภาพและข้อผิดพลาดถูกต้อง
+- Review: Machine result/Human confirmation/Legacy Test/Production Evidence แยกกัน การอ่านไม่ยืนยันผลเอง
+- `/engineering`404, `/jobs` เข้า Test, Setup→Test→Production→Review ไม่มี console error/ปุ่มล้นจอ ตรวจ disabled state เมื่อ runtime busy และเมื่อ backend ติดต่อไม่ได้
+
+### Git checkpoints
+
+- Phase1: `9f3f8a1`; Phase2 migration/cleanup: `65434bf` → `bfe7520`
+- ก่อน Phase3: tag `phase3-start-20261009` ที่ `bfe7520`
+- หลัง Phase3: tag `phase3-live-20261009` ชี้ commit ของโค้ด/tests/รายงานรอบนี้ (`git log --oneline`)
+- ไม่มี backup source ชุดใหม่ใน Project ไม่ push ไม่แตะ untracked files เดิม
+
+---
+
+## บันทึก Phase 2 (งานที่เสร็จก่อนหน้า)
 
 ## สถานะ
 

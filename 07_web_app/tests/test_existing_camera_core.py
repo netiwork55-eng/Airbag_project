@@ -11,6 +11,7 @@ import app
 from inspection.store import Store,atomic_json
 from inspection.pipeline import Pipeline
 from inspection.runtime import Runtime
+import inspection.runtime as shared
 from inspection.validation import validate
 
 detector=app.detector
@@ -44,12 +45,24 @@ def camera_core(tmp_path,monkeypatch):
     monkeypatch.setattr(detector,'YOLO',Mock(side_effect=AssertionError('Legacy model must not load')))
     monkeypatch.setattr(detector.cv2,'imshow',Mock())
     monkeypatch.setattr(detector.cv2,'destroyAllWindows',Mock())
+    class Pump:
+        # Deterministic frames for contract tests; real thread/lease covered separately.
+        def __init__(self,camera,**kwargs):
+            self.camera=camera
+            self.thread=Mock();self.thread.is_alive.return_value=False
+        def next(self,sequence):
+            frame=self.camera.read()
+            return sequence+1,frame,shared.time.monotonic(),'fixture-time'
+        def close(self):self.camera.close()
+    monkeypatch.setattr(shared,'FramePump',Pump)
     args=SimpleNamespace(camera_index=1,no_brand=True)
     return store,frame,saved,report,runtime,args
 
 
 def capture(frames):
     cap=Mock()
+    cap.isOpened.return_value=True
+    cap.get.return_value=0.0
     cap.read.side_effect=[(True,f.copy()) for f in frames]+[(False,None)]
     return cap
 
@@ -58,8 +71,8 @@ def test_existing_window_uses_shared_decision_and_full_frame_evidence(camera_cor
     store,frame,saved,report,runtime,args=camera_core
     blank=np.full_like(frame,120)
     cap=capture([frame+1,frame+1,blank,blank])
-    opener=Mock(return_value=(cap,1))
-    monkeypatch.setattr(detector,'open_available_camera',opener)
+    opener=Mock(return_value=cap)
+    monkeypatch.setattr(shared.cv2,'VideoCapture',opener)
     monkeypatch.setattr(detector.cv2,'waitKey',Mock(side_effect=[-1,-1,-1,ord('q')]))
     clock=[10.0]
     def tick():
@@ -73,6 +86,8 @@ def test_existing_window_uses_shared_decision_and_full_frame_evidence(camera_cor
     rows=store.records('evidence')
     assert len(rows)==1 and rows[0]['complete'] and rows[0]['state']=='PASS'
     assert rows[0]['recipe_hash']==saved['hash'] and rows[0]['source']=='production'
+    assert rows[0]['capture']['actual']['driver']=='opencv' and rows[0]['capture']['requested']['index']==1
+    opener.assert_called_once_with(1,cv2.CAP_DSHOW)
     assert rows[0]['areas'][0]['source_polygon']
     np.testing.assert_array_equal(store.image(rows[0]['image_id']),frame+1)
     assert store.read('images',rows[0]['image_id'])['label']=='GOOD'  # Same existing fixture pixels; not relabelled.
@@ -86,9 +101,9 @@ def test_existing_window_uses_shared_decision_and_full_frame_evidence(camera_cor
 def test_disconnect_records_incomplete_unable_and_releases(camera_core,monkeypatch):
     store,frame,_,_,runtime,args=camera_core
     cap=capture([frame+2,frame+2])
-    monkeypatch.setattr(detector,'open_available_camera',lambda index:(cap,1))
+    monkeypatch.setattr(shared.cv2,'VideoCapture',lambda *args:cap)
     monkeypatch.setattr(detector.cv2,'waitKey',lambda delay:-1)
-    with pytest.raises(RuntimeError,match='disconnected'):
+    with pytest.raises(RuntimeError,match='did not deliver'):
         detector.run_normal_reference_camera(args,{},runtime)
     row=store.records('evidence')[0]
     assert row['state']=='UNABLE_TO_INSPECT' and not row['complete']
@@ -98,12 +113,13 @@ def test_disconnect_records_incomplete_unable_and_releases(camera_core,monkeypat
     runtime.anomaly.close.assert_called_once()
 
 
-@pytest.mark.parametrize('failure',['report','source','index','resolution','fallback'])
+@pytest.mark.parametrize('failure',['report','source','index','resolution','unavailable'])
 def test_invalid_core_configuration_never_falls_back_or_changes_settings(camera_core,monkeypatch,failure):
     store,frame,saved,report,runtime,args=camera_core
     cap=capture([frame])
-    opener=Mock(return_value=(cap,2 if failure=='fallback' else 1))
-    monkeypatch.setattr(detector,'open_available_camera',opener)
+    opener=Mock(return_value=cap)
+    if failure=='unavailable':cap.isOpened.return_value=False
+    monkeypatch.setattr(shared.cv2,'VideoCapture',opener)
     if failure=='report':
         report['metrics']['good_count']=999
         atomic_json(store.path('tests',report['id']),report)
@@ -116,9 +132,9 @@ def test_invalid_core_configuration_never_falls_back_or_changes_settings(camera_
         pipeline=runtime.production_pipeline()
         pipeline.recipe.camera.width=640
         monkeypatch.setattr(runtime,'production_pipeline',lambda:pipeline)
-    with pytest.raises(ValueError):
+    with pytest.raises((ValueError,RuntimeError)):
         detector.run_normal_reference_camera(args,{},runtime)
-    if failure=='fallback':
+    if failure=='unavailable':
         cap.release.assert_called_once()
     else:opener.assert_not_called()
     cap.set.assert_not_called()
@@ -161,7 +177,7 @@ def test_candidate_uses_same_camera_core_without_production(camera_core,monkeypa
     store.path('tests',report['id']).unlink()
     runtime.source='candidate'
     cap=capture([frame+2,frame+2])
-    monkeypatch.setattr(detector,'open_available_camera',lambda index:(cap,1))
+    monkeypatch.setattr(shared.cv2,'VideoCapture',lambda *args:cap)
     monkeypatch.setattr(detector.cv2,'waitKey',Mock(side_effect=[ord('s'),ord('q')]))
     detector.run_normal_reference_camera(args,{},runtime,candidate_recipe_id=saved['id'])
     rows=store.records('evidence')
@@ -232,11 +248,70 @@ def test_web_runtime_keeps_same_shared_part_cycle_and_raw_evidence(camera_core,m
             if sequence==3:runtime.stop_event.set()
             return sequence+1,next(frames),tick(),'fixture-time'
         def close(self):self.camera.close()
-    monkeypatch.setattr(shared,'FramePump',Pump)
-    runtime.loop(camera,runtime.production_pipeline())
+    runtime.loop(Pump(camera),runtime.production_pipeline())
     rows=store.records('evidence')
     assert len(rows)==1 and rows[0]['complete'] and rows[0]['state']=='PASS'
     assert rows[0]['recipe_hash']==saved['hash']
     np.testing.assert_array_equal(store.image(rows[0]['image_id']),frame+1)
     assert runtime.state['last_event']==rows[0]['id'] and runtime.frame is None
     camera.close.assert_called_once()
+
+
+def test_candidate_unspecified_resolution_uses_driver_not_legacy_crop_defaults(camera_core,monkeypatch):
+    store,frame,saved,_,runtime,args=camera_core
+    config=saved['config'];config['camera'].update(width=None,height=None)
+    candidate=store.save_recipe(config);runtime.source='candidate'
+    monkeypatch.setattr(detector,'CAMERA_WIDTH',640)
+    monkeypatch.setattr(detector,'CAMERA_HEIGHT',480)
+    cap=capture([frame+2]);monkeypatch.setattr(shared.cv2,'VideoCapture',lambda *a:cap)
+    monkeypatch.setattr(detector.cv2,'waitKey',lambda d:ord('q'))
+    detector.run_normal_reference_camera(args,{},runtime,candidate_recipe_id=candidate['id'])
+    assert [c.args for c in cap.set.call_args_list]==[(cv2.CAP_PROP_BUFFERSIZE,1),(cv2.CAP_PROP_FPS,detector.CAMERA_FPS)]
+    row=store.records('evidence')[0]
+    assert row['source']=='candidate' and not row['complete']
+    assert row['capture']['requested']['width'] is None
+    assert store.image(row['image_id']).shape==frame.shape
+
+
+def test_terminal_and_web_consume_same_candidate_pipeline_cycle_and_evidence(camera_core,monkeypatch,tmp_path):
+    import shutil
+    store,frame,saved,_,runtime,args=camera_core
+    runtime.source='candidate'
+    # Copy only the temporary fixture, never the user's data/model artifacts.
+    other=tmp_path/'web_fixture'
+    shutil.copytree(store.root,other)
+    web=Runtime(Store(other),Mock(),source='candidate')
+    clock=[10.0]
+    def tick():
+        clock[0]+=.1
+        return clock[0]
+    monkeypatch.setattr(shared.time,'monotonic',tick)
+    frames=[frame+1,frame//2,frame//2,np.full_like(frame,120),np.full_like(frame,120)]
+    cap=capture(frames);monkeypatch.setattr(shared.cv2,'VideoCapture',lambda *a:cap)
+    monkeypatch.setattr(detector.cv2,'waitKey',Mock(side_effect=[-1]*4+[ord('q')]))
+    detector.run_normal_reference_camera(args,{},runtime,candidate_recipe_id=saved['id'])
+    web.capture_metadata=runtime.capture_metadata
+    class Pump:
+        def next(self,sequence):
+            if sequence==len(frames)-1:web.stop_event.set()
+            return sequence+1,frames[sequence].copy(),tick(),'fixture-time'
+        def close(self):pass
+    web.loop(Pump(),web.candidate_pipeline(saved['id']))
+    terminal_record=store.records('evidence')[0];web_record=web.store.records('evidence')[0]
+    for field in ['source','state','complete','recipe_hash','areas','quality','locator','capture','inspected_frames']:
+        assert terminal_record[field]==web_record[field],field
+    assert terminal_record['state']=='NG' and terminal_record['complete']
+    np.testing.assert_array_equal(store.image(terminal_record['image_id']),web.store.image(web_record['image_id']))
+
+
+def test_terminal_release_error_is_not_reported_as_success(camera_core,monkeypatch,capsys):
+    _,frame,saved,_,runtime,args=camera_core
+    runtime.source='candidate';cap=capture([frame])
+    cap.release.side_effect=RuntimeError('driver release error')
+    monkeypatch.setattr(shared.cv2,'VideoCapture',lambda *a:cap)
+    monkeypatch.setattr(detector.cv2,'waitKey',lambda d:ord('q'))
+    with pytest.raises(RuntimeError,match='driver release error'):
+        detector.run_normal_reference_camera(args,{},runtime,candidate_recipe_id=saved['id'])
+    output=capsys.readouterr().out
+    assert 'Camera release failed' in output and 'Camera released.' not in output
+    runtime.anomaly.close.assert_called_once()
