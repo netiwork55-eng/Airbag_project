@@ -1,0 +1,2 @@
+# Tested existing camera/web runtime. Optional Anomalib worker is isolated.
+-r requirements-runtime.lock

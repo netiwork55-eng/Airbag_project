@@ -1,0 +1,288 @@
+{
+  "project_name": "Airbag_Toyota",
+  "brand": "Toyota",
+  "model": "1",
+  "target_classes": [
+    "OK",
+    "NG"
+  ],
+  "primary_class": "OK",
+  "detection_mode": "normal_reference",
+  "inspection_strategy": "normal_reference",
+  "inspection_modules": {
+    "part_locator": true,
+    "normal_reference": true,
+    "legacy_defect_assist": false,
+    "brand_classifier": true
+  },
+  "normal_reference": {
+    "active_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\normal_reference\\Airbag_Toyota_20260929_154205_deep_patch.npz",
+    "source_dataset": "reviewed_known_good",
+    "inspection_size": 320,
+    "min_good_images": 5,
+    "min_region_ratio": 0.00035,
+    "trained_at": "2026-09-29T15:42:07",
+    "training_images": 214,
+    "pipeline_version": 7,
+    "background_handling": "aligned_part_mask_only",
+    "quality_metrics": {
+      "engine": "deep_patch",
+      "pipeline_version": 7,
+      "feature_mode": "aligned_masked_multiscale_position_aware",
+      "metric_scope": "independent_known_good_holdout",
+      "independent_validation": true,
+      "calibration_images": 35,
+      "fit_images": 137,
+      "production_memory_scope": "fit_only_frozen",
+      "roi_policy": "shared_runtime_locator_complete_part",
+      "split_policy": "source_group_disjoint",
+      "validation_in_production_memory": false,
+      "source_images_considered": 268,
+      "usable_training_images": 214,
+      "images_excluded_no_part": 43,
+      "images_excluded_clipped_part": 11,
+      "images_excluded_total": 54,
+      "validation_images": 42,
+      "normal_acceptance_rate": 1.0,
+      "false_ng_rate": 0.0,
+      "anomaly_score_mean": 0.9719,
+      "anomaly_score_p95": 1.1914,
+      "anomaly_score_max": 2.326,
+      "production_threshold": 3.241,
+      "review_threshold": 3.0141,
+      "region_threshold": 2.1067,
+      "memory_positions": 1024,
+      "memory_samples_per_position": 64,
+      "foreground_coverage": 0.8916,
+      "threshold_calibration": "fit_group_excluded_scale_then_calibration_threshold",
+      "defect_metrics_available": false,
+      "defect_metrics_reason": "No human-confirmed NG evaluation images are available yet.",
+      "confirmed_ng_images": 0,
+      "detected_ng_images": 0,
+      "ng_recall": null,
+      "false_ok_rate": null,
+      "false_ok_images": 0,
+      "confirmed_ng_review_images": 0,
+      "confirmed_ng_uninspectable_images": 0,
+      "reviewed_ok_images": 0,
+      "accepted_reviewed_ok_images": 0,
+      "reviewed_ok_acceptance_rate": null,
+      "balanced_accuracy": null,
+      "evaluation_note": "Human-reviewed production captures; excluded from Normal Reference training.",
+      "strict_ok_rate": 1.0,
+      "review_rate": 0.0,
+      "uninspectable_rate": 0.0,
+      "holdout_decisions": {
+        "OK": 42,
+        "REVIEW": 0,
+        "NG": 0,
+        "UNINSPECTABLE": 0
+      },
+      "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575"
+    },
+    "source_datasets": [
+      "Airbag_Toyota"
+    ],
+    "source_images": 268,
+    "duplicates_removed": 0,
+    "training_fingerprint": "c1ca454f0089d9518b6376e9383cd3cf8bc2ce25cd6004153a505045a8869fc9",
+    "anomaly_engine": "deep_patch",
+    "backbone_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+    "locator_retrained": false,
+    "recipe_id": "job_e64743c6e55848d5813bd6e5c4148fbd",
+    "recipe_name": "Toyota 1 — saved model",
+    "effective_inspection_size": 320,
+    "candidate_comparison": {
+      "promote": true,
+      "decision": "promoted_provisional",
+      "provisional": true,
+      "checks": [
+        {
+          "name": "independent_holdout_required",
+          "passed": true,
+          "candidate": true,
+          "incumbent": true,
+          "detail": "Training-set scores cannot authorize automatic model activation."
+        },
+        {
+          "name": "clear_ok_acceptance_minimum",
+          "passed": true,
+          "candidate": 1.0,
+          "incumbent": 0.9,
+          "detail": "REVIEW is not a clean OK decision."
+        },
+        {
+          "name": "same_comparison_images_and_roi",
+          "passed": true,
+          "candidate": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+          "incumbent": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+          "detail": ""
+        },
+        {
+          "name": "known_good_acceptance_minimum",
+          "passed": true,
+          "candidate": 1.0,
+          "incumbent": 0.9,
+          "detail": ""
+        },
+        {
+          "name": "known_good_not_regressed",
+          "passed": true,
+          "candidate": 1.0,
+          "incumbent": 0.0238,
+          "detail": "Candidate may be at most 3 percentage points lower on Known-good holdout."
+        }
+      ],
+      "failed_checks": [],
+      "candidate_metrics": {
+        "engine": "deep_patch",
+        "pipeline_version": 7,
+        "feature_mode": "aligned_masked_multiscale_position_aware",
+        "metric_scope": "independent_known_good_holdout",
+        "independent_validation": true,
+        "calibration_images": 35,
+        "fit_images": 137,
+        "production_memory_scope": "fit_only_frozen",
+        "roi_policy": "shared_runtime_locator_complete_part",
+        "split_policy": "source_group_disjoint",
+        "validation_in_production_memory": false,
+        "source_images_considered": 268,
+        "usable_training_images": 214,
+        "images_excluded_no_part": 43,
+        "images_excluded_clipped_part": 11,
+        "images_excluded_total": 54,
+        "validation_images": 42,
+        "normal_acceptance_rate": 1.0,
+        "false_ng_rate": 0.0,
+        "anomaly_score_mean": 0.9719,
+        "anomaly_score_p95": 1.1914,
+        "anomaly_score_max": 2.326,
+        "production_threshold": 3.241,
+        "review_threshold": 3.0141,
+        "region_threshold": 2.1067,
+        "memory_positions": 1024,
+        "memory_samples_per_position": 64,
+        "foreground_coverage": 0.8916,
+        "threshold_calibration": "fit_group_excluded_scale_then_calibration_threshold",
+        "defect_metrics_available": false,
+        "defect_metrics_reason": "No human-confirmed NG evaluation images are available yet.",
+        "confirmed_ng_images": 0,
+        "detected_ng_images": 0,
+        "ng_recall": null,
+        "false_ok_rate": null,
+        "false_ok_images": 0,
+        "confirmed_ng_review_images": 0,
+        "confirmed_ng_uninspectable_images": 0,
+        "reviewed_ok_images": 0,
+        "accepted_reviewed_ok_images": 0,
+        "reviewed_ok_acceptance_rate": null,
+        "balanced_accuracy": null,
+        "evaluation_note": "Human-reviewed production captures; excluded from Normal Reference training.",
+        "strict_ok_rate": 1.0,
+        "review_rate": 0.0,
+        "uninspectable_rate": 0.0,
+        "holdout_decisions": {
+          "OK": 42,
+          "REVIEW": 0,
+          "NG": 0,
+          "UNINSPECTABLE": 0
+        },
+        "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575"
+      },
+      "incumbent_metrics": {
+        "validation_images": 42,
+        "independent_validation": false,
+        "normal_acceptance_rate": 0.0238,
+        "strict_ok_rate": 0.0238,
+        "review_rate": 0.0,
+        "false_ng_rate": 0.9762,
+        "uninspectable_rate": 0.0,
+        "holdout_decisions": {
+          "OK": 1,
+          "REVIEW": 0,
+          "NG": 41,
+          "UNINSPECTABLE": 0
+        },
+        "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+        "confirmed_ng_images": 0,
+        "detected_ng_images": 0,
+        "ng_recall": null,
+        "false_ok_rate": null,
+        "false_ok_images": 0,
+        "confirmed_ng_review_images": 0,
+        "confirmed_ng_uninspectable_images": 0,
+        "reviewed_ok_images": 0,
+        "accepted_reviewed_ok_images": 0,
+        "reviewed_ok_acceptance_rate": null,
+        "balanced_accuracy": null,
+        "evaluation_note": "Paired candidate holdout; incumbent may have seen these images during its historical training."
+      },
+      "reason": "Candidate passed Known-good checks; NG performance is not yet measurable."
+    },
+    "inspection_contract": {
+      "schema_version": 2,
+      "check_brand": true,
+      "model_sha256": "e9efcd50b809608f5cf4ff51da590efcbd9107782563ab48975849c953c22171",
+      "brand": "Toyota",
+      "min_brand_confidence": 0.8,
+      "datasets": [
+        {
+          "id": "Airbag_Toyota",
+          "recipe": {
+            "brand": "Toyota",
+            "model": "1",
+            "target": "1"
+          }
+        }
+      ]
+    },
+    "recipe_datasets": [
+      {
+        "id": "Airbag_Toyota",
+        "recipe": {
+          "brand": "Toyota",
+          "model": "1",
+          "target": "1"
+        }
+      }
+    ],
+    "job_id": "job_e64743c6e55848d5813bd6e5c4148fbd"
+  },
+  "class_aliases": {},
+  "class_display_names": {
+    "OK": "OK",
+    "NG": "NG"
+  },
+  "primary_confidence": 0.3,
+  "secondary_confidence": 0.4,
+  "camera_index": 0,
+  "use_classifier": true,
+  "active_detector_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Airbag_Mark_20260824_154238_best.pt",
+  "active_locator_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+  "previous_detector_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Airbag_Mark_20260824_154238_best.pt",
+  "active_brand_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\06_brand_classification\\04_trained_models\\airbag_brand_best.pt",
+  "last_train_type": "",
+  "last_train_log": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\07_web_app\\logs\\train_jobs\\20260824_145201_airbag_detector.log",
+  "last_train_status": "",
+  "last_model_validation": {
+    "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Airbag_Mark_20260824_154238_best.pt"
+  },
+  "use_legacy_defect_signal": false,
+  "augmentation_profile": {
+    "mode": "recommended",
+    "values": {
+      "hsv_s": 0.35,
+      "hsv_v": 0.25,
+      "degrees": 5.0,
+      "translate": 0.08,
+      "scale": 0.18,
+      "shear": 1.0,
+      "fliplr": 0.15,
+      "mosaic": 0.35,
+      "erasing": 0.1
+    }
+  },
+  "target_classes_text": "OK, NG",
+  "updated_at": "2026-10-08T14:31:24",
+  "created_at": "2026-08-25T12:59:46"
+}

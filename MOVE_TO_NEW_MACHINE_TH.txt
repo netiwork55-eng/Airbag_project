@@ -1,0 +1,31 @@
+ย้าย Industrial Visual Inspection ไปเครื่องใหม่ — 6 ตุลาคม 2026
+
+1. หยุดกล้อง/งานเรียนรู้ก่อนสำรอง คัดลอกโฟลเดอร์โปรเจกต์พร้อม inspection_data, models,
+   Dataset, project_config และหลักฐานที่ต้องเก็บ สำรอง credentials แยกอย่างปลอดภัย
+2. ใช้ Python 3.12 บน Windows สร้าง environment ใหม่ ไม่คัดลอก venv จากเครื่องเดิม
+3. setup_new_machine.bat สร้าง ../venv ติดตั้ง requirements-runtime.lock ผ่าน requirements.txt
+   แล้วสร้าง .venv-inspection จาก requirements-inspection.lock ผ่าน setup_inspection.py
+   packages มาจาก official PyPI; backbone มาจาก official TorchVision และตรวจ hash
+   หาก offline ให้เตรียม cache/package ที่ตรวจแหล่งที่มาแล้ว ไม่ดาวน์โหลด binary จากแหล่งสุ่ม
+4. .venv-inspection อ่าน torch/torchvision base ผ่าน existing_runtime.pth จึงต้องสร้างไฟล์นี้ใหม่หลังย้าย
+   เรียก ../venv/Scripts/python.exe tools/maintenance/setup_inspection.py
+   เพิ่ม --fetch-backbone เฉพาะเมื่อต้องเตรียม official ResNet18 cache
+5. ตรวจเงื่อนไข pretrained weights แยกจาก license ของ code ก่อนใช้เชิงพาณิชย์
+   ตรวจ SDK/สิทธิ์ Basler ตาม vendor; ไม่แทน driver ด้วย implementation ใหม่
+6. CVAT ใช้ server เดิม ตั้ง environment/credentials ตามการติดตั้งเดิม ไม่ติดตั้งซ้ำหรือเปิด public
+7. start_web_app.bat เปิด http://127.0.0.1:8000/inspection
+   startup ไม่ซ่อม path หรือสลับโมเดลอัตโนมัติอีกแล้ว
+8. ถ้างาน Engineering เดิมมี absolute paths ให้สำรอง config แล้วตรวจ repair_after_move.py ก่อนเรียก
+   ตัวช่วยย้ายเฉพาะไฟล์ชื่อเดิม ไม่เลือก checkpoint ล่าสุดแทนไฟล์หาย
+9. ทดสอบ recipes ด้วยภาพอิสระใหม่ ตรวจ exact camera serial/index, resolution, exposure, light,
+   locator, ROI, timing, NG/REVIEW/UNABLE และ replay/กล้องจริงก่อนเริ่ม Production
+   ผล validation เครื่องเก่าไม่ใช่การรับรองเครื่องใหม่
+
+คำสั่ง tests จาก root:
+.venv-inspection\Scripts\python.exe -m pytest 07_web_app/tests -q
+node --check 07_web_app/static/inspection.js
+node 07_web_app/tests/test_live_polling.cjs
+
+รุ่นที่ตรึงนี้ทดสอบบนเครื่องปัจจุบัน ยังไม่ได้ clean-install และทดสอบ Basler บนเครื่องใหม่
+ถ้า package/driver ไม่ตรง อย่าเงียบปรับรุ่นแล้วอ้างผลเดิม ให้ตรวจ compatibility และทดสอบใหม่
+คู่มือหลัก NEW_SYSTEM_TH.md; รายงานล่าสุด work/renovation-20261006/REPORT_TH.md

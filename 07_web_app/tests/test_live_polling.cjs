@@ -1,0 +1,40 @@
+const fs = require('node:fs');
+const vm = require('node:vm');
+const assert = require('node:assert/strict');
+const html = fs.readFileSync(require('node:path').join(__dirname, '../templates/training.html'), 'utf8');
+const extract = name => { const begin = html.indexOf(`      async function ${name}(`); const end = html.indexOf('\n      function ', begin + 1); const asyncEnd = html.indexOf('\n      async function ', begin + 1); return html.slice(begin, Math.min(...[end, asyncEnd].filter(n => n > begin))); };
+(async () => {
+  let release;
+  let calls = 0;
+  const ctx = {trainStatusInFlight:false, refreshReferenceTrainingStatus:async()=>{ calls++; await new Promise(r=>release=r); return true; }};
+  vm.createContext(ctx); vm.runInContext(extract('refreshTrainStatus'),ctx);
+  const first=ctx.refreshTrainStatus(); await ctx.refreshTrainStatus();
+  assert.equal(calls,1); release(); await first; assert.equal(ctx.trainStatusInFlight,false);
+  let fallbackCalls=0;
+  const offline={referenceStartPending:false, trainStopPending:false, trainCommandRevision:0, AbortSignal, fetch:async()=>{fallbackCalls++; return {ok:false};}, referenceTrainingState:{running:true}, lastTrainStatusAt:123,
+    setTrainStatusPill:()=>{}, trainHeartbeat:{textContent:''}, formatClock:()=> 'last-success',
+    renderReferenceTrainingProgress:()=>{throw Error('Must not render a fresh heartbeat while offline');}};
+  vm.createContext(offline);vm.runInContext(extract('refreshReferenceTrainingStatus'),offline);
+  assert.equal(await offline.refreshReferenceTrainingStatus(),true);
+  assert.match(offline.trainHeartbeat.textContent,/last-success/);assert.equal(fallbackCalls,1);
+  let resolveStatus;
+  const stale={...offline, fetch:()=>new Promise(r=>resolveStatus=r), lastTrainState:{job_id:'new-job'}};
+  vm.createContext(stale);vm.runInContext(extract('refreshReferenceTrainingStatus'),stale);
+  const oldPoll=stale.refreshReferenceTrainingStatus();stale.trainCommandRevision++;
+  resolveStatus({ok:true,json:async()=>({strategy:'normal_reference',training:{job_id:'old-job',status:'finished'}})});
+  assert.equal(await oldPoll,true);assert.equal(stale.lastTrainState.job_id,'new-job');
+  stale.referenceStartPending=true;resolveStatus=null;
+  assert.equal(await stale.refreshReferenceTrainingStatus(),true);assert.equal(resolveStatus,null);
+  const rateSource=html.slice(html.indexOf('      function formatReferenceRate('),html.indexOf('      function showReferenceTrainingCompletion('));
+  vm.runInContext(rateSource,stale);
+  for(const value of [null,undefined,'',NaN]) assert.equal(stale.formatReferenceRate(value),'—');
+  assert.equal(stale.formatReferenceRate(0),'0.0%');assert.equal(stale.formatReferenceRate(.975),'97.5%');
+  const stepSource=html.slice(html.indexOf('      function referenceBuildStep('),html.indexOf('      function renderReferenceTrainingProgress('));
+  vm.runInContext(stepSource,stale);
+  assert.equal(stale.referenceBuildStep('extracting_deep_features'),'validation');
+  assert.equal(stale.referenceBuildStep('calibrating_threshold'),'production');
+  assert.equal(stale.referenceBuildStep('saving_reference'),'saving');
+  console.log('PASS: build step follows backend stage instead of guessed percentage');
+  console.log('PASS: stale response after command ignored; pending start skips poll; missing metrics differ from zero');
+  console.log('PASS: single-flight polling; lock released; HTTP failure retains last successful timestamp without false heartbeat');
+})().catch(e=>{console.error(e);process.exitCode=1});

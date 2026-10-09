@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.py[cod]
+*.pyo
+
+# Virtual environment / dependency folders
+.venv/
+venv/
+
+# Secret or machine-specific config
+.env
+
+# Runtime logs ที่ระบบสร้างใหม่ได้
+*.log
+!07_web_app/logs/train_jobs/
+!07_web_app/logs/train_jobs/*.log
+
+# ไฟล์ backup/temp ที่ไม่ควรติดไปกับ source หลัก
+*.bak
+*.tmp
+*~
+
+# Upload staging เป็นพื้นที่พักไฟล์ ไม่ใช่ dataset หลัก
+03_dataset/web_upload_staging/*
+!03_dataset/web_upload_staging/.gitkeep
+
+# โฟลเดอร์ที่ระบบใช้พักรายการที่ลบไว้ ไม่ใช่ dataset หลัก
+03_dataset/deleted_dataset_folders/*
+!03_dataset/deleted_dataset_folders/.gitkeep
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+
+# ภาพตรวจ UI ชั่วคราวจาก Codex/automation
+.codex-*.png

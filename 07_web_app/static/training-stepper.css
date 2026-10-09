@@ -1,0 +1,211 @@
+/* Persistent four-step workflow navigation.
+   Loaded last so page-specific legacy layouts cannot hide or compress it. */
+
+.workflow-stepper {
+  box-sizing: border-box;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  align-items: stretch;
+  min-height: 54px;
+  margin: 0;
+  padding: 5px 8px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background:
+    radial-gradient(circle at 50% -140%, rgba(32, 139, 214, .14), transparent 58%),
+    linear-gradient(108deg, rgba(7, 27, 46, .78), rgba(5, 21, 38, .7)) !important;
+  box-shadow: none !important;
+}
+
+.workflow-stepper .workspace-signal-item {
+  position: relative;
+  isolation: isolate;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 42px !important;
+  padding: 5px 12px !important;
+  border: 1px solid transparent !important;
+  border-radius: 11px;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #839bb2;
+  font: inherit;
+  list-style: none;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+  transition: border-color .2s ease, background .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.workflow-stepper .workspace-signal-item + .workspace-signal-item,
+.workflow-stepper .workspace-signal-item:nth-child(n) {
+  border-top-color: transparent !important;
+  border-left-color: transparent !important;
+}
+
+.workflow-stepper .workspace-signal-item:not(:last-child)::after {
+  position: absolute;
+  z-index: -1;
+  top: 50%;
+  right: -22%;
+  width: 44%;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(83, 139, 178, .52), rgba(47, 104, 148, .18));
+  content: "";
+  pointer-events: none;
+}
+
+.workflow-stepper .workflow-step-number {
+  display: grid;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border: 1px solid rgba(132, 179, 214, .64);
+  border-radius: 50%;
+  background: rgba(11, 37, 61, .86);
+  color: #bfd2e2;
+  font-size: 12px;
+  font-weight: 800;
+  line-height: 1;
+  transition: inherit;
+}
+
+.workflow-stepper .workspace-signal-item strong {
+  overflow: hidden;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workflow-stepper .workspace-signal-item.is-complete {
+  color: #a9c8d9;
+}
+
+.workflow-stepper .workspace-signal-item.is-complete .workflow-step-number {
+  border-color: rgba(33, 207, 222, .7);
+  background: rgba(17, 105, 130, .38);
+  color: #7eeaf5;
+}
+
+.workflow-stepper .workspace-signal-item.is-complete::after {
+  background: linear-gradient(90deg, rgba(40, 201, 226, .86), rgba(40, 201, 226, .34));
+}
+
+.workflow-stepper .workspace-signal-item.is-current,
+.workflow-stepper .workspace-signal-item[aria-current="step"] {
+  border-color: transparent !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #f4fcff;
+}
+
+.workflow-stepper .workspace-signal-item.is-current strong,
+.workflow-stepper .workspace-signal-item[aria-current="step"] strong {
+  text-shadow: 0 0 14px rgba(67, 218, 240, .3);
+}
+
+.workflow-stepper .workspace-signal-item.is-current .workflow-step-number,
+.workflow-stepper .workspace-signal-item[aria-current="step"] .workflow-step-number {
+  border-color: #40ddf3;
+  background: linear-gradient(145deg, #31d8ef, #168fc4);
+  box-shadow: 0 0 17px rgba(40, 211, 239, .48);
+  color: #03243a;
+}
+
+body.studio-view-home .workflow-stepper { display: none !important; }
+
+@media (min-width: 821px) {
+  body.studio-view-project .workflow-stepper,
+  body.studio-view-dataset .workflow-stepper,
+  body.studio-view-setup .workflow-stepper,
+  body.studio-view-training .workflow-stepper,
+  body.studio-view-results .workflow-stepper { display: grid !important; }
+
+  body.studio-view-training.train-review-idle .workspace-signal-bar.workflow-stepper {
+    display: grid !important;
+  }
+
+  body.studio-view-project .training-shell,
+  body.studio-view-setup .training-shell,
+  body.studio-view-training .training-shell,
+  body.studio-view-results .training-shell {
+    display: grid !important;
+    grid-template-rows: 54px minmax(0, 1fr) !important;
+    gap: 22px !important;
+  }
+
+  body.studio-view-dataset .training-shell {
+    display: grid !important;
+    grid-template-rows: 54px auto minmax(0, 1fr) !important;
+    gap: 22px !important;
+  }
+
+  body.studio-view-training.train-review-idle .training-shell {
+    display: grid !important;
+    grid-template-rows: 54px minmax(0, 1fr) !important;
+    gap: 22px !important;
+  }
+
+  /* Keep the workflow rail on one baseline on every page without resizing
+     the page-specific cards, tables, charts, or upload surfaces below it. */
+  body.studio-view-dataset .training-shell,
+  body.studio-view-setup .training-shell,
+  body.studio-view-results .training-shell {
+    padding-top: 12px !important;
+    padding-bottom: 16px !important;
+  }
+
+  body.studio-view-training .training-shell {
+    height: 100% !important;
+    padding-top: 0 !important;
+  }
+
+  body.studio-view-training .workflow-stepper,
+  body.studio-view-training .status-layout {
+    transform: translateY(12px);
+  }
+
+  body.studio-view-training.train-review-idle .status-layout {
+    height: 100% !important;
+    min-height: 0 !important;
+  }
+}
+
+@media (max-width: 1180px) {
+  .workflow-stepper {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+  .workflow-stepper .workspace-signal-item:nth-child(n) { display: flex !important; }
+  .workflow-stepper .workspace-signal-item { gap: 8px; padding-inline: 7px !important; }
+  .workflow-stepper .workspace-signal-item strong { font-size: 12px; }
+  .workflow-stepper .workflow-step-number { flex-basis: 26px; width: 26px; height: 26px; }
+}
+
+@media (max-width: 820px) {
+  .workflow-stepper {
+    grid-template-columns: repeat(4, minmax(118px, 1fr)) !important;
+    min-height: 52px;
+    padding: 5px !important;
+    overflow-x: auto !important;
+    scrollbar-width: thin;
+  }
+  .workflow-stepper .workspace-signal-item:nth-child(n) {
+    display: flex !important;
+    min-height: 40px !important;
+    border-top-color: transparent !important;
+    border-left-color: transparent !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .workflow-stepper .workspace-signal-item,
+  .workflow-stepper .workflow-step-number { transition: none; }
+}

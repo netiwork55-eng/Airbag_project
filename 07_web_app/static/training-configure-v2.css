@@ -1,0 +1,293 @@
+/* Configure page — final layout layer. Keep this file after training-theme.css. */
+body.studio-view-setup #train-control .train-box {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1.08fr) minmax(440px, .92fr) !important;
+  grid-template-areas: "head head" "note note" "settings plan" "handoff handoff" !important;
+  align-content: start !important;
+  gap: 18px 20px !important;
+  min-height: 610px !important;
+  height: auto !important;
+  padding: 26px 28px 28px !important;
+  overflow: visible !important;
+  border-radius: 18px !important;
+}
+
+body.studio-view-setup #train-control .train-header-row {
+  grid-area: head !important;
+  position: static !important;
+  inset: auto !important;
+  width: auto !important;
+  min-height: 64px !important;
+  margin: 0 !important;
+  transform: none !important;
+  justify-self: stretch !important;
+  align-self: start !important;
+}
+body.studio-view-setup #train-control .train-header-row h2 { margin-top: 2px !important; font-size: clamp(29px, 1.65vw, 34px) !important; line-height: 1.15 !important; }
+body.studio-view-setup #train-control .train-note { grid-area: note !important; margin: -14px 0 2px !important; font-size: 13px !important; line-height: 1.55 !important; }
+body.studio-view-setup #train-control .auto-chip { display: none !important; }
+
+body.studio-view-setup #train-control .configure-settings-card,
+body.studio-view-setup #train-control .train-plan-card {
+  min-width: 0 !important;
+  height: 424px !important;
+  min-height: 424px !important;
+  margin: 0 !important;
+  border: 1px solid rgba(65, 188, 228, .27) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(150deg, rgba(7, 39, 59, .92), rgba(4, 24, 40, .95)) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .12) !important;
+  overflow: hidden !important;
+}
+
+html[data-training-theme] body.studio-view-setup #train-control .configure-settings-card {
+  grid-area: settings !important;
+  display: grid !important;
+  grid-template-areas: "settings-head" "mode" "fields" "auto" "hint" "area" !important;
+  grid-template-rows: auto auto auto auto auto auto !important;
+  height: auto !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+#inspectionAreaSettings { grid-area: area; }
+#inspectionAreaSettings small { display:block; line-height:1.5; }
+
+body.studio-view-setup #train-control .configure-settings-heading {
+  grid-area: settings-head !important;
+  min-height: 0 !important;
+  padding: 14px 18px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(105, 172, 204, .18) !important;
+  border-radius: 0 !important;
+  background: rgba(20, 89, 117, .18) !important;
+}
+body.studio-view-setup #train-control .configure-settings-heading > span { width: 38px !important; height: 38px !important; }
+body.studio-view-setup #train-control .configure-settings-heading strong { font-size: 16px !important; line-height: 1.25 !important; }
+body.studio-view-setup #train-control .configure-settings-heading small { margin-top: 3px !important; font-size: 11px !important; line-height: 1.35 !important; }
+
+html[data-training-theme] body.studio-view-setup #train-control .train-mode-field {
+  grid-area: mode !important;
+  display: grid !important;
+  grid-template-columns: 1fr !important;
+  align-content: center !important;
+  gap: 8px !important;
+  min-height: 0 !important;
+  padding: 13px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(105, 172, 204, .15) !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+}
+html[data-training-theme] body.studio-view-setup #train-control .train-mode-field > span {
+  display: block !important;
+  grid-column: 1 !important;
+  width: auto !important;
+  margin: 0 !important;
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+  white-space: normal !important;
+}
+html[data-training-theme] body.studio-view-setup #train-control .train-mode-picker { grid-column: 1 !important; }
+body.studio-view-setup #train-control .train-mode-picker { width: 100% !important; }
+body.studio-view-setup #train-control .train-mode-picker-button {
+  min-height: 66px !important;
+  padding: 10px 13px !important;
+  border-color: rgba(54, 207, 241, .45) !important;
+  border-radius: 12px !important;
+  cursor: default !important;
+  pointer-events: none !important;
+}
+body.studio-view-setup #train-control .train-mode-picker-icon { width: 42px !important; height: 42px !important; flex: 0 0 42px !important; }
+body.studio-view-setup #train-control .train-mode-picker-copy strong { font-size: 14px !important; line-height: 1.3 !important; }
+body.studio-view-setup #train-control .train-mode-picker-copy small { font-size: 11px !important; line-height: 1.4 !important; white-space: normal !important; }
+body.studio-view-setup #train-control .train-mode-picker-chevron { display: none !important; }
+
+body.studio-view-setup #train-control .train-fields {
+  grid-area: fields !important;
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  gap: 12px !important;
+  min-height: 0 !important;
+  padding: 12px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(105, 172, 204, .15) !important;
+  background: transparent !important;
+}
+body.studio-view-setup #train-control .train-fields .field { gap: 6px !important; }
+body.studio-view-setup #train-control .train-fields .field > span { font-size: 11px !important; line-height: 1.2 !important; }
+body.studio-view-setup #train-control .train-fields input { height: 42px !important; padding: 0 12px !important; border-radius: 10px !important; font-size: 14px !important; }
+
+body.studio-view-setup #train-control .auto-toggle {
+  grid-area: auto !important;
+  min-height: 0 !important;
+  padding: 13px 16px !important;
+  border: 0 !important;
+  border-bottom: 1px solid rgba(105, 172, 204, .15) !important;
+  border-radius: 0 !important;
+  background: rgba(12, 56, 76, .26) !important;
+}
+body.studio-view-setup #train-control .toggle-copy strong { font-size: 13px !important; line-height: 1.25 !important; }
+body.studio-view-setup #train-control .toggle-copy small { margin-top: 4px !important; font-size: 10.5px !important; line-height: 1.35 !important; white-space: normal !important; }
+body.studio-view-setup #train-control .train-settings-hint {
+  grid-area: hint !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: rgba(34, 194, 220, .07) !important;
+  font-size: 11px !important;
+  line-height: 1.4 !important;
+}
+
+body.studio-view-setup #train-control .train-plan-card {
+  grid-area: plan !important;
+  display: grid !important;
+  grid-template-rows: auto auto 1fr !important;
+  align-content: start !important;
+  padding: 18px !important;
+}
+body.studio-view-setup #train-control .train-plan-head {
+  display: grid !important;
+  grid-template-columns: 42px minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 11px !important;
+  min-height: 48px !important;
+  padding: 0 0 13px !important;
+  border-bottom: 1px solid rgba(105, 172, 204, .18) !important;
+}
+body.studio-view-setup #train-control .configure-card-icon { width: 42px !important; height: 42px !important; }
+body.studio-view-setup #train-control .train-plan-head .section-kicker { font-size: 9px !important; letter-spacing: .07em !important; }
+body.studio-view-setup #train-control .train-plan-head strong { display: block !important; margin-top: 2px !important; font-size: 15px !important; line-height: 1.25 !important; }
+.configure-dataset-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 10px;
+  border: 1px solid rgba(59, 213, 241, .35);
+  border-radius: 999px;
+  background: rgba(38, 193, 223, .12);
+  color: #75e8f7;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.configure-dataset-badge[data-state="ready"] { border-color: rgba(46, 222, 159, .42); background: rgba(31, 186, 126, .12); color: #61e9b4; }
+.configure-dataset-scope {
+  margin: 11px 0 12px !important;
+  padding: 9px 11px !important;
+  border: 1px solid rgba(72, 187, 223, .18) !important;
+  border-radius: 10px !important;
+  background: rgba(23, 101, 133, .13) !important;
+  color: #9fc5d8 !important;
+  font-size: 10.5px !important;
+  line-height: 1.4 !important;
+}
+body.studio-view-setup #train-control .train-plan-list {
+  display: grid !important;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  grid-auto-rows: minmax(80px, 1fr) !important;
+  gap: 9px !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+body.studio-view-setup #train-control .train-plan-list > div {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  justify-content: center !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  min-height: 0 !important;
+  padding: 10px 12px !important;
+  border: 1px solid rgba(91, 156, 190, .18) !important;
+  border-radius: 11px !important;
+  background: rgba(1, 17, 31, .31) !important;
+}
+body.studio-view-setup #train-control .train-plan-list dt { color: #7e9cb0 !important; font-size: 10px !important; line-height: 1.25 !important; }
+body.studio-view-setup #train-control .train-plan-list dd {
+  width: 100% !important;
+  margin: 0 !important;
+  color: #e6f3f8 !important;
+  font-size: 12px !important;
+  font-weight: 750 !important;
+  line-height: 1.35 !important;
+  text-align: left !important;
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+}
+body.studio-view-setup #train-control .train-plan-list > div:last-child { border-color: rgba(46, 222, 159, .25) !important; background: rgba(21, 135, 97, .09) !important; }
+body.studio-view-setup #train-control .train-plan-list > div:last-child dd { color: #65e8b5 !important; }
+
+body.studio-view-setup #train-control .configure-next-action {
+  grid-area: handoff !important;
+  display: grid !important;
+  grid-template-columns: 48px minmax(0, 1fr) minmax(250px, 290px) !important;
+  align-items: center !important;
+  gap: 14px 16px !important;
+  min-height: 92px !important;
+  margin: 0 !important;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(54, 196, 226, .25) !important;
+  border-radius: 14px !important;
+  background: linear-gradient(100deg, rgba(16, 75, 99, .34), rgba(7, 35, 52, .7)) !important;
+}
+body.studio-view-setup #train-control .configure-ready-icon { width: 46px !important; height: 46px !important; }
+body.studio-view-setup #train-control .configure-next-action > div { display: grid !important; gap: 4px !important; min-width: 0 !important; }
+body.studio-view-setup #train-control .configure-next-action > div strong { font-size: 15px !important; line-height: 1.3 !important; }
+body.studio-view-setup #train-control .configure-next-action > div span { font-size: 11.5px !important; line-height: 1.4 !important; }
+body.studio-view-setup #train-control .configure-next-action .mini-action { width: 100% !important; min-width: 0 !important; min-height: 50px !important; margin: 0 !important; font-size: 14px !important; }
+body.studio-view-setup #train-control .train-actions,
+body.studio-view-setup #train-control .train-action-guidance { display: none !important; }
+
+html[data-training-theme="light"] body.studio-view-setup #train-control .configure-settings-card,
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-card {
+  border-color: #c8deec !important;
+  background: linear-gradient(150deg, #ffffff, #f6fbff) !important;
+  box-shadow: 0 16px 38px rgba(55, 92, 125, .1) !important;
+}
+html[data-training-theme="light"] body.studio-view-setup #train-control .configure-settings-heading { border-bottom-color: #dce9f2 !important; background: #eef8fd !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control :is(.train-mode-field, .train-fields, .auto-toggle) { border-bottom-color: #e1ebf2 !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .auto-toggle { background: #f6fafd !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-settings-hint { background: #eff9fc !important; }
+html[data-training-theme="light"] .configure-dataset-scope { border-color: #d2e7f2 !important; background: #eff8fd !important; color: #5e788d !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-list > div { border-color: #dbe8f1 !important; background: #f8fbfd !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-list dt { color: #6a8094 !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-list dd { color: #1c354b !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-list > div:last-child { border-color: #bce7d5 !important; background: #f0fbf7 !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .train-plan-list > div:last-child dd { color: #087f58 !important; }
+html[data-training-theme="light"] body.studio-view-setup #train-control .configure-next-action { border-color: #bedfeb !important; background: linear-gradient(100deg, #eef9fd, #ffffff) !important; }
+
+@media (max-width: 1180px) {
+  body.studio-view-setup #train-control .train-box {
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "head" "note" "settings" "plan" "handoff" !important;
+  }
+  body.studio-view-setup #train-control .configure-settings-card,
+  body.studio-view-setup #train-control .train-plan-card { height: auto !important; min-height: 424px !important; }
+}
+
+@media (max-width: 720px) {
+  body.studio-view-setup #train-control .train-box { gap: 14px !important; padding: 18px 14px !important; }
+  body.studio-view-setup #train-control .configure-settings-card { grid-template-rows: auto !important; }
+  body.studio-view-setup #train-control .train-plan-list { grid-template-columns: 1fr !important; }
+  body.studio-view-setup #train-control .configure-next-action { grid-template-columns: 42px minmax(0, 1fr) !important; }
+  body.studio-view-setup #train-control .configure-next-action .mini-action { grid-column: 1 / -1 !important; }
+}
+
+/* Area editor uses the Configure palette in both themes. */
+#inspectionAreaSettings button{padding:9px 12px;margin:6px 6px 6px 0;border:1px solid #1fa5c4;border-radius:9px;background:linear-gradient(135deg,#087caa,#075274);color:#fff;font:inherit;font-size:12px;font-weight:700;cursor:pointer}
+#inspectionAreaSettings button:disabled{opacity:.55;cursor:wait}
+#inspectionAreaSettings button:focus-visible{outline:3px solid #53d9f4;outline-offset:2px}
+#inspectionAreaSettings p{font-size:12px;line-height:1.6}
+#inspectionAreaSettings #clearInspectionAreas{background:transparent;color:inherit;border-color:#66849b}
+#savedAreaList{display:flex;flex-wrap:wrap;gap:5px}
+#savedAreaList button{background:#0d684e;border-color:#31bc90}
+#inspectAreaStatus{display:block;margin-top:8px;line-height:1.6}
+html[data-training-theme=light] #inspectionAreaSettings button{background:linear-gradient(135deg,#008fc7,#1565c0);border-color:#137cac;box-shadow:0 3px 8px #0a609c24}
+html[data-training-theme=light] #savedAreaList button{background:#078466;border-color:#027057}
+html[data-training-theme=light] #inspectionAreaSettings #clearInspectionAreas{background:#edf5fc;color:#284c68;border-color:#acc5d8}
