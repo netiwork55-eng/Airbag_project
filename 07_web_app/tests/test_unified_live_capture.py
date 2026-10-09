@@ -75,6 +75,29 @@ def test_inspection_worker_start_failure_closes_started_capture(tmp_path,monkeyp
     with ProjectLease(tmp_path).hold('next camera'):pass
 
 
+@pytest.mark.parametrize('action',['stop','reopen'])
+def test_release_failure_cannot_be_hidden_by_stop_or_reopen(tmp_path,monkeypatch,action):
+    runtime=shared.Runtime(Store(tmp_path),Mock())
+    camera=Mock()
+    camera.read.side_effect=RuntimeError('disconnected')
+    camera.close.side_effect=RuntimeError('driver release failed')
+    pump=shared.FramePump(camera,ownership=runtime.ownership)
+    pump.thread.join(5)
+    assert not pump.thread.is_alive()
+    runtime.capture_pump=pump
+    pipeline=SimpleNamespace(recipe=SimpleNamespace(camera=Camera(),decision=DecisionSettings()))
+    runtime.loop(pump,pipeline)
+    assert 'Camera release failed:' in runtime.snapshot()['reasons'][0]
+    opener=Mock(side_effect=AssertionError('Must not reopen after release failure'))
+    monkeypatch.setattr(shared,'OpenCVCamera',opener)
+    with pytest.raises(RuntimeError,match='Camera release failed:'):
+        if action=='stop':runtime.stop()
+        else:runtime.open_capture(pipeline)
+    assert runtime.snapshot()['state']=='UNABLE_TO_INSPECT'
+    assert 'Camera release failed:' in runtime.snapshot()['reasons'][0]
+    opener.assert_not_called()
+
+
 @pytest.mark.parametrize('source',['production','candidate'])
 def test_shared_live_stale_frame_never_passes_and_evidence_retains_capture(tmp_path,source):
     runtime=shared.Runtime(Store(tmp_path),Mock(),source=source)

@@ -1,6 +1,102 @@
 # Airbag_Project — Renovation & Consolidation
 
-อัปเดต 9 ตุลาคม 2026 · Phase 3 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+อัปเดต 9 ตุลาคม 2026 · Phase 4 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+
+## Phase 4 — System Verification & Legacy Retirement Readiness
+
+ฐาน `37ab956`; checkpoint ก่อนแก้ `phase4-start-20261009` และหลังแก้ `phase4-verified-20261009` ตรวจ Source/Runtime ปัจจุบันเฉพาะ integration ที่เกี่ยวข้อง ไม่เปลี่ยน Camera entrypoint, Recipe, model weights, thresholds หรือ Production configuration ไม่ Train/Activate และไม่เปิดกล้องจริง
+
+### ผลตรวจและสิ่งที่แก้จริง
+
+- `/inspection` ยังเป็น workflow หลัก Dataset/Jobs/Models/Legacy History ใช้ backend เดิม; `/engineering` ตอบ404 และ `/jobs` redirect `/inspection#test` ไม่มีการนำหน้าเก่ากลับมา
+- Terminal Core กับ Web ใช้ `Runtime.open_capture` → `FramePump` → `Pipeline` → `Cycle` → `evidence` ร่วมกันแล้วตั้งแต่ Phase3 ยืนยันด้วย integration tests ทั้ง Candidate และ Production, ภาพเต็ม, ROI/quality, stale/disconnect, metadata และ incomplete cycle ส่วน legacy fallback ยังคงอยู่เมื่อไม่มี Core Production ที่ activate
+- แก้ Production UI เมื่อ status request ล้มเหลว: ล้างสีเขียว/ภาพสดเก่า แสดงไม่ทราบสถานะ ปิด Start/เปลี่ยนสูตร/Train/Validate/Activate/Rollback ระหว่างติดต่อไม่ได้; คงปุ่ม Stop ที่เคยใช้ได้ไว้ เพราะ network failure ไม่ได้แปลว่า worker หยุดแล้ว
+- ป้าย Production จาก engine เก่าแสดงต้อง Validate ด้วยสี review; Activate ติดตามสถานะ busy, report eligibility/engine และ dirty recipe พร้อมคืนสถานะอย่างถูกต้องเมื่อเชื่อมต่อได้ การเปิดใช้จริงยังผ่าน backend validation gate เดิม
+- แก้ Core lifecycle: หลัง driver แจ้ง `Camera release failed` การเรียก Stop ซ้ำไม่กลบ error เป็น “Production is stopped” และการเปิด capture ใหม่ใน Runtime เดิมถูกปฏิเสธก่อนแตะ driver ต้องให้ผู้ใช้จัดการ process/device ก่อนเริ่มใหม่ ไม่มี automatic restart/recovery และไม่อ้างว่าการคืน hardware สำเร็จจาก thread ที่จบแล้ว
+- พิสูจน์บั๊กด้วย tests ที่ fail ก่อนแก้: UI 3กรณี และ camera lifecycle 2กรณี หลังแก้ผ่านทั้งหมด Engine ยังเป็น `2026.10.09.2` เพราะไม่ได้เปลี่ยน image processing, scoring หรือ decision contract
+
+### Verification ที่ทำแล้ว / ขอบเขต
+
+| การตรวจ | ผลจริง |
+|---|---|
+| Python regression/integration | **329 tests + 5 subtests ผ่าน**; ครอบคลุม Camera/legacy entrypoint/Core/ownership/data lifecycle/validation/training-job contracts/model compatibility/evidence |
+| JavaScript VM/DOM fixtures | **12 tests ผ่าน** รวม status offline→recovery, stale engine, activation busy, Dataset/Jobs/Legacy/Human review; ไม่ใช่ Browser tests |
+| Latest-code HTTP smoke บน temporary8011 | หน้า/asset และ12 API groups: status, recipes, images, reports, evidence, dataset folders, trash, jobs, model registry, training runs, reviews, legacy parts อ่านได้200 |
+| ข้อมูลเก่า | Core test evidence 3รายการ (PASS1/NG2) และ preview ทั้ง3เปิดได้; legacy parts API อ่านได้30รายการในหน้าที่ตอบกลับ, unreadable0 และภาพตัวอย่างเปิดได้; ไม่มีการเปลี่ยน machine result เป็น human label |
+| Mutation integration | Upload/Preview/Metadata/Undo/Trash/Restore และ review/recipe/validation ใช้ temporary fixtures; ไม่ทำ Undo/Delete กับ Dataset จริง |
+| Ownership/capture | real threads/OS file lock กับกล้องจำลอง, subprocess contention, timeout/start/release failure ผ่าน; ไม่ใช่การทดสอบ LifeCam/Basler จริง |
+| Browser | **ยังค้าง**: ทั้ง `cua_repl` และ skill computer-use ผ่าน `node_repl` เริ่มไม่ได้ด้วย `failed to write kernel assets ... os error 3`; ไม่รับรอง layout/button/form/responsive จาก HTTP200 |
+
+temporary server8011 ปิดหลังอ่านข้อมูล ไม่ Restart server8000 หรือโปรแกรมกล้องของผู้ใช้ คำสั่ง regression ใช้ชุดเดียวกับส่วน Phase3 ด้านล่าง ไม่มี dependency เพิ่ม
+
+ตรวจ SHA-256 ก่อน/หลังของ data/config/artifact ที่เลือก **8,261ไฟล์: เปลี่ยน0 / หาย0** (รวม72 model artifacts); manifest เก็บนอก Project ใน workspace ของงาน ไม่รวม `.git`, environments, caches, `work`, `.vscode` และ runtime lock metadata ไม่อ้างว่าเป็น hash ทุกไฟล์ใน Project ตรวจ Git diff แล้วมีเฉพาะ runtime, UI, regression tests และรายงานนี้; `project_config.json`/dependency configuration ไม่เปลี่ยน
+
+### Candidate readiness จากข้อมูลปัจจุบัน
+
+- Core Recipe7รายการยังเป็น `fixed`; ไม่มี Production pointer สูตรเหล่านี้ใช้ image tests ได้ตามเงื่อนไขเดิม แต่ **ไม่ใช่ Candidate Live ที่พร้อม place/remove**
+- Core image metadata392รายการ: label GOOD391, UNKNOWN1; `confirmed_at` สำหรับ GOOD/NG =0, confirmed capture group =0 จึงยังใช้รับรอง validation ไม่ได้ การติดป้าย GOOD เดิมไม่ใช่ human confirmation
+- คลังนี้ไม่มี human-confirmed NG; NG ใน Evidence เป็น machine test เท่านั้น ไม่ใช่ ground truth สถิตินี้เฉพาะ Core store ไม่ได้อ้างว่าภาพทั้งหมดใน project ถูกตรวจโดยมนุษย์แล้ว
+- ต้องมี full-frame reference ที่ยืนยันจริง, capture settings/group provenance, ROI/model input ที่ตรงกัน, independent GOOD/NG และข้อกำหนด defect ก่อนสร้าง/ประเมิน Candidate หน้างาน ห้ามรับรองโมเดลที่เคยเรียนจาก cropped ROI ว่าเข้ากับสูตรใหม่โดยอัตโนมัติ
+
+### Legacy retirement decision จาก caller และ contract ปัจจุบัน
+
+| ส่วน | สถานะ | หลักฐาน/เงื่อนไขก่อนถอด |
+|---|---|---|
+| YOLO Part Locator (`part_locator.analyze_part`) | **REUSE IN CORE — BLOCKED** | Web/Terminal/legacy reference ยังเรียกอยู่ คืน bounding box ไม่มี reference transform; พิจารณา reuse เฉพาะเมื่อ Template/Features ไม่ครอบคลุมงานจริง ต้องพิสูจน์ full-frame translation/rotation/scale, partial part, alignment และ source ROI ก่อน ไม่มี adapter ใหม่ในรอบนี้ |
+| Optional Brand Classifier | **KEEP** | ใช้เลือก/แยกชนิดงานแบบ optional ใน legacy; ไม่ใช่ defect decision และยังไม่มี requirement ให้ Core เลือกสูตรด้วย Brand คง shared classifier ที่มี caller ไม่เพิ่ม Brand gate |
+| Deep Patch Reference / RecipeBoundInspector | **REPLACE — BLOCKED** | ยังใช้ใน live/job tests และ artifact contract เดิม; PaDiM/PatchCore ใน Core เป็นตัวแทนเชิงหน้าที่ แต่ต้องผ่าน full-frame ROI/model compatibility + independent NG validation ก่อนย้ายงานจริง ห้ามลบ weights/history |
+| Legacy DecisionStabilizer / PartCycle | **REPLACE — BLOCKED** | Core Cycle มีตัวแทนแล้วใน software tests แต่ OK/REVIEW/NG และ incomplete policy ของ legacy ต่างกัน ต้องเทียบลำดับภาพเดียวกันและหนึ่งผลต่อชิ้นจริงก่อนถอด callers |
+| Legacy Camera Acquisition | **REPLACE — BLOCKED เฉพาะ legacy branch** | Core branch ใช้ capture ร่วมและไม่มี synchronous loop ซ้ำแล้ว; legacy index/fallback/driver settings ยังเป็น contract เดิม ต้องพิสูจน์ exact-device/full resolution/freshness/release บนกล้องจริงก่อนย้าย branch นี้ |
+| Legacy UI/API/helpers ที่ถอด Phase2–3 | **READY TO REMOVE → REMOVED แล้ว** | `/engineering`, UI assets/helpers ที่หมด caller และ Core capture loop ซ้ำถูกถอดแล้ว; regression ปัจจุบันยังผ่าน |
+
+**Phase4 ไม่ลบ Legacy Live เพิ่ม**: ส่วนที่ตรวจยังมี caller และ field-validation blocker จริง ไม่ได้เก็บเพียงเพื่อความสะดวก ไม่มี dependency ใดถูกถอดโดยยังมี caller และไม่มี implementation ใหม่ซ้อน การแก้รอบนี้อยู่ที่ UI status และ Runtime lifecycle เดิม
+
+### ขั้นตอน Candidate ครั้งแรก (ผู้ใช้ทำเมื่อข้อมูลพร้อม)
+
+1. ระบุชนิด/ตำแหน่ง/ขนาดต่ำสุดของ defect, tolerance การเลื่อน/หมุน/scale, เวลาต่อชิ้น และเกณฑ์ FA/FR/strict recall/REVIEW/UNABLE ที่เจ้าของงานยอมรับก่อน ไม่ใช้ค่า default เป็นการอนุมัติหน้างาน
+2. นัดช่วงหยุดงาน ให้ผู้ใช้ปิด Terminal เดิมด้วย q/Esc และตรวจคืนกล้องก่อนใช้ Capture เดิมใน Setup หรือ utility เดิม ห้ามเปิดซ้อน จด LifeCam indexจริง, full resolution, exposure/gain/focus/autofocus/white balance ที่ driver รองรับ, ระยะกล้องและการจัดแสง ค่าจาก OpenCV อาจเป็น sentinel ต้องเทียบภาพจริง; Basler ยังไม่ได้ทดสอบ
+3. เก็บภาพเต็มต้นฉบับ GOOD และ NG ที่ผู้ตรวจยืนยัน ระบุ part ID, defect type/ขนาด/ตำแหน่ง, capture group และผู้ตรวจในบันทึกหน้างานที่โยง filename/image ID; UI metadata/review ไม่ได้เป็นระบบจัด defect taxonomy อัตโนมัติ ชิ้นเดียวกันหรือรอบเดียวกันรวมกลุ่มเดียวกัน รวมภาพเลื่อน/หมุน/ถ่ายซ้ำของชิ้นนั้น ห้ามกระจายไป train/calibration/independent validation คนละชุด
+4. ใน `/inspection` Setup เลือกภาพเต็มอ้างอิงและยืนยัน GOOD/group เฉพาะที่ตรวจแล้ว ตั้ง Candidate แยกด้วย Template/Features ที่เหมาะกับภาพจริง ลาก inspection areas ใน reference coordinates ตรวจ source polygon หลัง alignment และ model/reference/ROI/input hash ให้ตรงกัน ใช้ anomaly ที่มีอยู่; ถ้า model input ไม่ตรงให้หยุดเพื่อขอทำงานปรับ/Train ด้วยข้อมูลจริงในรอบที่อนุญาต ไม่ยืม cropped Recipe เก่ามาบังคับให้ผ่าน
+5. เก็บภาพ calibration ทั้งยอมรับ/ไม่ยอมรับสำหรับแสงและความคมแล้วจึงกำหนด quality/locator/anomaly limits ตามข้อมูลจริง แยกกลุ่มจาก validation ถ้ายังไม่ได้ calibrate ให้ระบุว่า exploratory และยังไม่รับรอง fault coverage; `min_blur=0` คือปิด blur gate
+6. เมื่อ Candidate พร้อมและไม่มี process ถือกล้อง ให้รันไฟล์เดิมด้วย Python environment เดิมจาก Project root (แทน placeholders ด้วยค่าจริง ไม่ copy bracket ไปใช้):
+
+```text
+..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe <saved_recipe_id> --camera-index <actual_index>
+```
+
+7. ต้องเห็น `CANDIDATE TEST - NOT PRODUCTION`; ตรวจขนาดภาพเต็ม/กรอบ/FPS/quality/locator/ROI แล้ววาง–ยก GOOD/NG ทีละชิ้นตาม matrix ด้านล่าง `s`/Space เก็บ sample ไม่ใช่ human confirmation และไม่แทน cycle completion; q/Esc หยุด ไม่กด Activate
+8. อ่าน Review พร้อม source=`candidate`/`candidate_sample`, image ID, Recipe hash, area/source polygon, score/threshold, capture metadata, frame age/sequence, complete flag และเหตุผลของ decision ผูกกับ field log/part ID/group แยก human truth จาก machine result ตรวจ Production pointer ไม่เปลี่ยน
+9. หาก ROI หลุด, ภาพผิดขนาด, locator/quality fail, ข้อมูลไม่ครบ หรือ release error ให้หยุดและเก็บ failure evidence ห้ามแก้ threshold เพื่อทำให้ตัวอย่างนั้นผ่าน หากเก็บ evidence ไม่ได้ ให้เก็บ error log และไม่ถือว่ารอบนั้นผ่าน ผู้ใช้เป็นผู้ตัดสินใจ restart/reconnect หลังตรวจ process/device
+
+### Field test matrix และผลที่ต้องเก็บ
+
+| กรณี | สิ่งที่วัด/ตรวจ |
+|---|---|
+| Confirmed GOOD/NG ทุก defect type และขนาดใกล้ขอบเขต | ผลต่อชิ้น/ต่อชนิด defect, heatmap/score/threshold/area coverage, false accept/reject; จำนวนตัวอย่างและเกณฑ์ให้เจ้าของงานกำหนด ไม่กำหนดในรอบนี้ |
+| ชิ้นงานกึ่งกลาง/เลื่อน/หมุน/scale ภายในขอบเขตและเลยขอบเขต | transform, locator score, source polygon ครอบคลุมตำหนิจริง; invalid alignment/required ROI ต้องไม่ PASS |
+| เบลอ แสงมืด/สว่าง เงาสะท้อน บัง/ชิ้นงานขาดขอบ | Quality/Locator failure พร้อม reason; ตรวจ blur gate เปิดหลัง calibration แล้ว ถ้าภาพไม่เหมาะยัง PASS ต้องบันทึกเป็น failure ของ setup |
+| วางค้าง/สั่น/ยก/วางเร็ว/ชิ้นถัดไป และทดสอบชิ้นเดิมซ้ำ | ผลหนึ่งรายการต่อ complete cycle, state holding/settling, ไม่เอาผลหรือ heatmap ชิ้นก่อนมาตัดสินชิ้นใหม่; แยก repeatability จากจำนวน independent parts |
+| ภาพค้าง/ประมวลผลช้า/กล้องหลุด/หยุดกลางชิ้น | UNABLE หรือ incomplete ตามเหตุ; ไม่สร้าง complete PASS ที่ยังตรวจไม่จบ, stale image ไม่กลับมาใช้, error และ ownership/release บันทึกได้ การถอดสายทำโดยผู้ใช้ในช่วงทดสอบที่ปลอดภัย |
+| Evidence/Review และ Validation | อ่านภาพ/Recipe/model/area/threshold ย้อนกลับได้, human confirmation ไม่เขียนทับ machine result, split groups ไม่รั่ว, record เก่าไม่มี field ใหม่ต้องไม่ถูกเติม ground truth เอง |
+
+นิยามตาม `inspection/validation.py`: **False Accept = NG→PASS / confirmed independent NG**, **False Reject = GOOD→NG / confirmed independent GOOD**, **Strict Defect Recall = NG→NG / confirmed independent NG**; NG→REVIEW/UNABLE ไม่นับว่าจับ NG สำเร็จ รายงาน REVIEW/UNABLE แยกเสมอ การไม่มี false accept ไม่เพียงพอหากทุกชิ้นได้ UNABLE
+
+Validation metrics ปัจจุบันนับ **ภาพที่ eligible** ไม่ได้ deduplicate เป็นจำนวนชิ้นอิสระอัตโนมัติ; บันทึกผลต่อชิ้น/defect type และ repeat runs แยกใน field log ห้ามเพิ่มจำนวน independent samples ด้วยหลายภาพของชิ้นเดิม `mean_ms/p95_ms` คือ image-processing ของ rows ที่ทดสอบ ไม่ใช่ throughput โรงงาน; `cycle_elapsed_ms` คือเวลา observed place-to-removal รวม settling/removal confirmation ให้เก็บ median/P95 cycle time, inspected frames, frame age และ repeatability ต่อชิ้นจริงแยกกัน
+
+### Manual Browser checklist ที่ยังต้องทำ
+
+ใช้ server โค้ดล่าสุดเมื่อผู้ใช้พร้อม restart ตามขั้นตอนปกติ แล้ว Hard refresh; ตรวจ desktop และหน้าจอแคบ/zoom: navigation4แท็บ, ฟอร์มและปุ่มไม่ล้น/ซ้อน, canvas/ROI ตรงภาพเมื่อย่อจอ, errors อ่านได้และไม่มี console error
+
+- Setup/Dataset: เปิดรายการจริงแบบอ่านอย่างเดียว; Upload→Preview→Metadata→Undo→Trash→Restore ให้ใช้ **temporary dataset แยก** ตรวจ token/ภาพเปลี่ยนหลัง upload ทำให้ Undo ถูกปฏิเสธ และ metadata ไม่ยืนยัน label เอง
+- Test: โหลดสูตรเก่าและสูตร fixture/ทดสอบแยก ตรวจ Jobs/Models/Training history อ่านได้, ไม่มีการ Train/Use/Activate จากการเปิดรายการ; backend error ต้องแสดง ไม่ใช่ลิสต์ว่างที่ดูสำเร็จ
+- Production: เมื่อไม่มี active recipe ปิด Start; old-engine pointer ต้องแสดงต้อง Validate; runtimeภายนอกทำให้ปุ่มที่ชนกัน disabled; จำลอง network offline ใน browser แล้วสีเขียว/ภาพเก่าหายและกลับได้เมื่อ online โดยไม่เปิดกล้องทดสอบ
+- Review: เปิด Core Test/Legacy history/Production Evidence แยก source, complete และ human review; preview/คะแนน/เหตุผล/Recipe ถูกต้อง ไม่กด Human confirmation กับข้อมูลจริงเพื่อทดลอง ใช้ temporary fixture ถ้าจะทดสอบการเขียน
+
+### เงื่อนไขถอด Legacy Live ถาวร
+
+ต้องผ่าน full-frame Camera/Locator/Alignment/ROI และ input/model compatibility กับงานเดิม; independent human GOOD/NG validation ผ่านเกณฑ์ที่เจ้าของงานกำหนด; field sequence/cycle/failure/repeatability/timing/evidence ผ่าน และ browser checklist เสร็จ ยืนยันว่าความสามารถจำเป็นรวม optional product identification มีตัวแทนหรือเจ้าของงานยืนยันว่าไม่ต้องใช้ จากนั้นตรวจทุก Web/Terminal/Job/Training/Verification caller ใหม่ก่อนถอด branch และรัน regression โดยเก็บ artifacts/history พร้อม Git rollback; **ยังไม่ผ่านเงื่อนไขเหล่านี้ในรอบนี้**
+
+---
 
 ## Phase 3 — ผลที่ลงมือทำแล้ว
 

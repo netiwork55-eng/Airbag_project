@@ -344,6 +344,10 @@ class Runtime:
         with self.lock, self.ownership.hold('Live camera setup'):
             if self.running:
                 raise ValueError('Camera capture is already running')
+            if self.capture_pump is not None:
+                # A dead reader does not prove that its driver released the device.
+                # Preserve any release failure before opening another capture.
+                self.capture_pump.close()
             config=pipeline.recipe.camera
             camera=(BaslerCamera(config) if config.driver=='basler' else
                     OpenCVCamera(config,fps=terminal_fps,buffer_size=1 if terminal_fps is not None else None))
@@ -446,6 +450,8 @@ class Runtime:
                 raise RuntimeError("Camera worker is still stopping; camera remains locked")
         if self.running:
             raise RuntimeError("Camera capture is still stopping; the camera remains locked")
+        if self.capture_pump is not None:
+            self.capture_pump.close()
         with self.lock:
             self.state.update(running=False,state="UNABLE_TO_INSPECT",reasons=["Production is stopped"])
             self.frame = None
