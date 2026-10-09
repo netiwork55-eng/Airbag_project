@@ -104,7 +104,7 @@ class TrainingApiGuardTests(unittest.TestCase):
                 mock.patch.object(app, "normal_reference_training_fingerprint", return_value="fingerprint"),
                 mock.patch.object(app, "refresh_train_state_locked"),
                 mock.patch.object(app, "TRAIN_PROCESS", None),
-                mock.patch.object(app.threading, "Thread", return_value=fake_thread) as thread_factory,
+                mock.patch.object(app.vision_service.runtime.ownership, "start_thread", return_value=fake_thread) as thread_factory,
             ):
                 response = app.api_train_normal_reference({"scope": "reviewed_known_good", "min_good_images": 3, "inspection_size": 512})
             payload = json.loads(response.body)
@@ -113,8 +113,8 @@ class TrainingApiGuardTests(unittest.TestCase):
             self.assertEqual(payload["state"]["total_images"], 3)
             self.assertEqual(payload["state"]["source_images"], 4)
             self.assertEqual(payload["state"]["datasets"], ["first", "second"])
-            self.assertEqual(thread_factory.call_args.kwargs["args"][2]["inspection_size"], 512)
-            fake_thread.start.assert_called_once()
+            self.assertEqual(thread_factory.call_args.args[1][2]["inspection_size"], 512)
+            self.assertIs(thread_factory.call_args.args[0],app.run_normal_reference_training)
         finally:
             app.REFERENCE_TRAIN_STATE.clear()
             app.REFERENCE_TRAIN_STATE.update(state_before)

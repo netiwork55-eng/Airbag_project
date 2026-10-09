@@ -9,6 +9,7 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from deep_patch_reference import AlignmentError, DeepPatchReference, _align_bgr
+import normal_reference
 
 
 def test_blank_image_cannot_silently_use_identity():
@@ -46,3 +47,22 @@ def test_matching_textured_image_still_aligns():
     aligned, _, warp = _align_bgr(image, image, return_warp=True)
     assert np.allclose(warp, np.eye(2, 3), atol=.01)
     assert np.max(np.abs(aligned.astype(float) - image)) < 2
+
+
+@pytest.mark.parametrize('failure',['ecc_error','nan','singular','reflection','empty_area','nan_model'])
+def test_classical_reference_failure_is_review_never_ok(monkeypatch,failure):
+    image=np.random.default_rng(4).integers(50,180,(64,64,3),dtype=np.uint8)
+    lab=cv2.cvtColor(image,cv2.COLOR_BGR2LAB).astype(np.float32)
+    inspector=normal_reference.NormalReferenceInspector(lab,np.ones_like(lab),3.,2.,.002,5,
+        object_mask=np.zeros((64,64),np.uint8) if failure=='empty_area' else None)
+    warp=np.eye(2,3,dtype=np.float32)
+    if failure=='ecc_error':
+        monkeypatch.setattr(cv2,'findTransformECC',Mock(side_effect=cv2.error('failed')))
+    else:
+        if failure=='singular':warp[0,0]=0
+        if failure=='reflection':warp[0,0]=-1
+        monkeypatch.setattr(cv2,'findTransformECC',lambda *a:(float('nan') if failure=='nan' else 1.,warp))
+    if failure=='nan_model':inspector.reference[0,0,0]=float('nan')
+    result=inspector.inspect(image)
+    assert result.status=='REVIEW' and result.review_required and result.input_issue
+    assert not result.regions and result.to_dict()['location']=='not_checked'

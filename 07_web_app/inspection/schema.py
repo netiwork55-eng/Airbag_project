@@ -101,6 +101,9 @@ class Area(Config):
 
 
 class ValidationLimits(Config):
+    # Part-level rejection policy is distinct from detector object recall.
+    # Leave unset until the inspection owner defines the acceptance requirement.
+    min_defect_recall: float | None = Field(default=None, gt=0, le=1)
     min_precision: float = Field(default=.9,ge=0,le=1)
     min_recall: float = Field(default=.9,ge=0,le=1)
     min_good: int = Field(default=10, ge=1, le=100000)

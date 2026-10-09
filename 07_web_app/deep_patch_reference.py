@@ -14,7 +14,7 @@ from ultralytics import YOLO
 
 from part_locator import analyze_part, part_class_id
 from inspection_area import checked_area, area_grid, checked_areas, areas_grid
-from normal_reference import InspectionRegion, InspectionResult, NormalReferenceInspector, _foreground_mask, yolo_primary_box
+from normal_reference import AlignmentError, InspectionRegion, InspectionResult, NormalReferenceInspector, _foreground_mask, yolo_primary_box
 
 
 def _read_bgr(path: Path) -> np.ndarray:
@@ -37,10 +37,6 @@ def _crop(image: np.ndarray, box: Sequence[int | float] | None):
             source = candidate
     x1, y1, x2, y2 = source
     return image[y1:y2, x1:x2], source
-
-
-class AlignmentError(ValueError):
-    """The image cannot be compared in the model's reference coordinates."""
 
 
 def _align_bgr(image: np.ndarray, reference: np.ndarray, mask: np.ndarray | None = None, *, return_warp=False):

@@ -878,7 +878,7 @@ def draw_status(frame, text, color):
     )
 
 
-def parse_args():
+def parse_args(argv=None):
     """Read optional runtime settings."""
     parser = argparse.ArgumentParser(
         description="Run real-time Airbag detection from a webcam.",
@@ -888,7 +888,7 @@ def parse_args():
         type=int,
         default=DEFAULT_CAMERA_INDEX,
         help=(
-            "OpenCV camera index to use. Default is 0 for the built-in/default camera. "
+            f"OpenCV camera index to use. Default is {DEFAULT_CAMERA_INDEX}. "
             "Use 1 or 2 for another connected camera."
         ),
     )
@@ -915,7 +915,8 @@ def parse_args():
         action="store_true",
         help="Disable Toyota/Honda brand classification overlay.",
     )
-    return parser.parse_args()
+    parser.add_argument('--candidate-recipe', help='Test this saved Core recipe without activating Production; requires a part locator')
+    return parser.parse_args(argv)
 
 
 def open_camera(camera_index):
@@ -1058,7 +1059,7 @@ def save_inspection_sample(frame, result, located, model_path):
     return image_path
 
 
-def run_normal_reference_camera(args, project_config, core_runtime=None):
+def run_normal_reference_camera(args, project_config, core_runtime=None, candidate_recipe_id=None):
     """Keep the existing capture/window loop; use the shared Core for activated recipes.
 
     The legacy inspector remains only while its configuration has no validated
@@ -1078,14 +1079,15 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
         window = WINDOW_NAME
     try:
         if core_runtime:
-            pipeline = core_runtime.production_pipeline()
+            pipeline = core_runtime.candidate_pipeline(candidate_recipe_id) if candidate_recipe_id else core_runtime.production_pipeline()
             camera = pipeline.recipe.camera
             if camera.driver!='opencv' or camera.index!=args.camera_index:
                 raise ValueError('Active recipe camera does not match the existing terminal camera; no camera/settings were changed')
             if camera.exposure_us is not None or camera.gain is not None:
                 raise ValueError('Existing USB camera controls must be configured in its driver, not overridden by a recipe')
-            if camera.width not in (None,CAMERA_WIDTH) or camera.height not in (None,CAMERA_HEIGHT):
-                raise ValueError('Active recipe resolution differs from the existing terminal settings; no resizing or setting changes were applied')
+            width,height = camera.width or CAMERA_WIDTH,camera.height or CAMERA_HEIGHT
+            if (width,height) != (pipeline.reference.shape[1],pipeline.reference.shape[0]):
+                raise ValueError('Recipe camera resolution must match its full-frame reference; no resizing or camera changes were applied')
             settings = pipeline.recipe.decision
             cycle = Cycle(settings.stable_frames,settings.release_frames,settings.release_ms/1000)
         else:
@@ -1108,6 +1110,7 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
                     brand_model.to(DEVICE)
             stabilizer = DecisionStabilizer()
             cycle = PartCycle()
+            width,height = CAMERA_WIDTH,CAMERA_HEIGHT
 
         cv2.setUseOptimized(True)
         cap, selected_camera_index = open_available_camera(args.camera_index)
@@ -1115,10 +1118,12 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
             raise ValueError('Selected camera differs from the validated recipe; refusing silent camera fallback')
         # Preserve the established terminal capture settings. Never write project_config.
         cap.set(cv2.CAP_PROP_BUFFERSIZE,1)
-        cap.set(cv2.CAP_PROP_FRAME_WIDTH,CAMERA_WIDTH)
-        cap.set(cv2.CAP_PROP_FRAME_HEIGHT,CAMERA_HEIGHT)
+        cap.set(cv2.CAP_PROP_FRAME_WIDTH,width)
+        cap.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
         cap.set(cv2.CAP_PROP_FPS,CAMERA_FPS)
         print(f"Inspection Core recipe {pipeline.saved['id']}" if core_runtime else f"Legacy Normal Reference: {model_path}; no activated Core replacement")
+        if candidate_recipe_id:
+            print('CANDIDATE TEST - NOT PRODUCTION. Results do not certify defect accuracy.')
         print(f"Camera index {selected_camera_index}. Press Esc/q to quit; Space/s to save an unmodified sample.")
         fps = 0.0
         last_time = time.perf_counter()
@@ -1145,6 +1150,8 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
                         cv2.putText(display,text,(max(0,int(x)),max(45,int(y)-5)),cv2.FONT_HERSHEY_SIMPLEX,.45,color,1,cv2.LINE_AA)
                 draw_status(display,state['state'],colors.get(state['state'],colors['UNABLE_TO_INSPECT']))
                 cv2.putText(display,'; '.join(state.get('reasons',[]))[:100],(10,50),cv2.FONT_HERSHEY_SIMPLEX,.4,(255,255,255),1,cv2.LINE_AA)
+                if candidate_recipe_id:
+                    cv2.putText(display,'CANDIDATE TEST - NOT PRODUCTION',(10,70),cv2.FONT_HERSHEY_SIMPLEX,.5,(0,200,255),1,cv2.LINE_AA)
             else:
                 located = analyze_primary_object(locator_model,locator_class_id,frame)
                 if located is not None:
@@ -1178,7 +1185,7 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
             if key in (32,ord('s')):
                 try:
                     if core_runtime:
-                        sample=evidence(core_runtime.store,measured_result,frame,maps,source='camera_sample',complete=False)
+                        sample=evidence(core_runtime.store,measured_result,frame,maps,source='candidate_sample' if candidate_recipe_id else 'camera_sample',complete=False)
                         print(f"Saved unconfirmed camera sample: {sample['id']}")
                     else:
                         print(f"Saved inspection sample: {save_inspection_sample(frame,measured_result,located,model_path)}")
@@ -1205,10 +1212,19 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
                         print('Camera released. Window closed.')
 
 
-def main():
+def main(argv=None):
     """เปิดโมเดลและกล้อง แล้ววน inference จนผู้ใช้สั่งออก; ปิดกล้องในทุกเส้นทางจบงาน."""
     # โหลดโมเดล เปิดกล้อง แล้ววนอ่าน frame เพื่อ detect แบบ real-time
-    args = parse_args()
+    args = parse_args() if argv is None else parse_args(argv)
+    web_app_dir = str(PROJECT_ROOT / '07_web_app')
+    if web_app_dir not in sys.path:
+        sys.path.insert(0,web_app_dir)
+    from inspection.ownership import project_lease
+    with project_lease(PROJECT_ROOT/'inspection_data').hold('Terminal Candidate test' if getattr(args,'candidate_recipe',None) else 'Terminal camera'):
+        _run_camera(args)
+
+
+def _run_camera(args):
     project_config = load_project_detection_config()
     # Same entry point and camera window. Only an explicitly activated Core recipe
     # replaces the configured legacy inspection; Candidates never auto-select.
@@ -1219,6 +1235,10 @@ def main():
     from inspection.runtime import Runtime
     from inspection.worker_client import AnomalyClient
     store = Store(PROJECT_ROOT/'inspection_data')
+    if getattr(args,'candidate_recipe',None):
+        runtime = Runtime(store,AnomalyClient(PROJECT_ROOT,store),source='candidate')
+        run_normal_reference_camera(args,project_config,core_runtime=runtime,candidate_recipe_id=args.candidate_recipe)
+        return
     if store.production() is not None:
         runtime = Runtime(store,AnomalyClient(PROJECT_ROOT,store),source='production')
         run_normal_reference_camera(args,project_config,core_runtime=runtime)

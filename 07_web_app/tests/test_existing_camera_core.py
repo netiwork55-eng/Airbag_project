@@ -31,7 +31,7 @@ def camera_core(tmp_path,monkeypatch):
         'areas':[{'id':'a','name':'Surface','region':{'x':.1,'y':.1,'width':.8,'height':.8},
                   'method':{'kind':'brightness','low':80,'high':180}}],
         'decision':{'stable_frames':2,'release_frames':2,'release_ms':100},
-        'validation':{'min_good':1,'min_ng':1}}
+        'validation':{'min_good':1,'min_ng':1,'min_defect_recall':1}}
     saved=store.save_recipe(config)
     report=validate(store,Pipeline(store,saved),[good['id'],ng['id']])
     assert report['eligible']
@@ -112,7 +112,10 @@ def test_invalid_core_configuration_never_falls_back_or_changes_settings(camera_
         ref['group']='changed-after-activation'
         atomic_json(store.path('images',ref['id']),ref)
     elif failure=='index':args.camera_index=0
-    elif failure=='resolution':monkeypatch.setattr(detector,'CAMERA_WIDTH',640)
+    elif failure=='resolution':
+        pipeline=runtime.production_pipeline()
+        pipeline.recipe.camera.width=640
+        monkeypatch.setattr(runtime,'production_pipeline',lambda:pipeline)
     with pytest.raises(ValueError):
         detector.run_normal_reference_camera(args,{},runtime)
     if failure=='fallback':
@@ -149,6 +152,38 @@ def test_main_selects_only_explicit_production_without_writing_config(camera_cor
     assert (store.root/'production.json').read_bytes()==before
     assert config=={'inspection_strategy':'normal_reference','active_brand_model':'keep-this-setting'}
     assert runtime.thread is None and runtime.capture_pump is None
+
+
+def test_candidate_uses_same_camera_core_without_production(camera_core,monkeypatch,capsys):
+    store,frame,saved,report,runtime,args=camera_core
+    # Candidate must not depend on a passing report or active pointer.
+    (store.root/'production.json').unlink()
+    store.path('tests',report['id']).unlink()
+    runtime.source='candidate'
+    cap=capture([frame+2,frame+2])
+    monkeypatch.setattr(detector,'open_available_camera',lambda index:(cap,1))
+    monkeypatch.setattr(detector.cv2,'waitKey',Mock(side_effect=[ord('s'),ord('q')]))
+    detector.run_normal_reference_camera(args,{},runtime,candidate_recipe_id=saved['id'])
+    rows=store.records('evidence')
+    assert {r['source'] for r in rows}=={'candidate','candidate_sample'}
+    assert all(r['recipe_hash']==saved['hash'] for r in rows)
+    assert store.production() is None and not store.records('tests')
+    assert 'CANDIDATE TEST - NOT PRODUCTION' in capsys.readouterr().out
+    cap.release.assert_called_once()
+
+
+def test_explicit_candidate_does_not_replace_active_production(camera_core,monkeypatch):
+    store,_,saved,_,_,args=camera_core
+    args.candidate_recipe=saved['id']
+    monkeypatch.setattr(detector,'parse_args',lambda:args)
+    monkeypatch.setattr(detector,'load_project_detection_config',lambda:{})
+    selected=Mock()
+    monkeypatch.setattr(detector,'run_normal_reference_camera',selected)
+    before=(store.root/'production.json').read_bytes()
+    detector.main()
+    assert selected.call_args.kwargs['candidate_recipe_id']==saved['id']
+    assert selected.call_args.kwargs['core_runtime'].source=='candidate'
+    assert (store.root/'production.json').read_bytes()==before
 
 
 def test_existing_legacy_window_and_sample_keys_remain_until_replacement(camera_core,monkeypatch,tmp_path):

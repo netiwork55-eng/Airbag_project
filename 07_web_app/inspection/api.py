@@ -13,6 +13,7 @@ from .validation import validate
 from .worker_client import AnomalyClient
 from .annotations import import_coco,read_dataset,save_dataset
 from . import ENGINE_VERSION
+from .ownership import InspectionBusy
 
 
 class InspectionService:
@@ -29,14 +30,16 @@ class InspectionService:
         self.cvat_lock = threading.Lock()
         # An interrupted training process must not keep a stale "running" state after restart.
         for item in self.store.records("training"):
-            if item["status"] == "running":
+            if item["status"] == "running" and not self.runtime.ownership.external_owner():
                 item.update(status="failed",error="Application restarted before training completed")
                 atomic_json(self.store.path("training",item["id"]),item)
 
     def busy(self):
-        return self.runtime.running or self.work_lock.locked()
+        return self.runtime.running or self.work_lock.locked() or bool(self.runtime.ownership.external_owner())
 
     def idle(self):
+        if self.runtime.ownership.external_owner():
+            raise InspectionBusy('Another process owns inspection/camera work; stop that run before continuing')
         if self.runtime.running or self.legacy_busy():
             raise ValueError("Stop the running inspection/training before changing or testing a configuration")
 
@@ -57,7 +60,10 @@ class InspectionService:
         self.idle()
         if not self.work_lock.acquire(blocking=False):
             raise ValueError("Another test or training task is running")
+        acquired = False
         try:
+            self.runtime.ownership.acquire('Core candidate training')
+            acquired = True
             recipe = self.store.recipe(payload["recipe_id"])
             area = next((a for a in recipe["config"]["areas"] if a["id"]==payload["area_id"]),None)
             if not area or area['method']['kind'] not in ('anomaly','detection','segmentation'):
@@ -118,11 +124,18 @@ class InspectionService:
                         item.update(status="failed",error="Training cleanup/storage failed: "+str(exc))
                     finally:
                         self.training_client = None
-                        self.work_lock.release()
+                        try:
+                            self.runtime.ownership.release()
+                        finally:
+                            self.work_lock.release()
             threading.Thread(target=work,daemon=True,name="candidate-anomaly-training").start()
             return item
         except Exception:
-            self.work_lock.release()
+            try:
+                if acquired:
+                    self.runtime.ownership.release()
+            finally:
+                self.work_lock.release()
             raise
 
 
@@ -138,7 +151,10 @@ def make_router(service):
         if not service.work_lock.acquire(blocking=False):
             raise HTTPException(409,"Another test or training task is running")
         try:
-            return fn()
+            with service.runtime.ownership.hold('Web inspection operation'):
+                return fn()
+        except InspectionBusy as exc:
+            raise HTTPException(409,str(exc)) from exc
         except (ValueError,KeyError,StopIteration,FileNotFoundError,RuntimeError) as exc:
             raise HTTPException(400,str(exc)) from exc
         finally:
@@ -147,6 +163,7 @@ def make_router(service):
     @router.get("/status")
     def status():
         return {"engine_version":ENGINE_VERSION,"production":store.production(),"runtime":service.runtime.snapshot(),
+                "external_runtime":service.runtime.ownership.external_owner(),
                 "busy":service.busy(),"training":service.training,
                 "capabilities":{"opencv":True,"anomalib":(service.root/".venv-inspection/Scripts/python.exe").is_file(),
                     "basler_sdk":importlib.util.find_spec("pypylon") is not None,

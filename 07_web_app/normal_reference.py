@@ -19,6 +19,10 @@ import numpy as np
 IMAGE_SUFFIXES = {".jpg", ".jpeg", ".png", ".bmp", ".webp", ".tif", ".tiff"}
 
 
+class AlignmentError(ValueError):
+    """The image cannot be compared in the model's reference coordinates."""
+
+
 @dataclass(frozen=True)
 class InspectionRegion:
     x: int
@@ -281,7 +285,7 @@ def _align(image: np.ndarray, reference: np.ndarray, mask: np.ndarray | None = N
         reference_gray = cv2.resize(reference_gray, alignment_size, interpolation=cv2.INTER_AREA)
     warp = np.eye(2, 3, dtype=np.float32)
     try:
-        cv2.findTransformECC(
+        correlation, warp = cv2.findTransformECC(
             reference_gray,
             image_gray,
             warp,
@@ -290,6 +294,8 @@ def _align(image: np.ndarray, reference: np.ndarray, mask: np.ndarray | None = N
             None,
             3,
         )
+        if not np.isfinite(correlation) or not np.isfinite(warp).all() or np.linalg.det(warp[:, :2]) <= 0:
+            raise AlignmentError('Image alignment failed: invalid transform')
         if alignment_scale < 1.0:
             warp[0, 2] /= alignment_scale
             warp[1, 2] /= alignment_scale
@@ -306,8 +312,8 @@ def _align(image: np.ndarray, reference: np.ndarray, mask: np.ndarray | None = N
             borderMode=cv2.BORDER_CONSTANT, borderValue=0,
         )
         return aligned, aligned_mask
-    except cv2.error:
-        return image, mask
+    except cv2.error as exc:
+        raise AlignmentError('Image alignment failed: check image and reference') from exc
 
 
 class NormalReferenceInspector:
@@ -521,9 +527,19 @@ class NormalReferenceInspector:
         prepared, frame_mask, source_box = _prepare(
             image, self.size, object_box, estimate_foreground=False
         )
-        prepared, frame_mask = _align(prepared, self.reference, frame_mask)
+        try:
+            prepared, frame_mask = _align(prepared, self.reference, frame_mask)
+        except AlignmentError:
+            return InspectionResult('REVIEW',0.0,0.0,self.threshold,[],brand,brand_confidence,
+                                    review_required=True,input_issue='alignment_failed')
         active_mask = cv2.bitwise_and(self.object_mask, frame_mask) if frame_mask is not None else self.object_mask
+        if not np.any(active_mask):
+            return InspectionResult('REVIEW',0.0,0.0,self.threshold,[],brand,brand_confidence,
+                                    review_required=True,input_issue='inspection_area_not_visible')
         residual = np.mean(np.abs(prepared - self.reference) / (self.deviation + 6.0), axis=2)
+        if not np.isfinite(residual).all() or not all(np.isfinite(v) and v>0 for v in (self.threshold,self.region_threshold)):
+            return InspectionResult('REVIEW',0.0,0.0,0.0,[],brand,brand_confidence,
+                                    review_required=True,input_issue='invalid_model_output')
         residual = cv2.GaussianBlur(residual, (7, 7), 0)
         mask = cv2.bitwise_and((residual >= self.region_threshold).astype(np.uint8) * 255, active_mask)
         kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))

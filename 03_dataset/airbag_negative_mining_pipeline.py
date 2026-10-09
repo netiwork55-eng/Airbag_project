@@ -34,11 +34,9 @@ import sys
 from pathlib import Path
 
 import cv2
-from ultralytics import YOLO
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PROJECT_DIR = PROJECT_ROOT
 
 # ---------------------------------------------------------------------------
 # PART 1: Dataset Augmentation Utility
@@ -572,150 +570,13 @@ def merge_background_examples(
 # PART 2: Real-time Camera Inference
 # ---------------------------------------------------------------------------
 
-# ส่วนนี้เป็น inference เก่าในไฟล์ pipeline; งานเปิดกล้องหลักปัจจุบันอยู่ที่ 01_camera/airbag_webcam_detection.py
-TRAINED_MODEL_CANDIDATES = [
-    PROJECT_DIR / "models" / "best.pt",
-    OUTPUT_AUGMENTED_PATH / "weights" / "best.pt",
-]
-FALLBACK_MODEL_CANDIDATES = [
-    PROJECT_DIR / "models" / "yolov8n.pt",
-    PROJECT_ROOT.parent / "yolov8n.pt",
-    Path.cwd() / "yolov8n.pt",
-]
-GENERAL_NOT_AIRBAG_MODEL_CANDIDATES = FALLBACK_MODEL_CANDIDATES
-
-WINDOW_NAME = "AI Airbag Detector (Negative Mining Trained)"
-TARGET_CLASS_NAME = "Airbag"
-CONFIDENCE_THRESHOLD = 0.45
-GENERAL_CONFIDENCE_THRESHOLD = 0.35
-IOU_THRESHOLD = 0.45
-OVERLAP_IOU_THRESHOLD = 0.35
-
-
-def calculate_iou(
-    box_a: tuple[int, int, int, int],
-    box_b: tuple[int, int, int, int],
-) -> float:
-    """Calculate intersection-over-union for two xyxy boxes."""
-    ax1, ay1, ax2, ay2 = box_a
-    bx1, by1, bx2, by2 = box_b
-
-    inter_x1 = max(ax1, bx1)
-    inter_y1 = max(ay1, by1)
-    inter_x2 = min(ax2, bx2)
-    inter_y2 = min(ay2, by2)
-
-    inter_width = max(0, inter_x2 - inter_x1)
-    inter_height = max(0, inter_y2 - inter_y1)
-    inter_area = inter_width * inter_height
-
-    area_a = max(0, ax2 - ax1) * max(0, ay2 - ay1)
-    area_b = max(0, bx2 - bx1) * max(0, by2 - by1)
-    union_area = area_a + area_b - inter_area
-
-    if union_area <= 0:
-        return 0.0
-
-    return inter_area / union_area
-
-
-def overlaps_any_airbag(
-    box: tuple[int, int, int, int],
-    airbag_boxes: list[tuple[int, int, int, int]],
-) -> bool:
-    """Avoid drawing a red general-object box on top of a green Airbag box."""
-    return any(
-        calculate_iou(box, airbag_box) >= OVERLAP_IOU_THRESHOLD
-        for airbag_box in airbag_boxes
-    )
-
-
-def draw_labeled_box(
-    frame,
-    xyxy: tuple[int, int, int, int],
-    label: str,
-    confidence: float,
-    color: tuple[int, int, int],
-) -> None:
-    """Draw a readable bounding box and label on the current frame."""
-    # วาดกรอบและป้ายชื่อให้อ่านง่ายบนหน้าต่างกล้อง
-    x1, y1, x2, y2 = xyxy
-    text = f"{label} {confidence:.2f}"
-
-    cv2.rectangle(frame, (x1, y1), (x2, y2), color, 2)
-
-    text_size, baseline = cv2.getTextSize(
-        text,
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        2,
-    )
-    text_width, text_height = text_size
-    text_y = max(y1, text_height + 10)
-
-    cv2.rectangle(
-        frame,
-        (x1, text_y - text_height - baseline - 6),
-        (x1 + text_width + 6, text_y + baseline - 2),
-        color,
-        thickness=-1,
-    )
-    cv2.putText(
-        frame,
-        text,
-        (x1 + 3, text_y - 5),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.6,
-        (255, 255, 255),
-        2,
-        cv2.LINE_AA,
-    )
-
-
-def load_inference_model() -> tuple[YOLO, Path, bool]:
-    """
-    Load the retrained Airbag model if available.
-
-    If the trained Airbag best.pt does not exist,
-    this falls back to yolov8n.pt only so the script can still run. The fallback
-    COCO model is NOT trained for the custom Airbag class, so retraining on the
-    augmented dataset is required for the intended accuracy improvement.
-    """
-    # โหลด best.pt ที่ train แล้วก่อน ถ้าไม่มีจึง fallback เป็น yolov8n.pt เพื่อให้สคริปต์ยังรันได้
-    trained_model_path = next(
-        (path for path in TRAINED_MODEL_CANDIDATES if path.exists()),
-        None,
-    )
-    if trained_model_path is not None:
-        return YOLO(str(trained_model_path)), trained_model_path, True
-
-    fallback_model_path = next(
-        (path for path in FALLBACK_MODEL_CANDIDATES if path.exists()),
-        None,
-    )
-    if fallback_model_path is None:
-        fallback_model_path = Path("yolov8n.pt")
-
-    print(
-        "Warning: retrained Airbag model was not found:\n"
-        f"  {TRAINED_MODEL_CANDIDATES}\n"
-        "Falling back to yolov8n.pt. Retrain on the augmented dataset and place "
-        "best.pt at the path above to get Airbag-specific accuracy."
-    )
-
-    return YOLO(str(fallback_model_path)), fallback_model_path, False
-
-
 def run_camera_inference(camera_index: int = 0) -> None:
     """Run the canonical webcam detector so there is only one inference logic."""
-    # ส่งต่อไปใช้ไฟล์เปิดกล้องหลัก เพื่อไม่ให้มี logic detect ซ้ำหลายชุดจนแก้ไม่ตรงกัน
-    if camera_index != 0:
-        print("The canonical webcam detector accepts camera selection via --camera-index.")
-
     sys.path.insert(0, str(PROJECT_ROOT / "01_camera"))
     from airbag_webcam_detection import main as run_airbag_webcam
 
-    run_airbag_webcam()
+    # Pass only camera arguments, not this utility's --camera/--prepare-dataset.
+    run_airbag_webcam(['--camera-index', str(camera_index)])
 
 
 def parse_args() -> argparse.Namespace:

@@ -9,6 +9,7 @@ from .schema import State
 from .store import atomic_json, now
 from .pipeline import Pipeline
 from . import ENGINE_VERSION
+from .ownership import project_lease
 
 
 def evidence(store, result, image, maps=None, *, source="test", complete=True):
@@ -261,6 +262,7 @@ class FramePump:
 class Runtime:
     def __init__(self, store, anomaly, source="production"):
         self.store,self.anomaly = store,anomaly
+        self.ownership = project_lease(store.root)
         self.source=source
         self.lock = threading.RLock()
         self.stop_event = threading.Event()
@@ -284,16 +286,25 @@ class Runtime:
         saved = self.store.validated_recipe(active["recipe_id"],active["report_id"])
         if saved["hash"] != active["recipe_hash"]:
             raise ValueError("Active recipe integrity check failed")
+        return self._ready_pipeline(saved)
+
+    def candidate_pipeline(self, recipe_id):
+        """Test an explicitly selected immutable recipe without activating it."""
+        if self.source != 'candidate':
+            raise ValueError('Candidate inspection must be labelled as a test run')
+        return self._ready_pipeline(self.store.recipe(recipe_id))
+
+    def _ready_pipeline(self, saved):
         pipeline = Pipeline(self.store,saved,self.anomaly)
         if pipeline.recipe.locator.method == "fixed":
             raise ValueError("Continuous place-and-remove inspection needs a part locator; fixed setup supports image tests only")
         warm,_ = pipeline.run(pipeline.reference)
         if warm["state"]=="UNABLE_TO_INSPECT":
-            raise ValueError("Production readiness check failed: "+"; ".join(warm["reasons"]))
+            raise ValueError("Inspection readiness check failed: "+"; ".join(warm["reasons"]))
         return pipeline
 
     def start(self):
-        with self.lock:
+        with self.lock, self.ownership.hold('Web Production inspection'):
             if self.running:
                 raise ValueError("Production camera is already running")
             pipeline = self.production_pipeline()
@@ -303,8 +314,12 @@ class Runtime:
             self.stop_event.clear()
             self.frame = None
             self.state = {"running":True,"state":"UNABLE_TO_INSPECT","reasons":["Waiting for the first image"],"recipe_id":saved["id"],"recipe_hash":saved["hash"],"last_event":None}
-            self.thread = threading.Thread(target=self.loop,args=(camera,pipeline),daemon=True,name="production-inspection")
-            self.thread.start()
+            try:
+                self.thread = self.ownership.start_thread(self.loop,(camera,pipeline),daemon=True,name="production-inspection")
+            except BaseException:
+                self.state.update(running=False,state='UNABLE_TO_INSPECT',reasons=['Inspection worker could not start'])
+                camera.close()
+                raise
             return self.snapshot()
 
     def snapshot(self):

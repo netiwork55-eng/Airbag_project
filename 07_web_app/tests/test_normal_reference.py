@@ -54,6 +54,9 @@ def test_model_round_trip(tmp_path):
     paths = []
     for index in range(5):
         image = np.full((100, 100, 3), 100 + index, np.uint8)
+        # Serialization fixture still needs a registrable part, not a flat image.
+        cv2.rectangle(image,(20,25),(75,80),(160+index,150,130),-1)
+        cv2.circle(image,(40,45),8,(70,80,90),-1)
         path = tmp_path / f"normal_{index}.png"
         _write(path, image)
         paths.append(path)

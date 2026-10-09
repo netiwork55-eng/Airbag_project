@@ -23,6 +23,7 @@
 
 from datetime import datetime
 from pathlib import Path
+import sys
 
 import cv2
 
@@ -163,11 +164,21 @@ def scan_best_focus(cap):
 
 def main() -> None:
     """เปิดกล้อง รับปุ่มควบคุม และบันทึก frame ที่ผู้ใช้เลือกลง SAVE_DIR."""
+    root=Path(__file__).resolve().parents[1]
+    web=str(root/'07_web_app')
+    if web not in sys.path:sys.path.insert(0,web)
+    from inspection.ownership import project_lease
+    with project_lease(root/'inspection_data').hold('Existing image capture utility'):
+        _capture()
+
+
+def _capture() -> None:
     SAVE_DIR.mkdir(parents=True, exist_ok=True)
 
     cap = cv2.VideoCapture(CAMERA_INDEX, cv2.CAP_DSHOW)
 
     if not cap.isOpened():
+        cap.release()
         raise RuntimeError(
             f"Could not open webcam {CAMERA_INDEX}. "
             "Check that the camera is connected and not used by another app."

@@ -26,7 +26,7 @@ def setup(tmp_path):
         "areas":[{"id":"surface","name":"Surface","region":{"x":.1,"y":.1,"width":.8,"height":.8},
                   "method":{"kind":"brightness","low":80,"high":180,"review_margin":2}}],
         "quality":{"min_brightness":5,"max_brightness":250},"locator":{"fixture_confirmed":True},
-        "validation":{"min_good":1,"min_ng":1}}
+        "validation":{"min_good":1,"min_ng":1,"min_defect_recall":1}}
     return store,frame,config,add
 
 
@@ -71,6 +71,47 @@ def test_template_alignment_and_clipped_roi(setup):
     c['areas'][0]['region']={'x':0,'y':0,'width':1,'height':1}
     result=Pipeline(store,store.save_recipe(c)).run(shifted)[0]
     assert result['state']=='UNABLE_TO_INSPECT' and 'visible' in result['reasons'][0]
+
+
+def test_validation_needs_explicit_part_recall_policy(setup):
+    store,frame,c,add=setup
+    c['locator']={'method':'template','region':{'x':.25,'y':.25,'width':.5,'height':.5}}
+    c['validation'].pop('min_defect_recall')
+    ids=[add(frame+1)['id'],add(frame//2,'NG')['id']]
+    saved=store.save_recipe(c)
+    report=validate(store,Pipeline(store,saved),ids)
+    assert report['metrics']['defect_recall']==1
+    assert not report['eligible'] and any('Set the required part-level' in b for b in report['blockers'])
+    assert report['limits']['min_defect_recall'] is None
+    with pytest.raises(ValueError,match='passing independent'):
+        store.activate(saved['id'],report['id'])
+    assert store.production() is None
+
+
+def test_many_good_images_cannot_hide_reviewed_ng(setup):
+    store,frame,c,add=setup
+    c['locator']={'method':'template','region':{'x':.25,'y':.25,'width':.5,'height':.5}}
+    ids=[add(frame+i)['id'] for i in range(1,11)]
+    # Deliberately exercise the decision band; this is not a defect-accuracy dataset.
+    borderline=np.clip(frame.astype(float)*.71,0,255).astype(np.uint8)
+    ids.append(add(borderline,'NG')['id'])
+    saved=store.save_recipe(c)
+    report=validate(store,Pipeline(store,saved),ids)
+    assert report['rows'][-1]['result']['state']=='REVIEW'
+    assert report['metrics']['review_rate']<c.get('validation',{}).get('max_review',.1)
+    assert report['metrics']['false_accept_rate']==0
+    assert report['metrics']['defect_recall']==0
+    assert report['metrics']['ng_review_count']==1
+    assert not report['eligible']
+    assert any('defect_recall does not meet' in b for b in report['blockers'])
+    with pytest.raises(ValueError):store.activate(saved['id'],report['id'])
+
+
+@pytest.mark.parametrize('value',[0,-.1,1.01,float('nan'),float('inf')])
+def test_invalid_part_recall_policy_is_rejected(setup,value):
+    store,_,c,_=setup
+    c['validation']['min_defect_recall']=value
+    with pytest.raises(ValueError):store.save_recipe(c)
 
 
 def test_anomaly_not_trained_is_unable(setup):

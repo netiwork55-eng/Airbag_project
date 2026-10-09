@@ -61,6 +61,10 @@ def validate(store, pipeline, image_ids, dataset_id=None):
         blockers.append(f"Need at least {limits.min_good} independent GOOD images")
     if len(ng)<limits.min_ng:
         blockers.append(f"Need at least {limits.min_ng} independent NG images; defect recall is unverified")
+    if limits.min_defect_recall is None:
+        blockers.append("Set the required part-level defect recall before Production validation; REVIEW and UNABLE are not NG rejections")
+    elif metrics['defect_recall'] is None or metrics['defect_recall'] < limits.min_defect_recall:
+        blockers.append(f"defect_recall does not meet limit {limits.min_defect_recall:g}; REVIEW and UNABLE are not NG rejections")
     for metric,limit in (("false_accept_rate",limits.max_false_accept),("false_reject_rate",limits.max_false_reject),
                          ("review_rate",limits.max_review),("unable_rate",limits.max_unable)):
         if metrics[metric] is None or metrics[metric] > limit:

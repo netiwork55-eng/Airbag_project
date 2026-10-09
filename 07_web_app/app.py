@@ -219,8 +219,13 @@ def serialized_workflow(function):
     """Serialize camera/train transitions without blocking status polling."""
     @wraps(function)
     def wrapped(*args, **kwargs):
+        from inspection.ownership import InspectionBusy
         with WORKFLOW_LOCK:
-            return function(*args, **kwargs)
+            try:
+                with vision_service.runtime.ownership.hold('Web engineering operation'):
+                    return function(*args, **kwargs)
+            except InspectionBusy as exc:
+                return JSONResponse({'ok':False,'error':str(exc)},status_code=409)
     return wrapped
 
 REFERENCE_TRAIN_THREAD: threading.Thread | None = None
@@ -4494,6 +4499,14 @@ def refresh_train_state_locked() -> None:
     TRAIN_PROCESS = None
 
 
+def wait_for_train_completion(process):
+    """Keep project ownership until the existing child and finalization finish."""
+    process.wait()
+    with TRAIN_LOCK:
+        if TRAIN_PROCESS is process:
+            refresh_train_state_locked()
+
+
 def stop_train_process_locked() -> tuple[bool, str]:
     """หยุด process train ที่กำลังทำงานอยู่ และฆ่า process ลูกบน Windows ให้ครบ."""
     global TRAIN_PROCESS
@@ -5475,8 +5488,7 @@ def start_camera_worker(
     else:
         target = camera_worker
         args = (camera_index, airbag_confidence, debug_detection, use_brand)
-    WORKER_THREAD = threading.Thread(target=target, args=args, daemon=True)
-    WORKER_THREAD.start()
+    WORKER_THREAD = vision_service.runtime.ownership.start_thread(target,args,daemon=True)
 
 
 # ===== HTTP routes: หน้าเว็บและ Annotation API =====
@@ -6839,14 +6851,11 @@ def api_train_normal_reference(payload: dict = Body(...)) -> JSONResponse:
             "dataset": "reviewed_known_good",
             "result": {},
         })
-        REFERENCE_TRAIN_THREAD = threading.Thread(
-            target=run_normal_reference_training,
-            args=(source_datasets, paths, settings, training_fingerprint, int(corpus["source_images"]), int(corpus["duplicates_removed"])),
-            daemon=True,
-            name="normal-reference-training",
-        )
         try:
-            REFERENCE_TRAIN_THREAD.start()
+            REFERENCE_TRAIN_THREAD = vision_service.runtime.ownership.start_thread(
+                run_normal_reference_training,
+                (source_datasets, paths, settings, training_fingerprint, int(corpus["source_images"]), int(corpus["duplicates_removed"])),
+                daemon=True,name='normal-reference-training')
         except Exception as exc:
             REFERENCE_TRAIN_THREAD = None
             REFERENCE_TRAIN_STATE.update({"running": False, "status": "failed", "stage": "failed",
@@ -7884,6 +7893,12 @@ def api_start_train(
                 ),
             }
         )
+        try:
+            vision_service.runtime.ownership.start_thread(wait_for_train_completion,(TRAIN_PROCESS,),
+                daemon=True,name='legacy-training-completion')
+        except Exception:
+            stop_train_process_locked()
+            raise
 
     return JSONResponse({"ok": True, "state": TRAIN_STATE})
 

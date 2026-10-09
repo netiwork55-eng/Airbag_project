@@ -9,14 +9,30 @@ __pycache__/
 # Virtual environment / dependency folders
 .venv/
 venv/
+.venv-inspection/
+
+# Runtime data and historical artifacts stay on disk, outside source checkpoints.
+/inspection_data/
+/models/
+/jobs/
+/work/
+/05_train_new_object/
+/06_brand_classification/01_brand_exports/
+/06_brand_classification/02_unknown_background_images/
+/06_brand_classification/03_output_dataset/
+/06_brand_classification/04_trained_models/
+/03_dataset/annotation_studio/
+/03_dataset/inspection_cycles/
+/03_dataset/inspection_reviews/
+/03_dataset/cvat_exports/
+/03_dataset/cvat_annotated_ng/
+/07_web_app/logs/
 
 # Secret or machine-specific config
 .env
 
 # Runtime logs ที่ระบบสร้างใหม่ได้
 *.log
-!07_web_app/logs/train_jobs/
-!07_web_app/logs/train_jobs/*.log
 
 # ไฟล์ backup/temp ที่ไม่ควรติดไปกับ source หลัก
 *.bak

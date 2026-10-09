@@ -1,4 +1,4 @@
-# Industrial Visual Inspection — อัปเดต Camera Consolidation 9 ตุลาคม 2026
+# Industrial Visual Inspection — อัปเดต Consolidation 9 ตุลาคม 2026
 
 ระบบปรับใน FastAPI เดิม เปิด http://127.0.0.1:8000/inspection
 หน้า / และ /training เข้าหน้าใหม่นี้ ไม่เปิด Candidate ใหม่ทับโมเดลเดิม
@@ -13,8 +13,14 @@ Airbag/Toyota เป็นตัวอย่าง ไม่จำกัดป�
 หาก active Recipe ผิดหรือกล้องไม่ตรง จะหยุดพร้อมเหตุผล ไม่ fallback ไปโมเดลเก่า
 ถ้ายังไม่มี Production Recipe ที่ Activate คงเส้นทางโมเดลเดิมไว้ระหว่าง Migration; ณ รอบนี้ยังไม่มี Production Recipe และยังไม่ได้สลับการตรวจจริง
 กล้อง Terminal ยังใช้ลูปอ่านภาพเดิม ค่าอายุภาพเริ่มหลัง read สำเร็จ ไม่ใช่ hardware exposure timestamp จึงต้องทดสอบ buffer/latency กับกล้องและโมเดลจริง
-อย่าเปิดกล้องจากเว็บซ้อนกับ Terminal ที่กำลังใช้กล้องเดียวกัน การเชื่อม Core ไม่ใช่การแชร์ device handle ข้าม process
-Regression รอบนี้ผ่าน 304 tests และ 5 subtests; รวม 11 integration tests ของ Terminal/Core โดยใช้กล้องจำลอง ไม่ใช่หลักฐานตรวจตำหนิจริง
+Terminal, capture utility เดิม และ Web workflow ใช้ project lease ที่มี OS lock ร่วมกัน ป้องกัน process อื่นใน project แย่งงานกล้อง/เปลี่ยน configuration ระหว่างตรวจ; Web แสดง external owner แต่ไม่แชร์ camera handle หรือผลสดของ Terminal
+สามารถทดสอบ Candidate ที่บันทึกแล้วด้วยโปรแกรมเดิม: เพิ่ม `--candidate-recipe recipe_<idจริง> --camera-index <indexจริง>` ใช้ Core เดียวกัน แสดง CANDIDATE TEST - NOT PRODUCTION และเก็บ source=candidate/candidate_sample ไม่ Activate เอง
+Candidate แบบวาง–ยกต้องมี Locator; fixed/cropped recipe เดิมยังใช้ Test ภาพได้ แต่ไม่รับรอง live cycle โปรแกรม Core ใช้ resolution ที่ Recipe กำหนดและต้องตรง full-frame reference; legacy mode รักษาค่ากล้องเดิม
+ก่อน Production validation ต้องกำหนด Min defect recall ระดับชิ้นงานจาก requirement จริง ค่าเริ่มต้นเว้นว่าง; REVIEW/UNABLE ไม่นับเป็น NG rejection และ object recall ของ detector เป็นคนละเกณฑ์
+Engine 2026.10.09.1 ต้อง Validate ใหม่ก่อน Production รายงาน/Recipe/threshold เดิมไม่ได้แก้ย้อนหลัง
+Regression รอบล่าสุดผ่าน 327 tests และ 5 subtests รวม mock camera และการชนกันข้าม process จริง; JavaScript 2 suites ผ่าน ไม่ใช่หลักฐานตรวจตำหนิหรือกล้องจริง Browser automation ใช้ไม่ได้รอบนี้; HTTP smoke ผ่าน
+รายละเอียด KEEP/MIGRATED/REMOVED/BLOCKED และจุดย้อนกลับ: work/RENOVATION_CONSOLIDATION_REPORT.md
+โค้ดใหม่มีผลเมื่อเปิดโปรแกรมครั้งถัดไป ไม่ได้ patch/restart process กล้องหรือ server ที่ผู้ใช้เปิดค้างก่อนแก้
 
 ## ขั้นตอนใช้งาน
 1. Setup: สร้าง/เลือก Product เลือกภาพชิ้นดีอ้างอิง ตั้งกล้องและคุณภาพภาพ
@@ -85,7 +91,7 @@ CVAT ใช้ lock แยกจาก inspection ไม่ครอบครอ
 - เป็นภาพ crop แล้ว ไม่พิสูจน์ raw camera/locator และไม่ได้แสดงว่าดีกว่าโมเดลเดิม
 - ไม่มี verified NG จึงวัด false accept/defect recall ไม่ได้ ไม่มีสูตรใหม่เปิดเป็น Production
 - replay วางเข้า–ยกออกและการปล่อยกล้องจำลองผ่าน ยังไม่ทดสอบกล้องจริงหรือรันยาว
-- ไม่พบ pypylon/SDK Basler ใน runtime ที่ตรวจ adapter มีแล้วแต่ต้องทดสอบ SDK ทางการกับอุปกรณ์จริง
+- มี pypylon ใน runtime; probe ที่รายงานไว้วันที่ 8 ต.ค. ไม่พบ Basler device รอบพัฒนานี้ไม่ได้เปิด/ตรวจกล้องจริง จึงยังไม่รับรอง adapter กับ hardware
 - CVAT localhost:8080 ติดต่อ/ยืนยันตัวตนไม่ได้ตอนตรวจ จึงยังไม่ผ่าน annotation round trip จริง
 
 ## ติดตั้งและสิทธิ์การใช้งาน
