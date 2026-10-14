@@ -113,6 +113,23 @@ def export_onnx(store, key, model, samples, threshold):
             "onnxruntime_version":importlib.metadata.version("onnxruntime")}
 
 
+def split_training_groups(images, reference_group):
+    """Keep the reference and entire capture groups out of calibration."""
+    groups = sorted({i["group"] for i in images})
+    if len(groups)<5:
+        raise ValueError("At least five independent capture groups are required")
+    random.Random(42).shuffle(groups)
+    # Exclude the reference before selecting; discarding it afterwards can
+    # empty calibration despite other independent groups being available.
+    eligible_groups = [group for group in groups if group != reference_group]
+    cal_groups = set(eligible_groups[:max(1,round(len(groups)*.2))])
+    fit = [i for i in images if i["group"] not in cal_groups]
+    cal = [i for i in images if i["group"] in cal_groups]
+    if len(fit)<10 or len(cal)<4:
+        raise ValueError("Need at least 10 fit and 4 calibration images in separate groups")
+    return groups, fit, cal
+
+
 def train(store, request):
     saved = store.recipe(request["recipe_id"])
     recipe = Recipe.model_validate(saved["config"])
@@ -128,17 +145,7 @@ def train(store, request):
     if len(images)<20:
         raise ValueError("Use at least 20 distinct GOOD images; no image-count ceiling is imposed")
     ref = store.image(recipe.reference_id)
-    groups = sorted({i["group"] for i in images})
-    if len(groups)<5:
-        raise ValueError("At least five independent capture groups are required")
-    random.Random(42).shuffle(groups)
-    cal_groups = set(groups[:max(1,round(len(groups)*.2))])
-    reference_group = store.read("images",recipe.reference_id)["group"]
-    cal_groups.discard(reference_group)
-    fit = [i for i in images if i["group"] not in cal_groups]
-    cal = [i for i in images if i["group"] in cal_groups]
-    if len(fit)<10 or len(cal)<4:
-        raise ValueError("Need at least 10 fit and 4 calibration images in separate groups")
+    groups, fit, cal = split_training_groups(images, reference["group"])
     torch.manual_seed(42)
     np.random.seed(42)
     model = model_for(algorithm)

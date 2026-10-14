@@ -1,6 +1,60 @@
 # Airbag_Project — Renovation & Consolidation
 
-อัปเดต 14 ตุลาคม 2026 · Hardware Verification หลัง Phase 4 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+อัปเดต 14 ตุลาคม 2026 · Full-frame Candidate preparation · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+
+## Full-frame Candidate preparation — ข้อมูลจริงและขอบเขตที่ผู้ใช้ยืนยัน
+
+ฐาน `ddb5b60`; checkpoint ก่อนแก้ `full-frame-preparation-start-20261014` ผู้ใช้ระบุว่าชิ้นงานในภาพ Live มีจุดเสีย จึง **ไม่ใช้เป็น GOOD/reference สำหรับการเรียนรู้** และต้องตรวจผิว โลโก้ และขอบทั้งหมดที่กล้องมองเห็น ไม่ตัดโลโก้/ขอบออกเพื่อทำให้ตรวจผ่าน พื้นที่ด้านข้าง/ด้านหลังที่ไม่เห็นในภาพยังรับรองไม่ได้
+
+### พบชุด GOOD เดิมแล้ว — แก้ความเข้าใจจาก Core store
+
+- `05_train_new_object/01_yolov8_exports/Airbag_Toyota/20260929_153627_auto_split` มี **268ภาพเต็ม1280×720** และ labels268ไฟล์: class0=`Airbag`, class1=`Toyota` อย่างละ268กรอบ เป็นกรอบวัตถุและโลโก้ ไม่ใช่ defect annotations
+- `dataset_meta.json` ระบุ Known-good Reference, review_status=reviewed, reviewed_at=2026-09-29T15:36:34, auto_filled=false จึงมีแหล่ง GOOD เดิมในระบบจริง ไม่ได้มีเพียง Core cropped images ไม่ลบทิ้ง/ขอถ่ายใหม่ทั้งหมดโดยไม่ตรวจชุดนี้
+- ผู้ใช้ยืนยันในรอบนี้ว่า **ทั้ง268ภาพเป็นชิ้นเดียวที่ขยับหลายตำแหน่ง** ชื่อไฟล์อยู่23ก.ย.08:58:23–09:01:12; จึงนับเป็นกลุ่มชิ้นงานเดียว ห้ามใช้ split เดิม train215/valid40/test13 เป็นหลักฐานกลุ่มอิสระ Manifestเดิมเป็น automatic_class_aware_split ไม่ได้ยืนยัน physical part groups
+- ยังไม่มี capture settings/EXIF camera provenance ที่เทียบกับ LifeCamรอบล่าสุดได้ และความละเอียด1280×720ต่างจาก1920×1080 ห้าม upscale ภาพเก่าแล้วอ้างว่าเป็น reference1080pจากกล้องเดียวกัน; การใช้ camera1280×720 เป็นอีก setup ต้องตรวจ FOV/pose/lighting จริงก่อน ไม่เปลี่ยน camera configuration ในรอบนี้
+- Core storeปัจจุบัน393ภาพยังไม่มี confirmed label/group แต่ข้อเท็จจริงนี้ **ไม่ใช่ข้อสรุปว่าไม่มี reviewed GOOD dataset นอก Core** ยังไม่นำเข้าทั้ง268ภาพ/เขียน label ใหม่ เพราะต้องแก้ input setup และ group provenance ก่อน เพื่อไม่สร้างสำเนาที่ใช้ Trainไม่ได้
+
+### ภาพจริง / Geometry feasibility ที่ลงมือทดสอบแล้ว
+
+ใช้ `inspection.pipeline.align/match` เดิมบนภาพที่เก็บไว้ ไม่มีการ Train หรือบันทึก Recipeใหม่ เปลี่ยนเฉพาะ method/กรอบใน memoryสำหรับ diagnostic ใช้ locator limits จากสูตรเดิมโดยไม่ปรับตัวเลขเพื่อทำให้ผ่าน **ผล accepted ด้านล่างเป็น software gate ของ geometry เท่านั้น ไม่ใช่การตรวจ GOOD/NG และไม่ใช่เกณฑ์ที่ calibrateสำหรับ Full-frameแล้ว**
+
+| ชุด/บริเวณ locator | Template accepted | ORB accepted | ขอบเขต |
+|---|---:|---:|---|
+| ภาพ1080pจริง: referenceภาพวางชิ้นงานบนโต๊ะ, locatorภายในชิ้นงาน | 0/2ภาพอื่น | 0/2ภาพอื่น | self-match1/1ทั้งสองวิธีไม่นับเป็นหลักฐานการจัดแนวข้ามภาพ |
+| ชุด1280×720เดิม: กรอบภายใน Airbagจาก annotation | 3/267 | 1/267 | ตัดภาพreferenceเองออกจากจำนวนเปรียบเทียบ |
+| ชุด1280×720เดิม: กรอบ Toyota logoจาก annotation | 0/267 | 2/267 | บริเวณสะท้อนแสงยังไม่เป็น anchorที่เสถียรในชุดที่ลอง |
+
+ภาพ1080pมีทั้งช่วงถือชิ้นงานเอียง/ยกและวางบนโต๊ะ รูปทรงฉายในภาพ แสง และขนาดไม่คงที่ Templateเดิมทำ translationเท่านั้น; ORBใช้ partial affine (translation/rotation/uniform scale) ไม่ได้แก้ perspectiveหรือผิวโค้งทุกแบบ ผลยังไม่สนับสนุนการเลือกวิธีใดเป็น live-ready ไม่สรุปว่า algorithmทั้งหมดใช้ไม่ได้จาก reference/regionที่ลอง และไม่ลด min_score/min_matches เพื่อฝืนผ่าน
+
+Referenceที่ใช้ diagnostic `core_compatibility_raw.png` มี global brightness120.09 แต่ ROIตัวอย่างบนผิวเพียง50.50; global sharpness85.67 และ ROI143.24 (Laplacian variance) แสดงว่าค่าคุณภาพภาพรวมมีส่วนของโต๊ะ/เสื้อ/มือ ไม่ใช่ค่าผิวชิ้นงานล้วน มีแสงสะท้อนบนโลโก้และจุดสีอ่อนบนผิว ซึ่งยังไม่กำหนด defect type/ขนาดเอง ภาพ Liveนี้ไม่ใช้เป็น normal reference ตามคำยืนยันล่าสุดของผู้ใช้
+
+แนวทางที่ reuse Coreได้: เก็บ raw full-frameเดิม, เลือก locatorบนรายละเอียดของชิ้นงาน, กำหนดหลาย rectangular Inspection Areas หลัง alignment แยกผิว/โลโก้/ขอบและตรวจ source polygons ด้วยภาพจริง Coreรองรับสูงสุด16areas ยังไม่มี arbitrary part maskสำหรับ anomaly ROI; สี่เหลี่ยมครอบขอบโค้งอาจกินพื้นหลัง ต้องจัดฉาก/ตำแหน่งให้คงที่และตรวจ coverage ห้ามอ้างว่าลบ backgroundแล้วหรือมองเห็นครบทั้งชิ้นจากภาพด้านเดียว ROIตัวอย่างที่ใช้วิเคราะห์ไม่ใช่ขอบเขตสุดท้ายของงาน “ทั้งหมด”
+
+### Model compatibility / ข้อมูลที่ยังขาด
+
+PaDiM2และPatchCore2ตัวเดิมมี input_signatureของ cropped recipeเดียวกัน ไม่มีตัวใดตรงกับ full-frame reference/camera/locator/area/qualityที่ทดลองเชิงgeometry Pipelineเดิมตรวจ signatureก่อน predict จึงยังไม่เรียกโมเดลเหล่านี้กับROIใหม่ Workerเดิมทำ prepare→aligned ROI→resize224×224→normalization; การที่tensorขนาด224เหมือนกันไม่ได้ทำให้คนละROI/referenceเข้ากัน ต้องพิจารณาขนาดตำหนิหลังย่อROIและทดสอบ NGจริงก่อนรับรองพื้นที่กว้าง
+
+ขั้นต่ำตาม software guardเดิมสำหรับการ Train: ≥20ภาพGOODไม่ซ้ำ, ≥5กลุ่มอิสระ, fit≥10/calibration≥4 และไม่ให้ reference groupอยู่calibration **ไม่ใช่จำนวนที่รับรอง accuracy** ขณะนี้268ภาพเดิมคือกลุ่มเดียวตามผู้ใช้ยืนยัน ห้ามสร้าง group IDsใหม่แยกตามไฟล์หรือ train/valid/testเพื่อผ่าน guard ต้องเพิ่มชิ้นงาน/กลุ่มอิสระที่ยืนยันGOODและมี setupตรงกัน พร้อมกันนั้นกัน GOOD/NGจากชิ้นอื่นสำหรับ independent validation และแยก defect types/ขนาด/ตำแหน่งจริง
+
+### แก้ software blocker ที่พิสูจน์ได้
+
+ตัวแบ่งกลุ่มเดิมสุ่มเลือกcalibrationก่อนแล้ว discard reference group ทำให้ชุด20ภาพ/5กลุ่มที่พอใช้งานเกิดcalibrationว่างเมื่อ referenceถูกสุ่มมาเป็นกลุ่มแรก พิสูจน์ด้วย regressionที่failในกรณี part_d ก่อนแก้ ย้ายการแบ่งกลุ่มเดิมมา `split_training_groups` ใน workerไฟล์เดิม และตัดreferenceออกจากรายชื่อที่เลือก **ก่อน** เลือกcalibration ไม่เพิ่ม training pipeline/โมเดล ไม่ลดข้อกำหนดจำนวนภาพ/กลุ่มและไม่ทำให้ชิ้นเดียวผ่าน
+
+- Testsใหม่7กรณีผ่าน: referenceทุกกลุ่ม, fit/calibrationไม่ทับกัน, deterministic split, ภาพจำนวนมากของชิ้นเดียวถูกปฏิเสธ และกลุ่มที่มีภาพcalibrationไม่พอยังถูกปฏิเสธ
+- Full regression: **336 Python tests +5 subtests ผ่าน** ไม่มีการ fit/model construction ใน testsใหม่ ไม่ถือว่า testsเป็น defect accuracy
+- Browserจริงยังไม่ได้ตรวจในรอบนี้: ไม่มี callable browser/computer-use tool และ environmentโปรเจกต์ไม่มี Playwright/Selenium ไม่ติดตั้งเพิ่ม ไม่ใช้ HTTPแทนBrowser pass; manual checklistจากPhase4ยังค้าง
+- ไม่ Train, ไม่เปลี่ยน image labels/Recipe/model weights/thresholds/Production, ไม่เปิดLiveโดยใช้inputผิดเงื่อนไข ไม่ถอดLegacyLive Source changeเฉพาะการแบ่งกลุ่มใน workerและtests
+
+### หลักฐานและขั้นตอนถัดไป
+
+`work/full-frame-preparation-20261014/` เก็บ `legacy-data-provenance.json` (268 paths/hashes/annotation provenanceและคำยืนยันชิ้นเดียว), `geometry-diagnostics.json`, `legacy-reference-selection.json`, `legacy-geometry-diagnostics.json`, `legacy-logo-diagnostics.json`; ภาพต้นฉบับและDatasetยังอยู่ที่เดิม ตรวจ540ไฟล์ของToyotaก่อน–หลังgeometry testไม่เปลี่ยน
+
+1. ใช้ภาพ/กรอบเดิมช่วยกำหนดพื้นที่ชิ้นงานและขอบเขตความแปรผัน โดยคง268ภาพในกลุ่มเดียว และเก็บชิ้นที่ผู้ใช้แจ้งว่ามีตำหนิแยกจากGOOD ไม่กำหนดlabelทุกไฟล์แทนผู้ใช้
+2. จัดภาพชิ้นงานGOODที่ยืนยันแล้วใน setupเดียวกับกล้องที่จะใช้จริง: ชิ้นงานวางมั่นคง, มือออกก่อนตรวจ, ระยะ/มุม/แสงคงที่ ไม่ยกชิ้นงานเปลี่ยน perspectiveระหว่างรอบ เก็บภาพ full-frameต้นฉบับและsettingsพร้อม part/group IDs
+3. พิสูจน์ Templateสำหรับtranslationในตำแหน่งควบคุม หรือ ORBสำหรับin-plane rotation/scaleด้วยภาพจริงก่อนเลือกตัวใด บันทึก ROIผิว/โลโก้/ขอบทุกพื้นที่ที่ต้องตรวจและsource polygons; ถ้ายังไม่ผ่าน ให้หาสาเหตุ/ประเมิน reuse legacy locatorตามหลักฐาน ไม่ต่อ YOLOเข้าCoreแล้วอ้างว่าได้alignmentครบ
+4. เมื่อมีข้อมูลอิสระและได้รับอนุญาต Trainจึงสร้างสูตร/โมเดลใหม่ที่signatureตรงกัน แล้วรัน `01_camera/airbag_webcam_detection.py --candidate-recipe <จริง> --camera-index <enumerated>` ตาม environmentเดิม ตรวจQuality→Alignment→ROI→Anomaly→Decision→Cycle→Evidenceทั้งGOODและNG โดยไม่ Activate Production
+
+---
 
 ## Hardware Verification — 14 ตุลาคม 2026
 
