@@ -1,6 +1,60 @@
 # Airbag_Project — Renovation & Consolidation
 
-อัปเดต 9 ตุลาคม 2026 · Phase 4 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+อัปเดต 14 ตุลาคม 2026 · Hardware Verification หลัง Phase 4 · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+
+## Hardware Verification — 14 ตุลาคม 2026
+
+**รับภาพจากกล้องจริงแล้ว** ด้วย `Runtime.open_capture` → `OpenCVCamera` → `FramePump` เดิม และทดสอบภาพจริงกับ `Pipeline`/Decision/Evidence เดิม ไม่มี Camera Application/CLI/Pipeline ใหม่ ไม่มี Source Code change, Train, Activate, เปลี่ยน threshold หรือสร้าง Recipe/ground truth ไม่อ้างว่าตรวจ Defect Accuracy ผ่าน
+
+### อุปกรณ์ / ownership
+
+- รอบก่อนวันที่9พบ LifeCam ที่ index0 แต่ก่อนทดสอบมี Terminal เริ่มถือ lock PID23068 จึงไม่แย่งกล้อง และผู้ใช้ปิดด้วย q/Esc ตามคำขอ รอบต่อวันที่14 Windows ไม่พบกล้องจริง จนผู้ใช้ต่อใหม่ จึง enumerate อีกครั้งแทนใช้ index เดิม
+- ปัจจุบัน: **Microsoft® LifeCam Studio(TM), DirectShow index1**; USB `VID_045E&PID_0772&MI_00`, instance `6&3E88034&0&0000`; index0=Sharing-Media, index2=OBS Virtual Camera ชื่อ/indexอ่านจาก DirectShow COM enumeration ไม่ใช่การเดาหรือ probe ทุกกล้อง
+- Driver ที่ตรวจพบ: Microsoft `5.20.102.0` / `oem70.inf`; backend ที่เปิดจริง=`DSHOW` ไม่มี Basler ใน pylon enumeration
+- ก่อนเปิดไม่มี Terminal camera process/OS lease holder; Web8000รายงาน legacy worker และ Coreหยุดอยู่ ใช้ project lease ทุกช่วงรับภาพและ enumerate stream modes ไม่ Kill/Restart โปรแกรมใด
+- Mode list ที่ driver ประกาศผ่าน `IAMStreamConfig` วันที่14 (YUY2): 160×120, 176×144, 320×240, 352×288, 424×240, 640×360, 640×480, 800×448, 1280×720, 1920×1080 ที่ nominal30FPS; 800×600 และ960×544 ที่ nominal20FPS **ไม่ได้ทดสอบรับภาพทุก mode**
+
+### ผลรับภาพจริง
+
+| รายการ | Driver default | Full-frame session |
+|---|---:|---:|
+| Actual resolution | 640×480 | 1920×1080 |
+| ช่วงวัด | 10.032s | 25.094s |
+| Frames ที่ consumer อ่าน | 298 | 732 |
+| Producer FPS จาก sequence/host timestamps | 29.98 | 29.95 |
+| Consumer FPS | 29.98 | 29.35 |
+| Sequence ที่ consumer ข้าม | 0 | 15 |
+| ภาพดำล้วน / pixels ซ้ำติดกัน | 0 / 0 | 0 / 0 |
+| Brightness mean (gray0–255) | 98.08 | 103.19 |
+| Sharpness mean (Laplacian variance) | 779.00 | 134.29 |
+| Frame age ตอน consumer รับ P95 / max | 0 / 16ms | 16 / 32ms |
+| Release | สำเร็จ | สำเร็จ |
+
+FramePump เป็น latest-slot จึงข้ามเฟรมได้เมื่อ consumer วัด Laplacian/hash/เขียนภาพช้ากว่า producer; 15 sequence ที่ข้าม **ไม่ใช่ตัววัด USB/sensor frame loss** ไม่มี sensor frame counter จึงยังรับรองว่าไม่มี hardware drop ไม่ได้ Host `time.monotonic()` ใช้ `GetTickCount64()` resolution15.625ms; age0ms ไม่ได้แปลว่า latency เป็นศูนย์ และตัวเลขทั้งหมดไม่ใช่ sensor-to-display latency
+
+ค่าจาก driver ก่อน/หลัง: exposure **−6 driver units**, gain **−1 (unsupported/sentinel จึงไม่สรุปเป็นค่า gain จริง)**, focus **7 driver units**, autofocus **1/on**; OpenCV FPS property=−1 จึงใช้ timestamp วัด FPS แทน ไม่มีการ set exposure/gain/focus/autofocus เปลี่ยนเพียง requested width/height ของ session จากโหมดที่ประกาศไว้ หลังปิด1080p เปิดใหม่โดยไม่กำหนดขนาดได้640×480และค่าควบคุมเดิม
+
+เห็นชิ้นงานบนโต๊ะจากภาพจริง ไม่ใช่ black placeholder; ภาพเต็มมีแสงสะท้อนบริเวณโลโก้และมือ/ฉากหลัง ต้องกำหนด lighting/ROI/focus ตามตำหนิที่ต้องจับก่อนรับรองความคม ค่า sharpness ต่าง resolution เปรียบเทียบตรง ๆ ไม่ได้ และไม่มี threshold ที่ calibrate แล้วจึงไม่ตัดสินว่าภาพชัดพอสำหรับ defect ขนาดใด
+
+### Core integration กับภาพจริง / จุดที่หยุดอย่างถูกต้อง
+
+- รับ1080pต่ออีกประมาณ10วินาที → `Pipeline.run` กับ Recipeเดิม `recipe_00edecc594b149358ae66695d927730d`: **299เฟรมได้ UNABLE_TO_INSPECT** ที่ `alignment` เพราะ full frameไม่ตรง reference256×256 ไม่มี resize/crop เพื่อบังคับผ่าน
+- Quality metrics ถูกคำนวณจากภาพจริง; Recipeนี้มี brightness limits1–254 และ **min_blur=0 / blur gateปิด** คงค่าเดิมไว้ ไม่ใช้ผลผ่าน brightness เป็นหลักฐานว่าคุณภาพพร้อมโรงงาน
+- Pipeline latency mean18.861ms / P95 27.692ms / max47.092ms; host frame ageหลัง Pipeline mean19.204ms / P95 32ms / max47ms เป็น **เส้นทาง quality→alignment rejection→decision** ยังไม่มี anomaly inference จึงไม่ใช่ throughput ของระบบตรวจตำหนิครบชุด
+- ทดสอบภาพจริงเดียวกันกับ Recipeทั้งหมด7รายการ ได้ UNABLE ที่alignmentทั้งหมด; referenceทุกสูตรเป็น256×256, locator=`fixed`, camera indexในสูตรเดิม=0 ซึ่งปัจจุบันเป็น Sharing-Media `Runtime.candidate_pipeline` ปฏิเสธ fixed สำหรับ place/remove ก่อนเปิดกล้อง ไม่แก้สูตรเดิมให้ใช้ index1 เงียบ ๆ
+- เก็บ Evidence ใหม่ `event_cdd18ccf676d4a41a3939ff5e4a062ad`, source=`test`, complete=false, verification_kind=`real_camera_incompatible_recipe_check` พร้อม Recipe hash, required area/settings, failure reason, full raw imageและ requested/actual capture metadata; `camera_requested` ใน Recipeยังเป็นindex0 ส่วน `capture.requested/actual` ของ diagnosticเป็นindex1 แสดงความไม่เข้ากันตามจริง **ไม่ใช่ Candidate Live run**
+- Image `image_28c0d8c93f241d38c5c94bc559b1a2302088167e8ee14ef9da4cc864f100dceb` เป็น1920×1080, labelUNKNOWN, ไม่ยืนยัน label/group; Evidence อ่านได้จาก APIเดิมและ raw image HTTP200 ส่วน aligned preview404ตาม contract เพราะยังไม่มี location evidence ไม่สร้าง ROI/heatmapปลอม
+- **ยังไม่ทดสอบผ่าน**: alignment/ROI success, anomaly score, place/remove cycle, NG recall, physical unplug/reconnect ระหว่างกำลังอ่าน และ soak testระยะยาว; ไม่รัน Terminal Candidateด้วย cropped/fixed recipeที่ไม่เข้ากัน ไม่เรียกผลจาก299เฟรมนี้ว่า field validation สำเร็จ
+
+### หลักฐาน / ข้อมูลเดิม / งานถัดไป
+
+หลักฐานอยู่ `work/hardware-verification-20261014/`: `device-modes.json`, `summary.json`, `*_frames.json`, `core-compatibility.json`, `core-frames.json`, ภาพ `driver_default_first/last.png`, `full_1920x1080_first/last.png`, `core_compatibility_raw.png` เป็นภาพจริงไม่แก้ไข ส่วน Evidence/Image ใหม่อยู่ Core storeตาม IDด้านบน
+
+ตรวจ hash ไฟล์เดิม **876ไฟล์** ใน inspection_data/jobs/models และ project_config ก่อน–หลัง Core test: ไม่เปลี่ยน/ไม่หาย เพิ่มเฉพาะภาพUNKNOWN+Evidenceจริงและ diagnostic artifacts ตรวจ Productionยังเป็นNone และ OS leaseว่างหลังปิดกล้อง **31 regression tests** ของ capture/Terminal/Core/ownership ผ่านหลังทดสอบ hardware ไม่มี source/dependency/config diff; บันทึกรายงานใน Git แยกจากหลักฐานภาพที่อยู่ในพื้นที่ข้อมูล
+
+ก่อนทดสอบ Candidateครั้งแรก ต้องเลือกภาพเต็มที่ผู้ตรวจยืนยันGOOD พร้อม capture groupจริง, ออกแบบ locator/ROIให้ตรงชิ้นงานและการเลื่อน/หมุน, calibrate qualityจากภาพจริง, ตรวจ model/reference/input compatibility และมี NGจริงพร้อม defect type/ขนาด ไม่มีการรับรองจุดสี/รอยใดในภาพครั้งนี้ว่าเป็นตำหนิเอง เมื่อสูตรเข้ากันแล้วจึงใช้ Terminalไฟล์เดิมด้วย explicit Candidateและ indexที่ enumerateได้ ณ เวลานั้น; ห้ามยึด index0/1 ถาวรจากรายงานนี้
+
+---
 
 ## Phase 4 — System Verification & Legacy Retirement Readiness
 
