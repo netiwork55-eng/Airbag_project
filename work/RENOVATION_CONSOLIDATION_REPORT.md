@@ -2,6 +2,14 @@
 
 อัปเดต 14 ตุลาคม 2026 · Final Sprint — controlled stain demonstration · Project: `D:\Users\dev06\Desktop\Airbag_Project`
 
+## ขยายหน้าต่างกล้องเดิม — 15 ตุลาคม 2026
+
+- ตามคำขอผู้ใช้ ปรับ OpenCV preview เป็น WINDOW_NORMAL รักษาสัดส่วน เริ่มขนาด 1280x960 และลากขยาย/maximize ได้ ทั้งเส้นทางกล้องเดิมที่มีอยู่
+- ไม่ resize ภาพ inference/Evidence ไม่เปลี่ยน camera resolution, threshold, model หรือ Recipe
+- Checkpoint ก่อนแก้: tag `camera-display-before-20261015` ที่ `69f6539`
+- Regression เดิม 23 tests ผ่าน (camera/core/entrypoint/full-frame); เพิ่ม mock window operations เพื่อไม่เปิด UI ระหว่าง tests
+- เรียกเปิดโปรแกรมเดิมแล้ว จากนั้นผู้ใช้แจ้งว่าจะตรวจหน้าต่างเอง จึงไม่ทำ UI verification ต่อ ไม่อ้างว่าตรวจภาพสดหรือขนาดหน้าต่างจริงผ่านแล้ว
+
 ## ถอดโหมด Candidate จาก Terminal — 15 ตุลาคม 2026
 
 ตามขอบเขตที่ผู้ใช้ยืนยัน: เหลือวิธีเปิดกล้องเดิม เก็บ `/inspection`, Shared Core และข้อมูลเดิมทั้งหมด ยุติแผนทดสอบ Terminal Candidate 5 GOOD / 5 คราบจำลองในรอบนี้ ไม่อ้างว่าทำครบหรือผ่าน repeatability

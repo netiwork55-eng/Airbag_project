@@ -1116,6 +1116,9 @@ def run_normal_reference_camera(args, project_config, core_runtime=None):
             cap.set(cv2.CAP_PROP_FPS,CAMERA_FPS)
         print(f"Inspection Core recipe {pipeline.saved['id']}" if core_runtime else f"Legacy Normal Reference: {model_path}; no activated Core replacement")
         print(f"Camera index {selected_camera_index}. Press Esc/q to quit; Space/s to save an unmodified sample.")
+        # Enlarge only the preview window; inspection and saved frames keep their pixels.
+        cv2.namedWindow(window, cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
+        cv2.resizeWindow(window, 1280, 960)
         fps = 0.0
         last_time = time.perf_counter()
         sequence = 0
@@ -1378,6 +1381,8 @@ def _run_camera(args):
     last_time = time.perf_counter()
 
     try:
+        cv2.namedWindow(WINDOW_NAME, cv2.WINDOW_NORMAL | cv2.WINDOW_KEEPRATIO)
+        cv2.resizeWindow(WINDOW_NAME, 1280, 960)
         while True:
             success, frame = cap.read()
             if not success:

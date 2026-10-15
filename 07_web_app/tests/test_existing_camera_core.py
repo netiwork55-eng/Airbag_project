@@ -43,6 +43,8 @@ def camera_core(tmp_path,monkeypatch):
     monkeypatch.setattr(detector,'CAMERA_WIDTH',160)
     monkeypatch.setattr(detector,'CAMERA_HEIGHT',120)
     monkeypatch.setattr(detector,'YOLO',Mock(side_effect=AssertionError('Legacy model must not load')))
+    monkeypatch.setattr(detector.cv2,'namedWindow',Mock())
+    monkeypatch.setattr(detector.cv2,'resizeWindow',Mock())
     monkeypatch.setattr(detector.cv2,'imshow',Mock())
     monkeypatch.setattr(detector.cv2,'destroyAllWindows',Mock())
     class Pump:
