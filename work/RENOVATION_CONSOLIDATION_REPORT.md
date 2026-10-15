@@ -2,6 +2,32 @@
 
 อัปเดต 14 ตุลาคม 2026 · Final Sprint — controlled stain demonstration · Project: `D:\Users\dev06\Desktop\Airbag_Project`
 
+## Final Repeatability Verification — 15 ตุลาคม 2026 (กำลังทดสอบ)
+
+- G01 clarification: user confirms repeated actual removals/reinsertions during pre-ready positioning. The three machine-completed records are therefore NOT proof of duplicate-cycle software failure; exact physical matching remains unverified. Keep that interval as setup, not three scored trials.
+- 15 Oct 2026 14:06 ICT: original Terminal ended with Camera did not deliver an image; camera release logged, incomplete UNABLE evidence `event_232f24c9725e4157b371493b006e1105`, last image black. Cause unconfirmed. Re-enumerated LifeCam index 1 and restarted original command unchanged. At 15:17 ICT G02 fresh sample `event_a35f115180624a58837c098f9b0c9736`: 1920x1080, UNABLE alignment score 0.390274, age 125 ms, processing 124.612 ms. Exposure -6/focus 8/autofocus 1 driver values match earlier. Part still tilted; table framing differs; asked about physical setup movement and requested guide orientation correction. Restart began with part present, so entry/cycle not verified. No threshold, Recipe or source change.
+
+- 15 Oct 2026 11:09 ICT: G01 removal confirmed by user and empty raw image `event_e289c8572127460596bc96042437be30` (also E02, second distinct empty interval): UNABLE, locator 0.234186, age 78 ms, processing 78.717 ms. One requested GOOD placement/removal attempt is complete physically, stationary result UNABLE; end-to-end cycle mapping is NOT verified. Three earlier machine-completed records (REVIEW/NG/NG at 11:05:03/23/38) precede the stationary sample, and none was created after the final removal. User clarification requested on intervening physical movements; do not count these as three verified trials. Requested G02 with guide orientation corrected physically, unchanged recipe/thresholds. Current counts: 1 requested GOOD attempt (failed alignment), 0 simulated-stain attempts, 2/3 verified empty intervals; no repeatability/accuracy claim.
+
+- 15 Oct 2026 11:06 ICT: G01 stationary GOOD sample (user-confirmed condition) `event_0bff90344ba644f7a25fd600dccbb73b`: UNABLE_TO_INSPECT, template score 0.541420 below unchanged 0.800 limit; no inspection correlation score because alignment failed. Actual 1920x1080, age 109 ms, processing 84.047 ms; brightness 155.918, sharpness 77.173, blur gate still disabled. Part is visible with hands outside inspection region; orientation differs from reference, and existing template alignment corrects translation only. Physical removal and software-cycle completion still pending. No threshold/source-code change.
+
+- 15 Oct 2026 11:03 ICT: E01 verified from fresh raw image after user removed the part: `event_928af877f0a74169b7f960d241bb3d56`, image `image_a0c5bcca04df49644e766ae7f874ea482ad02586dc2b5ff9da451ff1f15e220a`. Empty scene returned UNABLE_TO_INSPECT, locator 0.220566 / part_present=false, no area correlation, no PASS, no new completed-cycle record. 1920x1080, frame 6172, age 109 ms, processing 72.905 ms. Counts: 1/3 empty-scene tests; 0/5 completed GOOD and 0/5 completed simulated-stain physical placements. G01 requested with original reference orientation.
+
+- 15 Oct 2026 11:01 ICT: original Terminal Space shortcut successfully saved `event_92d983849866417faa0b859c865e4868` (1920x1080, frame 2232, age 109 ms, processing 86.747 ms). Raw image still contains the part despite requested EMPTY condition. Locator score 0.331528; UNABLE_TO_INSPECT before area correlation; sample only, complete=false. Not counted as an empty-scene or completed physical-cycle trial. Await actual part removal or clarification of a possibly frozen image; no threshold or source-code change.
+
+รับงานต่อจาก staged Sprint และ commitผลเดิมเป็น `b6aa927`; checkpointก่อนรอบใหม่ `repeatability-start-20261015` ใช้ Candidate `recipe_a08d724e03d5421f82b0a985671a4053` hashเดิม ไม่เปลี่ยน Threshold/Locator/Recipe, ไม่ Train/Activate/ถอดLegacy ผู้ใช้ยืนยันจัดไกด์วางแบบไม่ทำความเสียหายและพื้นที่ว่างพร้อมแล้ว
+
+- เป้าหมายคือGOOD5 placements, authorized simulated-stain5 placements, EMPTY3 observations; ทุกplacementต้องมีground-truth conditionที่ผู้ใช้ระบุ, stationary sample, removalและEvidenceที่จับคู่ได้ จำนวนเฟรมและcycle recordsไม่ใช่จำนวนชิ้นจริง
+- เปิดTerminalเดิมสองครั้งแรกแล้วเกิด `Camera did not deliver an image`; หลักฐานrawเป็นภาพดำ เก็บincomplete UNABLE2records ไม่มีรอบphysicalที่ยืนยันผ่าน ระบุแยกจากผลตรวจตำหนิ Adapterเดิมที่1920×1080ก็เปิดไม่สำเร็จในช่วงหนึ่ง ไม่สรุปสาเหตุเป็นสาย/driverจากerrorเพียงอย่างเดียว
+- หลังผู้ใช้สั่งเปิดใหม่ ตรวจDirectShowพบLifeCam index1และไม่มีOS lease holder แล้วเปิดTerminalCandidateเดิมอีกครั้ง รอหลักฐานE01ก่อนเริ่มนับการทดสอบ ห้ามถือการเปิดหน้าต่างสำเร็จเป็นการทดสอบผ่าน
+- Targeted regressionวันนี้41testsผ่านใน8.54s ไม่มีsource change Browser automationก่อนหน้านี้ถูกปฏิเสธสิทธิ์ควบคุมChrome จึงใช้manual smoke testเมื่อจบการเก็บภาพ ไม่ใช้HTTP200เป็นหลักฐานBrowserผ่าน
+- สำรองภาพทดลอง, Recipe, raw sourceและCore EvidenceของSprintเดิมแล้ว107ไฟล์ใน `D:\Users\dev06\Documents\Codex\Airbag_Project_Backups\sprint-before-repeatability-20261014-145041.zip` (141261805bytes) ตรวจCRCและSHA256แต่ละไฟล์ในarchiveตรงต้นทาง Archive SHA256=`8520e9ed2abff8ac3afbb88cd60ef49ca96b709867fa5b467faefcad6bba0e91` เป็นสำเนาบนเครื่องเดียวกัน ไม่ใช่off-site backup
+- ตรวจข้อความสไลด์10หน้าเดิม: Classical CV/AI และข้อจำกัดaccuracyแยกไว้แล้ว จุดที่ควรเสริมในสไลด์ผลคือกรอบสีแดงเป็นInspection ROI ไม่ใช่ขอบเขตคราบที่โมเดลหาเจอ ยังไม่อัดDemo videoเพราะrepeatabilityยังไม่ยืนยัน
+
+Trial log: `work/repeatability-20261015/physical-trials.json`; acquisition failure diagnostic: `camera-delivery-diagnostic.json` จะแสดงจำนวนphysicalที่ยืนยันหลังจบรอบเท่านั้น
+
+---
+
 ## Final 3-Day Sprint — Controlled stain demonstration (14 ตุลาคม 2026)
 
 ฐาน Source `3f07c11`; checkpoint `sprint-start-20261014` เป้าหมายรอบนี้คือการพิสูจน์คราบหนึ่งประเภทด้วยระบบเดิม ไม่มีการเปลี่ยน Architecture/เพิ่ม AI model ชิ้นงานที่ผู้ใช้ระบุในภาพก่อนหน้าเป็นคราบสีขาวใต้โลโก้ ส่วน **การเก็บภาพ GOOD/NG รอบ Sprint ผู้ใช้ยืนยันว่าเป็นชิ้นเดียวกันและเพิ่มคราบเพื่อทดสอบ** จึงเป็น physical simulation ไม่ใช่ independent production NG และไม่ยืนยันว่าชิ้นนี้เป็นชิ้นเดียวกับ legacy268ภาพ
