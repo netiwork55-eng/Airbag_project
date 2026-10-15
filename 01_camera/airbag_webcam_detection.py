@@ -915,7 +915,6 @@ def parse_args(argv=None):
         action="store_true",
         help="Disable Toyota/Honda brand classification overlay.",
     )
-    parser.add_argument('--candidate-recipe', help='Test this saved Core recipe without activating Production; requires a part locator')
     return parser.parse_args(argv)
 
 
@@ -1051,7 +1050,7 @@ def save_inspection_sample(frame, result, located, model_path):
     return image_path
 
 
-def run_normal_reference_camera(args, project_config, core_runtime=None, candidate_recipe_id=None):
+def run_normal_reference_camera(args, project_config, core_runtime=None):
     """Keep the existing capture/window loop; use the shared Core for activated recipes.
 
     The legacy inspector remains only while its configuration has no validated
@@ -1072,7 +1071,7 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
         window = WINDOW_NAME
     try:
         if core_runtime:
-            pipeline = core_runtime.candidate_pipeline(candidate_recipe_id) if candidate_recipe_id else core_runtime.production_pipeline()
+            pipeline = core_runtime.production_pipeline()
             camera = pipeline.recipe.camera
             if camera.driver!='opencv' or camera.index!=args.camera_index:
                 raise ValueError('Active recipe camera does not match the existing terminal camera; no camera/settings were changed')
@@ -1116,8 +1115,6 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
             cap.set(cv2.CAP_PROP_FRAME_HEIGHT,height)
             cap.set(cv2.CAP_PROP_FPS,CAMERA_FPS)
         print(f"Inspection Core recipe {pipeline.saved['id']}" if core_runtime else f"Legacy Normal Reference: {model_path}; no activated Core replacement")
-        if candidate_recipe_id:
-            print('CANDIDATE TEST - NOT PRODUCTION. Results do not certify defect accuracy.')
         print(f"Camera index {selected_camera_index}. Press Esc/q to quit; Space/s to save an unmodified sample.")
         fps = 0.0
         last_time = time.perf_counter()
@@ -1145,8 +1142,6 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
                         cv2.putText(display,text,(max(0,int(x)),max(45,int(y)-5)),cv2.FONT_HERSHEY_SIMPLEX,.45,color,1,cv2.LINE_AA)
                 draw_status(display,state['state'],colors.get(state['state'],colors['UNABLE_TO_INSPECT']))
                 cv2.putText(display,'; '.join(state.get('reasons',[]))[:100],(10,50),cv2.FONT_HERSHEY_SIMPLEX,.4,(255,255,255),1,cv2.LINE_AA)
-                if candidate_recipe_id:
-                    cv2.putText(display,'CANDIDATE TEST - NOT PRODUCTION',(10,70),cv2.FONT_HERSHEY_SIMPLEX,.5,(0,200,255),1,cv2.LINE_AA)
             else:
                 located = analyze_primary_object(locator_model,locator_class_id,frame)
                 if located is not None:
@@ -1180,7 +1175,7 @@ def run_normal_reference_camera(args, project_config, core_runtime=None, candida
             if key in (32,ord('s')):
                 try:
                     if core_runtime:
-                        sample=evidence(core_runtime.store,measured_result,frame,maps,source='candidate_sample' if candidate_recipe_id else 'camera_sample',complete=False)
+                        sample=evidence(core_runtime.store,measured_result,frame,maps,source='camera_sample',complete=False)
                         print(f"Saved unconfirmed camera sample: {sample['id']}")
                     else:
                         print(f"Saved inspection sample: {save_inspection_sample(frame,measured_result,located,model_path)}")
@@ -1218,7 +1213,7 @@ def main(argv=None):
     if web_app_dir not in sys.path:
         sys.path.insert(0,web_app_dir)
     from inspection.ownership import project_lease
-    with project_lease(PROJECT_ROOT/'inspection_data').hold('Terminal Candidate test' if getattr(args,'candidate_recipe',None) else 'Terminal camera'):
+    with project_lease(PROJECT_ROOT/'inspection_data').hold('Terminal camera'):
         _run_camera(args)
 
 
@@ -1233,10 +1228,6 @@ def _run_camera(args):
     from inspection.runtime import Runtime
     from inspection.worker_client import AnomalyClient
     store = Store(PROJECT_ROOT/'inspection_data')
-    if getattr(args,'candidate_recipe',None):
-        runtime = Runtime(store,AnomalyClient(PROJECT_ROOT,store),source='candidate')
-        run_normal_reference_camera(args,project_config,core_runtime=runtime,candidate_recipe_id=args.candidate_recipe)
-        return
     if store.production() is not None:
         runtime = Runtime(store,AnomalyClient(PROJECT_ROOT,store),source='production')
         run_normal_reference_camera(args,project_config,core_runtime=runtime)

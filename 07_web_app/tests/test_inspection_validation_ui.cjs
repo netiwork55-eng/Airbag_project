@@ -9,7 +9,7 @@ const ctx={$,structuredClone,reference:{id:'image-fixture'},areas:[{id:'surface'
   referenceImage:async()=>{},library:[],trainIds:[],testIds:[],importedIds:[],markDirty:()=>{},page:()=>{},
   polling:false,activePage:'production',stateClass:()=> 'neutral',recipes:[],engineVersion:'fixture',
   api:async()=>({reports:[],runtime:{state:'UNABLE_TO_INSPECT',running:false,reasons:[]},production:null,
-    busy:true,external_runtime:{pid:123,purpose:'Terminal Candidate test'},capabilities:{basler_sdk:false}})};
+    busy:true,external_runtime:{pid:123,purpose:'Terminal camera'},capabilities:{basler_sdk:false}})};
 vm.createContext(ctx);
 vm.runInContext(line('function config()'),ctx);
 assert.equal(ctx.config().validation.min_defect_recall,null);
@@ -30,7 +30,7 @@ ctx.recipes=[{id:'old',hash:'old-hash',config:old}];ctx.library=[ctx.reference];
   vm.runInContext(line('async function poll()'),ctx);
   await ctx.poll();
   assert.equal($('live-state').textContent,'External runtime');
-  assert.match($('live-reason').textContent,/Terminal Candidate test/);
+  assert.match($('live-reason').textContent,/Terminal camera/);
   for(const id of ['start','save','capture-image','capture-test','validate'])assert.equal($(id).disabled,true);
   console.log('PASS: explicit defect recall round trip, old/new product unset, external owner blocks conflicting UI actions');
 })().catch(e=>{console.error(e);process.exitCode=1});

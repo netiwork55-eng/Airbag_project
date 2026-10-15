@@ -2,7 +2,21 @@
 
 อัปเดต 14 ตุลาคม 2026 · Final Sprint — controlled stain demonstration · Project: `D:\Users\dev06\Desktop\Airbag_Project`
 
-## Final Repeatability Verification — 15 ตุลาคม 2026 (กำลังทดสอบ)
+## ถอดโหมด Candidate จาก Terminal — 15 ตุลาคม 2026
+
+ตามขอบเขตที่ผู้ใช้ยืนยัน: เหลือวิธีเปิดกล้องเดิม เก็บ `/inspection`, Shared Core และข้อมูลเดิมทั้งหมด ยุติแผนทดสอบ Terminal Candidate 5 GOOD / 5 คราบจำลองในรอบนี้ ไม่อ้างว่าทำครบหรือผ่าน repeatability
+
+- Checkpoint ก่อนลบ: `d9c6bd0`; ก่อนหน้านั้น `b6aa927` เก็บผล Demo เดิม
+- ลบ argument, branch เลือก Candidate, parameter เฉพาะโหมด, ข้อความ overlay/console และการสร้าง candidate_sample จาก Terminal จริง ไม่มี alias หรือโปรแกรมกล้องตัวแทน
+- เปิดตามเดิม: `..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py` คงหน้าต่าง OpenCV, กรอบ, FPS และปุ่มเดิม การเลือก Production ที่ผ่านการ Activate อย่างถูกต้องยังคงตาม logic เดิม; ไม่มีการ Activate หรือแก้ configuration ในงานนี้
+- `/inspection` Test/Validation, Recipe, Evidence และ Runtime ownership ยังอยู่ ข้อมูล candidate_sample เก่ายังอ่านได้
+- Data hash ก่อน/หลัง: 1,162 ไฟล์ข้อมูล/โมเดล/metadata/configuration เดิม hash ตรงกัน ไม่มีข้อมูลสำคัญหาย; `.runtime-owner.json` เป็นสถานะ ownership ชั่วคราวซึ่งหายไประหว่างตรวจ จึงแยกจากข้อมูลถาวร ไม่ได้ลบด้วย cleanup
+- Regression กล้อง/entrypoint/capture/cycle 46 tests ผ่าน; API/ownership/evidence/validation preview 28 tests ผ่าน; JavaScript UI contract 6 tests ผ่าน รวม Python 74 + JS 6 ไม่ใช่ Browser หรือ Field Accuracy validation
+- คำสั่ง Candidate เก่าถูกปฏิเสธก่อนเข้า runtime/เปิดกล้องใน regression test; production Terminal/Web parity และการปล่อยกล้องเมื่อผิดพลาดยังผ่าน
+- ไม่ restart หรือแย่งกล้องจาก process ที่เปิดอยู่; source ใหม่มีผลในการเปิดครั้งถัดไป
+- สำรองภาพ/Evidence ก่อนการถอดไว้ภายนอก Source Tree ที่ `D:\Users\dev06\Documents\Codex\Airbag_Project_Backups` (ZIP ของ repeatability ตรวจ SHA256 แต่ละไฟล์แล้ว)
+
+## Final Repeatability Verification — 15 ตุลาคม 2026 (ยุติตามคำสั่งผู้ใช้ให้ถอดโหมด Terminal Candidate)
 
 - G01 clarification: user confirms repeated actual removals/reinsertions during pre-ready positioning. The three machine-completed records are therefore NOT proof of duplicate-cycle software failure; exact physical matching remains unverified. Keep that interval as setup, not three scored trials.
 - 15 Oct 2026 14:06 ICT: original Terminal ended with Camera did not deliver an image; camera release logged, incomplete UNABLE evidence `event_232f24c9725e4157b371493b006e1105`, last image black. Cause unconfirmed. Re-enumerated LifeCam index 1 and restarted original command unchanged. At 15:17 ICT G02 fresh sample `event_a35f115180624a58837c098f9b0c9736`: 1920x1080, UNABLE alignment score 0.390274, age 125 ms, processing 124.612 ms. Exposure -6/focus 8/autofocus 1 driver values match earlier. Part still tilted; table framing differs; asked about physical setup movement and requested guide orientation correction. Restart began with part present, so entry/cycle not verified. No threshold, Recipe or source change.
@@ -95,7 +109,7 @@ Reference `good_00.png` ผู้ใช้ยืนยัน GOOD และว�
 ### ขั้นตอน Demo ที่ทำตามได้
 
 1. ตรวจ device index และไม่มี process ถือกล้องก่อนรัน อย่ายึด index1 ถาวรหลัง replug เปิดด้วย environment เดิมจาก project root:
-   `..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe recipe_a08d724e03d5421f82b0a985671a4053 --camera-index 1`
+คำสั่ง Terminal Candidate ที่เคยใช้ในขั้นตอนนี้ถูกถอดเมื่อ 15 ตุลาคม 2026 ตามคำสั่งผู้ใช้; เก็บผลเดิมเป็นประวัติ ทดสอบ Candidate ด้วยภาพผ่าน `/inspection` ต่อได้
 2. ใช้กล้อง1920×1080 ตำแหน่ง/แสงตาม `good_00.png`; วางชิ้นงานแล้วเอามือออก รอผลนิ่ง กด s ครั้งเดียวเพื่อเก็บ raw sample ยกออกและรอพื้นที่ว่าง ≥2s เพื่อปิด cycle ตรวจชื่อ Candidate และป้าย NOT PRODUCTION
 3. ตรวจ GOOD ก่อนเพิ่มคราบและหลังเอาคราบออก ตลอดจนชิ้นคราบจำลองเดิม บันทึกตามจริงเมื่อ REVIEW/UNABLE/NG ผิดคาด ไม่ปรับ threshold หน้างานเพื่อทำให้ PASS
 4. Review ต้องอ่านทั้ง raw image, source polygon, score, threshold, quality, locator และ cycle completion; มือบังROI/เงา/การยกวางต้องแยกจากตำหนิจริง ห้ามนำค่าเวลาจากตัวอย่างเฟรมไปอ้างเป็นเวลาหนึ่งชิ้น
@@ -159,7 +173,7 @@ PaDiM2และPatchCore2ตัวเดิมมี input_signatureของ cr
 1. ใช้ภาพ/กรอบเดิมช่วยกำหนดพื้นที่ชิ้นงานและขอบเขตความแปรผัน โดยคง268ภาพในกลุ่มเดียว และเก็บชิ้นที่ผู้ใช้แจ้งว่ามีตำหนิแยกจากGOOD ไม่กำหนดlabelทุกไฟล์แทนผู้ใช้
 2. จัดภาพชิ้นงานGOODที่ยืนยันแล้วใน setupเดียวกับกล้องที่จะใช้จริง: ชิ้นงานวางมั่นคง, มือออกก่อนตรวจ, ระยะ/มุม/แสงคงที่ ไม่ยกชิ้นงานเปลี่ยน perspectiveระหว่างรอบ เก็บภาพ full-frameต้นฉบับและsettingsพร้อม part/group IDs
 3. พิสูจน์ Templateสำหรับtranslationในตำแหน่งควบคุม หรือ ORBสำหรับin-plane rotation/scaleด้วยภาพจริงก่อนเลือกตัวใด บันทึก ROIผิว/โลโก้/ขอบทุกพื้นที่ที่ต้องตรวจและsource polygons; ถ้ายังไม่ผ่าน ให้หาสาเหตุ/ประเมิน reuse legacy locatorตามหลักฐาน ไม่ต่อ YOLOเข้าCoreแล้วอ้างว่าได้alignmentครบ
-4. เมื่อมีข้อมูลอิสระและได้รับอนุญาต Trainจึงสร้างสูตร/โมเดลใหม่ที่signatureตรงกัน แล้วรัน `01_camera/airbag_webcam_detection.py --candidate-recipe <จริง> --camera-index <enumerated>` ตาม environmentเดิม ตรวจQuality→Alignment→ROI→Anomaly→Decision→Cycle→Evidenceทั้งGOODและNG โดยไม่ Activate Production
+คำสั่ง Terminal Candidate ที่เคยใช้ในขั้นตอนนี้ถูกถอดเมื่อ 15 ตุลาคม 2026 ตามคำสั่งผู้ใช้; เก็บผลเดิมเป็นประวัติ ทดสอบ Candidate ด้วยภาพผ่าน `/inspection` ต่อได้
 
 ---
 
@@ -276,7 +290,7 @@ temporary server8011 ปิดหลังอ่านข้อมูล ไม�
 6. เมื่อ Candidate พร้อมและไม่มี process ถือกล้อง ให้รันไฟล์เดิมด้วย Python environment เดิมจาก Project root (แทน placeholders ด้วยค่าจริง ไม่ copy bracket ไปใช้):
 
 ```text
-..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe <saved_recipe_id> --camera-index <actual_index>
+คำสั่ง Terminal Candidate ที่เคยใช้ในขั้นตอนนี้ถูกถอดเมื่อ 15 ตุลาคม 2026 ตามคำสั่งผู้ใช้; เก็บผลเดิมเป็นประวัติ ทดสอบ Candidate ด้วยภาพผ่าน `/inspection` ต่อได้
 ```
 
 7. ต้องเห็น `CANDIDATE TEST - NOT PRODUCTION`; ตรวจขนาดภาพเต็ม/กรอบ/FPS/quality/locator/ROI แล้ววาง–ยก GOOD/NG ทีละชิ้นตาม matrix ด้านล่าง `s`/Space เก็บ sample ไม่ใช่ human confirmation และไม่แทน cycle completion; q/Esc หยุด ไม่กด Activate
@@ -383,7 +397,7 @@ node --test 07_web_app/tests/test_live_polling.cjs 07_web_app/tests/test_workspa
 4. เริ่ม **ไฟล์เดิม** จาก Project root โดยแทน placeholders ด้วย Recipe ID/index จริง:
 
 ```text
-..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe <saved_recipe_id> --camera-index <actual_index>
+คำสั่ง Terminal Candidate ที่เคยใช้ในขั้นตอนนี้ถูกถอดเมื่อ 15 ตุลาคม 2026 ตามคำสั่งผู้ใช้; เก็บผลเดิมเป็นประวัติ ทดสอบ Candidate ด้วยภาพผ่าน `/inspection` ต่อได้
 ```
 
 5. ตรวจข้อความ `CANDIDATE TEST - NOT PRODUCTION`, ขนาดเต็ม, ภาพสด/กรอบ/FPS, Quality/Locator และ ROI บนชิ้นงานจริง ทดสอบ GOOD/NG ที่คนยืนยัน, การเลื่อน/หมุนในขอบเขต, ชิ้นงานขาดขอบ, blur/แสงผิด, วาง–ยก และทำซ้ำแต่ละชิ้น

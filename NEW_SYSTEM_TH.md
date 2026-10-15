@@ -14,7 +14,7 @@ Airbag/Toyota เป็นตัวอย่าง ไม่จำกัดป�
 ถ้ายังไม่มี Production Recipe ที่ Activate คงเส้นทางโมเดลเดิมไว้ระหว่าง Migration; ณ รอบนี้ยังไม่มี Production Recipe และยังไม่ได้สลับการตรวจจริง
 กล้อง Terminal โหมด Core ใช้ OpenCVCamera/FramePump ชุดเดียวกับ Web แล้ว เก็บเฉพาะภาพล่าสุดพร้อม sequence/host read time และ capture metadata ใน Evidence; Legacy branch คงลูป/ค่ากล้องเดิม Host read time ไม่ใช่ hardware exposure timestamp จึงยังต้องทดสอบ buffer/latency จริง
 Terminal, capture utility เดิม และ Web workflow ใช้ project lease ที่มี OS lock ร่วมกัน ป้องกัน process อื่นใน project แย่งงานกล้อง/เปลี่ยน configuration ระหว่างตรวจ; Web แสดง external owner แต่ไม่แชร์ camera handle หรือผลสดของ Terminal
-สามารถทดสอบ Candidate ที่บันทึกแล้วด้วยโปรแกรมเดิม: เพิ่ม `--candidate-recipe recipe_<idจริง> --camera-index <indexจริง>` ใช้ Core เดียวกัน แสดง CANDIDATE TEST - NOT PRODUCTION และเก็บ source=candidate/candidate_sample ไม่ Activate เอง
+ตั้งแต่ 15 ตุลาคม 2026 ถอดโหมด Candidate ของ Terminal แล้ว ใช้คำสั่งเปิดกล้องเดิมข้างต้นเพียงทางเดียว; ทดสอบ Candidate ด้วยภาพผ่าน Test/Validation ใน `/inspection` ข้อมูล Recipe และ Evidence เดิมยังอยู่
 Candidate แบบวาง–ยกต้องมี Locator; fixed/cropped recipe เดิมยังใช้ Test ภาพได้ แต่ไม่รับรอง live cycle โปรแกรม Core ใช้ resolution ที่ Recipe กำหนดและต้องตรง full-frame reference; legacy mode รักษาค่ากล้องเดิม
 ก่อน Production validation ต้องกำหนด Min defect recall ระดับชิ้นงานจาก requirement จริง ค่าเริ่มต้นเว้นว่าง; REVIEW/UNABLE ไม่นับเป็น NG rejection และ object recall ของ detector เป็นคนละเกณฑ์
 Engine 2026.10.09.2 ต้อง Validate ใหม่ก่อน Production รายงาน/Recipe/threshold เดิมไม่ได้แก้ย้อนหลัง

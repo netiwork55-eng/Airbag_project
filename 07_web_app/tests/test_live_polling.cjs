@@ -36,7 +36,7 @@ test('Polling preserves activation safety across external ownership and recovery
  ctx.dirty=false;ctx.report.engine_version='old';await ctx.poll();assert.equal(ctx.$('activate').disabled,true);
 });
 test('External terminal ownership blocks conflicting operations without showing fake Production',async()=>{
- const ctx=env();ctx.api=async()=>({runtime:{state:'UNABLE_TO_INSPECT',running:false},production:null,busy:true,external_runtime:{purpose:'Terminal Candidate test',pid:42},capabilities:{basler_sdk:false}});
+ const ctx=env();ctx.api=async()=>({runtime:{state:'UNABLE_TO_INSPECT',running:false},production:null,busy:true,external_runtime:{purpose:'Terminal camera',pid:42},capabilities:{basler_sdk:false}});
  await ctx.poll();assert.equal(ctx.$('live-state').textContent,'External runtime');
  for(const id of ['save','capture-image','capture-test','validate','train','start'])assert.equal(ctx.$(id).disabled,true);
 });

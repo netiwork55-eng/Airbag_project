@@ -17,7 +17,7 @@ def test_negative_mining_camera_forwards_only_camera_arguments(monkeypatch):
     mining.main()
     entry.assert_called_once_with(['--camera-index','0'])
     args=camera.parse_args(entry.call_args.args[0])
-    assert args.camera_index==0 and args.candidate_recipe is None
+    assert args.camera_index==0
 
 
 def test_negative_mining_preserves_explicit_camera_selection(monkeypatch):

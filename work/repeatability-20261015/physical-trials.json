@@ -275,5 +275,7 @@
       "cause": "Unconfirmed; do not infer unplug or driver cause.",
       "restart": "Same original Terminal Candidate command; DirectShow re-enumeration LifeCam index 1; reported settings unchanged."
     }
-  ]
+  ],
+  "status": "ended_by_user_request_remove_terminal_candidate_mode",
+  "stop_reason": "User explicitly selected removal of Terminal Candidate mode; preserve /inspection and all existing data. Remaining 5/5/3 protocol not completed."
 }
