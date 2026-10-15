@@ -1,6 +1,87 @@
 # Airbag_Project — Renovation & Consolidation
 
-อัปเดต 14 ตุลาคม 2026 · Full-frame Candidate preparation · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+อัปเดต 14 ตุลาคม 2026 · Final Sprint — controlled stain demonstration · Project: `D:\Users\dev06\Desktop\Airbag_Project`
+
+## Final 3-Day Sprint — Controlled stain demonstration (14 ตุลาคม 2026)
+
+ฐาน Source `3f07c11`; checkpoint `sprint-start-20261014` เป้าหมายรอบนี้คือการพิสูจน์คราบหนึ่งประเภทด้วยระบบเดิม ไม่มีการเปลี่ยน Architecture/เพิ่ม AI model ชิ้นงานที่ผู้ใช้ระบุในภาพก่อนหน้าเป็นคราบสีขาวใต้โลโก้ ส่วน **การเก็บภาพ GOOD/NG รอบ Sprint ผู้ใช้ยืนยันว่าเป็นชิ้นเดียวกันและเพิ่มคราบเพื่อทดสอบ** จึงเป็น physical simulation ไม่ใช่ independent production NG และไม่ยืนยันว่าชิ้นนี้เป็นชิ้นเดียวกับ legacy268ภาพ
+
+### วัตถุประสงค์ / Workflow / วิธีที่ใช้จริง
+
+Prototype นี้รับภาพเต็ม ตรวจความพร้อมภาพ จัดแนวชิ้นงาน แล้วเปรียบเทียบพื้นที่ผิวด้านหน้ากับ GOOD reference เพื่อแสดง Decision และเก็บหลักฐาน ใช้ `/inspection` เป็น Setup/Test/Review และ `01_camera/airbag_webcam_detection.py` เป็น Terminal/OpenCV เดิม ทั้งสองใช้ Camera adapter, FramePump, Pipeline, Decision, Cycle และ Evidence เดียวกัน ขอบเขต Demo แคบลงเหลือคราบบน ROI ผิว ไม่ได้ตรวจผิวทุกด้าน โลโก้ ขอบ หรือความปลอดภัยการทำงานของ Airbag
+
+PaDiM/PatchCore มี artifact เดิมแต่ input signature ไม่ตรง Full-frame ใหม่ จึงไม่เรียก inference และไม่ Train เพิ่ม ใช้ `presence` เดิมใน Core ซึ่งคำนวณ OpenCV normalized reference correlation; **เป็น Classical CV ไม่ใช่ AI anomaly model** การที่ชิ้นคราบได้ NG ไม่เพียงพอจะบอกว่าระบุขอบเขตคราบได้หรือแยกคราบออกจากเงา/มือได้
+
+### จุดติดขัดแรกและการทดลองที่ทำจริง
+
+ไม่พบหลักฐานว่าต้องแก้โค้ด alignment จากภาพก่อนหน้า จึงควบคุมการวางชิ้นงานและใช้ implementation เดิมก่อน ตรวจ DirectShow อีกครั้งพบ LifeCam index1, Sharing-Media0, OBS2; PnP LifeCam OK, ไม่มี Terminal/OS lease holder, Web Core stopped และ Production=None ก่อนเปิดแต่ละรอบใช้ lease เดิมและปล่อยสำเร็จ ไม่ kill/restart process
+
+| การรับภาพจริงใน Sprint | GOOD ก่อนเพิ่มคราบ | เพิ่มคราบจำลอง |
+|---|---:|---:|
+| Actual resolution | 1920×1080 | 1920×1080 |
+| ช่วงรับภาพ | ประมาณ8s | ประมาณ8s |
+| Consumer frames | 227 | 226 |
+| Producer FPS | 29.963 | 29.907 |
+| ภาพเต็มที่เก็บหลังช่วงเริ่มต้น2s | 11 | 11 |
+| Exposure / Focus / Autofocus จาก driver | −6 / 8 / on | −6 / 8 / on |
+
+ไม่ได้เปลี่ยน exposure/focus; autofocus ยังเปิดจึงอาจเปลี่ยน focus เองได้ gain−1เป็น sentinel ใช้ไฟล์ `good-capture.json` / `ng-capture.json` สำหรับ timestamps, quality และ frame age ระดับเฟรม FPS ในตารางเป็นการรับภาพ ไม่ใช่ defect throughput
+
+Reference `good_00.png` ผู้ใช้ยืนยัน GOOD และวางให้ถ่ายแล้ว เลือก logo anchor `[880,320,1140,445]` ที่ไม่รวมคราบกับ ROI ผิว `[820,445,1200,635]` หน่วยpxบน1920×1080 ก่อนประมวลผลชุดคราบ ใช้ min_score=.8/min_matches12 และ pose limits เดิม ไม่ลดเกณฑ์ Geometry
+
+| Geometry / raw surface score | GOOD อื่น10ภาพ (ไม่รวมreference) | คราบจำลอง11ภาพ |
+|---|---:|---:|
+| Template accepted | 10/10 | 11/11 |
+| ORB accepted | 10/10 | 11/11 |
+| Template-aligned surface correlation | .932057–.945505 | .647617–.701649 |
+| ORB-aligned surface correlation | .909575–.945944 | .695855–.714388 |
+| Template-aligned ROI brightness | 43.056–43.977 | 47.099–48.548 |
+
+เป็นหลักฐานว่าการวางคงที่ทำให้ Core เดิมจัดแนวผ่านได้ในภาพรอบนี้ ไม่ใช่ทุกมุม/แสง และความสว่างผิวที่เปลี่ยนเป็นตัวแปรกวน คะแนนต่างไม่ใช่ข้อพิสูจน์ว่าตอบสนองเฉพาะคราบ ทุกภาพ GOOD/คราบรอบนี้อยู่ physical group `sprint-20261014-same-physical-part-01` ห้ามแยกไป train/calibration/independent validation คนละกลุ่ม
+
+### Candidate ที่ผู้ใช้อนุญาตอย่างชัดเจน
+
+ผู้ใช้ตอบ “อนุญาต Candidate OpenCV สำหรับ Demo เท่านั้น” หลังเห็นข้อเสนอและตัวเลข จึงสร้าง **`recipe_a08d724e03d5421f82b0a985671a4053`**, hash `385f5cfde1d9675b2b8e5e65842031238ddff54d16788135b86a0091f61e1b6d` Reference `image_05d021d36a55996ca690a6b62d6e74fd43adca08b4c4830a606573a632b74d1e` โดย `Store.put_image/save_recipe` เดิม ไม่มี training job ไม่มี Production pointer
+
+- REVIEW band คือช่องว่างระหว่าง max observed simulated-NG `.7016487718` กับ min observed GOOD `.9320566058`; threshold=midpoint `.8168526888`, review_margin=half-gap `.1152039170` เป็น empirical demo calibration จากชิ้นเดียว ไม่ใช่ค่าหน้างานที่ validated แล้ว และไม่ใช้ภาพชุดเดียวกันรายงาน accuracy
+- Quality ยังคง limits1–254/min_blur0 ตามขอบเขต diagnostic ที่แจ้งไว้: ยัง **ไม่ calibrated** สำหรับคราบจริง จึงไม่อ้าง quality gate พร้อมโรงงาน
+- Runtime.candidate_pipeline ผ่าน warm-up กับ referenceตัวเอง (ไม่นับเป็น independent proof) และเปิด Terminal เดิมด้วย explicit Candidate สำเร็จ ไม่เปิด legacy pipeline ซ้อน
+- นำเข้าเฉพาะ GOOD reference ใหม่ให้ Core; ภาพคราบและ samples จาก Terminal คง machine/unconfirmed records ไม่อัปเกรดเป็น human-confirmed production NG การยืนยัน physical simulation เก็บใน manifest ของการทดลอง
+
+### ผล Live / ข้อจำกัด
+
+ผล Live อยู่ `work/sprint-20261014/live-evidence-index.json` เชื่อมไป Core Evidence จริงและ Recipe เดียวกัน บันทึกผลสุดท้ายหลังปิดกล้องไว้ต่อด้านล่าง การกด s คือ unconfirmed `candidate_sample`, complete=false; ไม่ใช่หนึ่งชิ้นที่จบ Cycle
+
+**ผลสุดท้ายของรอบ Sprint:** Terminal Candidate เดิมเปิดได้จริง และปล่อยกล้องสำเร็จ ได้ `candidate_sample` NG14รายการ (กด s, complete=false) คะแนน .549348–.562304, Pipeline73.739–86.299ms เฉลี่ย80.513ms และ frame age78–109ms เป็นค่าของ samples ที่บันทึกเท่านั้น ไม่ใช่ all-frame distribution หรือเวลาครบหนึ่งชิ้น ไม่ใช่ AI inference
+
+มี `candidate` complete=true NG3records: `event_bcaf72d9eda1448ab47183cba02b662a` (125frames/15.032s), `event_fc364934e6fb40729aee309a13975234` (3frames/.719s), `event_5d22d474df934043a8446e767db700a6` (628frames/81.031s) จำนวน3recordsไม่ได้แปลว่า3ชิ้นอิสระหรือหนึ่งผลต่อรอบถูกต้องแล้ว ยังไม่มี time-aligned video/physical cycle tally เพื่อจับคู่ทุก record ภาพของrecordสุดท้ายมีมือบังROIตอนยกและscore−.045069; จึงใช้เป็นหลักฐานข้อจำกัดของ occlusion ไม่ใช่ความไวต่อคราบ
+
+ผู้ใช้แจ้งทดสอบGOODและปิดแล้ว แต่ไม่พบsaved GOOD sampleใหม่จากTerminal จึงขอวางGOODอีกครั้งและรับภาพใหม่ด้วย Runtime.open_capture/inspect_frameเดิม10s โดยคงRecipeทุกค่า **134เฟรมได้UNABLE_TO_INSPECTทั้งหมด** ที่locator; Template score .381545–.393618 ต่ำกว่า .8 ภาพ `good_retest_00.png` แสดงชิ้นงานหมุนต่างจากreference ลองORBเดิมบน4ภาพที่เก็บแบบofflineก็ไม่ผ่าน (inlier ratio .406–.500) ไม่เปลี่ยนCandidateเป็นORB/ลดthreshold
+
+บันทึกcandidate_sample UNABLE4ภาพไว้ในCore (เช่น `event_dfa91654977f467baabb10a37831ffff`) ไม่มีcycleที่จบเพราะlocatorไม่เคยพบชิ้นงานในรอบนี้ ดังนั้น **ยังไม่เป็น Demo ที่ทำซ้ำผ่านทั้งGOOD/คราบหลังยกวางกลับ** จุดถัดไปคือควบคุมตำแหน่ง/มุมด้วยจุดอ้างอิงหรือfixtureและพิสูจน์การยกวาง ไม่ใช่เพิ่มAI/ปรับthresholdเพื่อบังคับPASS การทดสอบที่สำเร็จจริงคือacquisition→quality→alignment→ROI→OpenCV method→NG→candidate Evidenceในภาพคราบตำแหน่งควบคุม ส่วนGOODทดสอบกลับล้มเหลวอย่างfail-safe
+
+**Software / UI / Data checks:** focused regression41testsผ่าน (full-image evidence, existing Terminal/Core, unified capture, capture-group splitting); full regressionล่าสุดก่อนSprint336+5subtests ไม่รันซ้ำทั้งชุดเพราะไม่มีsource change ตรวจHTTP /inspection, status, recipes และNG Evidence previewตอบ200และProduction=None แต่ **Browserจริงยังค้าง** ไม่มีbrowserautomationที่เรียกได้ ไม่อ้างHTTPเป็นBrowser pass Manual: เปิดSetupเลือกCandidateนี้ ตรวจreference/ROI/quality-disabled warning; TestเปิดNGและUNABLEของสูตรเดียวกัน; Reviewเทียบraw/previewและsource; Productionต้องยังinactiveและไม่มีvalidationreportที่eligible อย่าTrain/Activate
+
+ตรวจSHA256ข้อมูลเดิม879ไฟล์ในinspection_data/jobs/modelsและrootconfigก่อน–หลัง **ไม่มีไฟล์เดิมเปลี่ยน/หาย**; เพิ่มเฉพาะGOOD reference1ภาพ, Candidate1สูตร, rawimages/Evidenceใหม่จากการทดลอง ข้อมูลกล้องรอบใหม่และprovenanceอยู่`work/sprint-20261014`; `artifact-hashes.json`เชื่อมhashไฟล์หลักฐาน ไม่มีsource/dependency/legacy/Production change ไม่มีการTrainหรือclaimaccuracy กล้องปล่อยแล้วและOS leaseว่าง
+
+รายงานฉบับนี้เป็นเอกสารหลักสำหรับส่งงาน; สไลด์10หน้า `work/sprint-20261014/AIRBAG_SPRINT_RESULTS_20261014.pptx` ใช้ข้อเท็จจริงและภาพจากการทดลองพร้อมข้อจำกัด ตรวจ renderทุกหน้า/package/font/layout/import แล้ว แต่ไม่ได้เปิดตรวจในPowerPoint Video Demoยังไม่ได้อัด และไม่สร้างวิดีโอจำลองให้เหมือนการตรวจสำเร็จ
+
+### ขั้นตอน Demo ที่ทำตามได้
+
+1. ตรวจ device index และไม่มี process ถือกล้องก่อนรัน อย่ายึด index1 ถาวรหลัง replug เปิดด้วย environment เดิมจาก project root:
+   `..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py --candidate-recipe recipe_a08d724e03d5421f82b0a985671a4053 --camera-index 1`
+2. ใช้กล้อง1920×1080 ตำแหน่ง/แสงตาม `good_00.png`; วางชิ้นงานแล้วเอามือออก รอผลนิ่ง กด s ครั้งเดียวเพื่อเก็บ raw sample ยกออกและรอพื้นที่ว่าง ≥2s เพื่อปิด cycle ตรวจชื่อ Candidate และป้าย NOT PRODUCTION
+3. ตรวจ GOOD ก่อนเพิ่มคราบและหลังเอาคราบออก ตลอดจนชิ้นคราบจำลองเดิม บันทึกตามจริงเมื่อ REVIEW/UNABLE/NG ผิดคาด ไม่ปรับ threshold หน้างานเพื่อทำให้ PASS
+4. Review ต้องอ่านทั้ง raw image, source polygon, score, threshold, quality, locator และ cycle completion; มือบังROI/เงา/การยกวางต้องแยกจากตำหนิจริง ห้ามนำค่าเวลาจากตัวอย่างเฟรมไปอ้างเป็นเวลาหนึ่งชิ้น
+5. ปิดด้วย q/Esc รอ Camera released และตรวจ lease ว่าง ไม่ Activate Production/ถอด Legacy Live ใช้ภาพและ Evidence นี้สำรองการนำเสนอจนกว่าจะอัด Demo video จริงได้ ไม่ทำ animation ภาพนิ่งแล้วเรียกว่าการทดสอบ Live
+
+### แผนส่งงาน 3 วัน / Stop condition
+
+วัน1: เก็บคู่GOOD/คราบจริงผ่านกล้องและพิสูจน์ alignmentในตำแหน่งควบคุม; ทดลอง Candidate Classical CV ที่อนุญาตและเขียนผลล้มเหลวควบคู่ วัน2: ทดสอบยกวางซ้ำ GOOD/คราบและพื้นที่ว่าง ตรวจ false rejection/มือบัง/แสงจากข้อมูลจริง แก้เฉพาะ critical problem และสรุปผล วัน3: freeze revision/Recipe ที่พิสูจน์ได้ จัดสไลด์พร้อมข้อจำกัด อัดหน้าต่างโปรแกรมเดิมและซ้อมอธิบาย หาก input/model/field validation ยังไม่พร้อม ให้หยุดขยาย software และส่งขอบเขตที่พิสูจน์ได้ ไม่อ้างว่า AI/Production พร้อม
+
+สำหรับ Production ต้องมีชิ้น GOOD/NG จริงอิสระจาก reference/calibration, defect typeและขนาด, ROI coverage ที่ทวนสอบ, controlled settings, place/remove repeatability และคุณภาพภาพที่ calibrate; คำนวณ False Accept, False Reject, Strict Defect Recall พร้อม REVIEW/UNABLE rates ตาม policyที่เจ้าของงานยืนยัน แล้วจึงผ่าน Validation Gate เดิม ไม่คำนวณอัตราผิดพลาดจากคราบจำลองชิ้นเดียวหรือจำนวนframesแทนจำนวนชิ้น
+
+---
 
 ## Full-frame Candidate preparation — ข้อมูลจริงและขอบเขตที่ผู้ใช้ยืนยัน
 

@@ -1,0 +1,24 @@
+{
+  "source_commit": "3f07c11",
+  "checkpoint": "sprint-start-20261014",
+  "source_code_changed": false,
+  "focused_regression": "41 passed",
+  "browser_verification": "pending; no callable browser tool",
+  "existing_protected_files": 879,
+  "existing_files_changed_or_missing": [],
+  "production": null,
+  "runtime_owner_after": null,
+  "events_by_source_and_machine_state": {
+    "candidate/NG": 3,
+    "candidate_sample/NG": 14,
+    "candidate_sample/UNABLE_TO_INSPECT": 4
+  },
+  "limits": [
+    "Physical simulated stain on one part",
+    "No AI inference or training",
+    "GOOD replacement 134 frames UNABLE at alignment",
+    "Hand occlusion present in one cycle evidence",
+    "No independent defect accuracy",
+    "No production activation"
+  ]
+}
