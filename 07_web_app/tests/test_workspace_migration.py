@@ -145,3 +145,39 @@ def test_undo_checks_entire_batch_before_moving_labels(workspace):
     response=c.post('/api/dataset-folders/undo-upload',json={'folder':'labelled','upload_id':manifest['upload_id']})
     assert response.status_code==400 and (batch/'sample.png').exists() and label.read_text()=='changed annotation'
     assert not list((root/'trash').iterdir())
+
+
+@pytest.mark.parametrize('method,url', [
+    ('get','/start_stream'), ('get','/stop_stream'), ('post','/stop_stream'),
+    ('get','/latest_frame.jpg'), ('get','/status'),
+])
+def test_unused_web_camera_routes_are_removed(workspace, monkeypatch, method, url):
+    c,root=workspace
+    def forbidden(*args, **kwargs):
+        raise AssertionError('Retired route must not open camera or change settings')
+    monkeypatch.setattr(app.cv2,'VideoCapture',forbidden)
+    monkeypatch.setattr(app,'write_project_config',forbidden)
+    assert getattr(c,method)(url).status_code==404
+
+
+def test_terminal_cycle_is_read_from_original_file_by_inspection(workspace):
+    from inspection_cycles import PartCycle, save_cycle
+    from normal_reference import InspectionResult
+    c,root=workspace
+    cycle=PartCycle(release_frames=2,release_seconds=.3)
+    result=InspectionResult('NG',.9,2.,1.,[])
+    image=np.full((32,48,3),120,np.uint8)
+    assert cycle.observe(True,result,now=0,frame=image) is None
+    assert cycle.observe(False,None,now=1) is None
+    saved=save_cycle(root,cycle.observe(False,None,now=1.4),
+        {'job_id':'test-job','active_model':'fixture.npz','inspection_contract':{'model_sha256':'fixture-hash'}},'camera_0')
+    folder=root/'03_dataset/inspection_cycles'
+    before={p.name:p.read_bytes() for p in folder.iterdir()}
+    row=c.get('/api/inspection/parts').json()['parts'][0]
+    assert row['id']==saved['id'] and row['complete'] and row['end_reason']=='removed'
+    assert row['source']=='camera_0' and row['job_id']=='test-job' and row['model_sha256']=='fixture-hash'
+    assert row['decision']=='NG' and 'reviewed_at' not in row
+    assert c.get('/api/inspection/parts/'+saved['id']+'/image').content==before[saved['id']+'.jpg']
+    assert before=={p.name:p.read_bytes() for p in folder.iterdir()}
+    assert app.vision_service.store.records('evidence')==[]
+    assert 'Terminal camera / Legacy history' in c.get('/inspection').text

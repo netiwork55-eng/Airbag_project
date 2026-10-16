@@ -54,7 +54,7 @@ def test_select_job_and_switch_back(saved, monkeypatch):
     monkeypatch.setattr(app, "PROJECT_ROOT", root)
     monkeypatch.setattr(app, "JOB_DIR", root / "jobs")
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", None)
+    monkeypatch.setattr(app.vision_service, "busy", lambda: False)
     monkeypatch.setattr(app, "load_inspection_reference", lambda _: SimpleNamespace(
         backbone_path=first["files"]["backbone"]["path"], threshold=1.))
     writer = Mock(side_effect=lambda settings: settings)
@@ -73,7 +73,7 @@ def test_train_and_camera_block_job_selection(monkeypatch):
     monkeypatch.setattr(app, "training_is_running", lambda: True)
     assert app.api_use_job("bad").status_code == 409
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", Mock(is_alive=lambda: True))
+    monkeypatch.setattr(app.vision_service, "busy", lambda: True)
     assert app.api_use_job("bad").status_code == 409
 
 
@@ -143,7 +143,7 @@ def test_image_test_does_not_activate_or_save_production_review(saved, monkeypat
     monkeypatch.setattr(app, "JOB_DIR", root / "jobs")
     app.write_json(job_path(app.JOB_DIR, job["id"]), job)
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", None)
+    monkeypatch.setattr(app.vision_service, "busy", lambda: False)
     model = Mock(backbone_path=job["files"]["backbone"]["path"], threshold=1.)
     model.inspect.return_value = app.InspectionResult("NG", .8, 2., 1., [])
     model.draw_result.side_effect = lambda image, *args, **kw: image

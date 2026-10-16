@@ -1,35 +1,33 @@
-Industrial Visual Inspection / Airbag_Project
-อัปเดต 6 ตุลาคม 2026
+Airbag_Project — จุดเริ่มใช้งานเดียว
+อัปเดต 16 ตุลาคม 2026
 
-เริ่มระบบ: start_web_app.bat แล้วเปิด http://127.0.0.1:8000/inspection
-Workflow: Product → Image setup → Part location → Areas → Methods → Test → Production → Review
-Train เฉพาะพื้นที่ที่ใช้ AI ไม่บังคับทุกงานผ่านหน้า Train
-เป้าหมายตรวจ Defect หลายประเภทชิ้นงาน Brand เป็นเพียงตัวช่วยแยกรุ่น ไม่ใช่เป้าหมายหลัก
+เปิดกล้อง: ใช้โปรแกรมเดิมจาก root
+..\venv\Scripts\python.exe 01_camera\airbag_webcam_detection.py
+ภาพสด/กรอบ/FPS อยู่หน้าต่าง OpenCV เดิม ไม่ใช้ --candidate-recipe
 
-คู่มือหลัก: NEW_SYSTEM_TH.md
-ผลตรวจและข้อจำกัดล่าสุด: work/renovation-20261006/REPORT_TH.md
-การตัดสินใจ KEEP/REFACTOR/REPLACE/REMOVE: work/renovation-20261006/AUDIT_TH.md
-คู่มือเครื่องใหม่: MOVE_TO_NEW_MACHINE_TH.txt
-คู่มือ backend: BACKEND_HANDOVER_TH.md
+เปิดพื้นที่จัดการ: start_web_app.bat → http://127.0.0.1:8000/inspection
+Setup/Dataset → Test/Validation/Jobs/Models → Production → Evidence/Review
+ดูผลจากกล้องเดิม: Review → Terminal camera / Legacy history → Refresh
+อ่านภาพและผลรอบวาง–ยกจาก 03_dataset/inspection_cycles โดยตรง ไม่ทำสำเนา
+NG จากเครื่องไม่ใช่ NG ที่มนุษย์ยืนยัน ไม่มี live preview ของ Terminal บนเว็บ
+ไม่เปิดกล้องสองโปรแกรมพร้อมกัน Shared ownership ป้องกันการแย่งงานในโปรเจกต์
 
-ระบบใหม่ใช้ OpenCV สำหรับภาพ/จัดแนว/ตรวจเงื่อนไข และ Anomalib สำหรับความผิดปกติผิว
-ใช้ ONNX Runtime เมื่อ export/parity ผ่าน มี PASS / NG / REVIEW / UNABLE_TO_INSPECT กลาง
-Candidate แยกจาก Production ต้อง Validation สูตรเดียวกันก่อน Activate และย้อนรุ่นได้
-ภาพดีอ้างอิงและภาพเรียนรู้ต้องยืนยัน GOOD; ภาพทดสอบต้องแยกชิ้น/รอบถ่าย
-ไม่มีเพดาน 160 ภาพ แต่ข้อมูลมากไม่ใช่หลักฐานความแม่นยำ ต้องวัดกับ GOOD และ NG
+สถานะจริง
+- ยังไม่มี Core Production ที่ผ่าน Validation และ Activate
+- Terminal จึงยังใช้ Normal Reference เดิมตาม 07_web_app/project_config.json
+- เมื่อมี Production ที่ผ่านจริง Terminal เดิมรองรับ Shared Core อยู่แล้ว
+- Candidate ทดสอบภาพผ่าน /inspection ข้อมูล Candidate เดิมยังอยู่
+- ถอด /engineering และ legacy web stream แล้ว ไม่ใช้ /start_stream หรือ /latest_frame.jpg
+- LifeCam เคยรับภาพจริง 1920×1080 เมื่อ 14 ต.ค.; ไม่ใช่การยืนยันว่ากล้องพร้อมทุกครั้ง
+- Demo คราบเป็นคราบจำลองบนชิ้นเดียวกัน และ GOOD re-placement ยังมี alignment failure
+- ยังไม่รับรอง Defect accuracy/การใช้งานโรงงาน ไม่ Train/Activate/เปลี่ยน threshold อัตโนมัติ
 
-ข้อมูลระบบใหม่: inspection_data/
-ข้อมูล Dataset เดิม: 05_train_new_object/01_yolov8_exports/
-หน้าเดิมสำหรับ Engineering: /engineering (เก็บเพื่อข้อมูล/เปรียบเทียบ ยังไม่ลบโมเดลที่ใช้อยู่)
-ใช้ CVAT ที่ติดตั้งเดิมเท่านั้น ส่งภาพที่เลือกจาก Human Review ไม่มีการส่งหรือ retrain อัตโนมัติ
+คู่มือปัจจุบัน: NEW_SYSTEM_TH.md (รวมแผนที่ทั้งโฟลเดอร์และความสัมพันธ์)
+สถานะงาน/ข้อจำกัด/ผลทดสอบ: work/RENOVATION_CONSOLIDATION_REPORT.md
+Backend: BACKEND_HANDOVER_TH.md; ย้ายเครื่อง: MOVE_TO_NEW_MACHINE_TH.txt
+รายงานลงวันที่อื่นใน work เป็นหลักฐานย้อนหลัง ไม่ใช่คำสั่งเปิดระบบปัจจุบัน
+สำเนาโค้ด/สคริปต์ทดลองย้อนหลังย้ายออกไป Airbag_Project_Backups แล้วตามรายงานหลัก
 
-สถานะสำคัญ: ยังไม่รับรองการใช้งานจริงในโรงงาน
-PaDiM รับ GOOD 41/42 และแจ้ง NG ผิด 1 ภาพ; PatchCore PASS 28/42, NG 2, REVIEW 12
-ผลเป็นภาพ crop จากข้อมูลเดิม ไม่มี verified NG จึงยังวัดการปล่อยชิ้นเสียผ่านไม่ได้
-ยังไม่ได้ทดสอบกล้องจริง และ CVAT ติดต่อไม่ได้ขณะตรวจ ไม่มี Candidate ใหม่ถูกเปิดเป็น Production
-อ่านรายงานก่อนนำตัวเลขไปอ้างอิง อย่าเรียกผล GOOD-only ว่า Defect accuracy
-
-ติดตั้งใช้ Python 3.12 / runtime ที่ตรึงรุ่นใน requirements-runtime.lock
-worker Anomalib แยก .venv-inspection; requirements-inspection.lock ระบุรุ่นที่ตรวจแล้ว
-ไม่คัดลอก venv ไปเครื่องใหม่ ให้สร้างใหม่ตามคู่มือ ไม่แก้ production model path เป็นไฟล์ล่าสุด
-เก็บ credentials ใน environment/.env ไม่ใส่ source, recipe หรือรายงาน
+Dataset/Model/Evidence เดิมเป็นข้อมูลสำคัญ ไม่ลบเพียงเพราะมีชื่อเก่า
+.venv-inspection เป็น worker environment ที่ใช้งานจริง แยกจาก ../venv ของกล้อง/เว็บ
+.git ใช้ย้อนการแก้ Source ไม่ใช่สำรองข้อมูลที่ Git-ignore ต้องสำรองข้อมูลแยก

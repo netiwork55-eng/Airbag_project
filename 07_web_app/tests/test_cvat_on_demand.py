@@ -15,10 +15,8 @@ def test_startup_does_not_start_cvat_thread_or_contact_connector(monkeypatch):
     monkeypatch.setattr(app,'pull_cvat_annotations',pull)
     monkeypatch.setattr(app,'sync_confirmed_reviews_to_cvat',pull)
     monkeypatch.setattr(app.vision_service,'close',lambda:None)
-    monkeypatch.setattr(app,'stop_camera_worker',lambda:None)
     monkeypatch.setattr(app,'TRAIN_PROCESS',None)
     monkeypatch.setattr(app,'REFERENCE_TRAIN_STOP_EVENT',threading.Event())
-    monkeypatch.setattr(app,'set_latest_frame',lambda frame:None)
     async def lifecycle():
         async with app.lifespan(app.app):
             pass

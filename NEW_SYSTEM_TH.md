@@ -1,4 +1,4 @@
-# Industrial Visual Inspection — อัปเดต Consolidation 9 ตุลาคม 2026
+# Industrial Visual Inspection — สถานะและทางใช้งาน 16 ตุลาคม 2026
 
 ระบบปรับใน FastAPI เดิม เปิด http://127.0.0.1:8000/inspection
 หน้า / และ /training เข้าหน้าใหม่นี้ ไม่เปิด Candidate ใหม่ทับโมเดลเดิม
@@ -52,7 +52,7 @@ Fixed position ใช้ทดสอบภาพ/fixture แต่ยังเ�
 - UNABLE_TO_INSPECT: ภาพ แสง ความคม ตำแหน่ง ROI โมเดลไม่พร้อม หรือ inference ล้มเหลว
 
 inspection/schema.py รวมคำตัดสิน ไม่เปลี่ยนข้อผิดพลาดเป็น PASS
-Web camera runtime เก็บเฟรมล่าสุดช่องเดียว ไม่สะสมคิวในแอป ตรวจอายุภาพและบันทึกเวลา source; Terminal รักษาลูปอ่านกล้องเดิมตามข้อกำหนดด้านบน
+Web camera runtime เก็บเฟรมล่าสุดช่องเดียว ไม่สะสมคิวในแอป ตรวจอายุภาพและบันทึกเวลา source; Terminal โหมด Core ใช้ FramePump เดียวกัน ส่วน Legacy รักษาลูปเดิมตามข้อกำหนดด้านบน
 รอผลต่อเนื่องตาม stable_frames ก่อนยืนยัน คงผลรุนแรงกว่าที่นิ่งแล้วจนยกออก หยุดกลางรอบเป็น UNABLE
 locator หายเป็นสัญญาณยกออก ต้องพิสูจน์กับพื้นว่าง มือบัง และชิ้นขยับจริงก่อนหน้างาน
 
@@ -84,29 +84,40 @@ Human Review ไม่แก้ label ภาพต้นฉบับอัตโ
 ใช้ CVAT เดิมผ่าน API ไม่มี Annotation Studio ซ้ำ; ส่งเฉพาะภาพที่เลือก/ทบทวนแล้ว
 CVAT ใช้ lock แยกจาก inspection ไม่ครอบครองกล้องหรือหยุด Production
 
-## ผลที่พิสูจน์แล้วและข้อจำกัด
-- OpenCV API ทดสอบ upload → recipe → validate → activate → evidence → review และ CVAT adapter จำลอง
-- Anomalib เรียนรู้ภาพจริง 172 ภาพ (fit 138/calibration 34) ทดสอบ GOOD แยก 42 ภาพจาก manifest เดิม
-- PaDiM: PASS 41, NG 1; PatchCore: PASS 28, NG 2, REVIEW 12; ทั้งคู่ไม่มี UNABLE ในชุดนี้
-- เป็นภาพ crop แล้ว ไม่พิสูจน์ raw camera/locator และไม่ได้แสดงว่าดีกว่าโมเดลเดิม
-- ไม่มี verified NG จึงวัด false accept/defect recall ไม่ได้ ไม่มีสูตรใหม่เปิดเป็น Production
-- replay วางเข้า–ยกออกและการปล่อยกล้องจำลองผ่าน ยังไม่ทดสอบกล้องจริงหรือรันยาว
-- มี pypylon ใน runtime; probe ที่รายงานไว้วันที่ 8 ต.ค. ไม่พบ Basler device รอบพัฒนานี้ไม่ได้เปิด/ตรวจกล้องจริง จึงยังไม่รับรอง adapter กับ hardware
-- CVAT localhost:8080 ติดต่อ/ยืนยันตัวตนไม่ได้ตอนตรวจ จึงยังไม่ผ่าน annotation round trip จริง
+## หลักฐานปัจจุบันและข้อจำกัด
+- Hardware วันที่ 14 ต.ค. รับภาพ LifeCam 1920×1080 จริงเข้า Core ได้ แต่ Recipe 256×256 เดิมหยุด UNABLE ก่อน Anomaly
+- Demo Full-frame OpenCV ใช้คราบจำลองบนชิ้นเดียวกัน ไม่ใช่โมเดล AI ใหม่ และ ROI ไม่ใช่ขอบเขตตำหนิจริง
+- Repeatability ยังไม่ผ่าน: GOOD ที่วางใหม่มี alignment failure; หยุดรอบทดสอบเมื่อผู้ใช้สั่งถอด Candidate จาก Terminal
+- ตัวเลข PaDiM/PatchCore บน crop เดิมเป็นผลทดลองย้อนหลัง ชุด Airbag_Toyota 268 ภาพเป็นชิ้นเดียวขยับหลายตำแหน่งตามผู้ใช้ยืนยัน ไม่ใช่ independent part validation
+- ไม่มี Production ที่ผ่านการรับรอง ห้ามอ้างว่า unit/integration tests หรือ GOOD-only พิสูจน์ Defect recall
+- ผลและภาพจริงเดิมยังอยู่ รายละเอียดล่าสุดใช้ work/RENOVATION_CONSOLIDATION_REPORT.md
 
-## ติดตั้งและสิทธิ์การใช้งาน
-เปิด start_web_app.bat; server ใช้ loopback ไม่เพิ่มพอร์ตภายนอก
-เครื่องใหม่ใช้ Python 3.12 และ setup_new_machine.bat ดู MOVE_TO_NEW_MACHINE_TH.txt
-requirements-runtime.lock ตรึง runtime เดิม; requirements-inspection.lock ตรึง dependency ใหม่
-ONNX Runtime ปิด telemetry; worker ไม่มี cloud logger หรือส่งภาพ/โมเดลไป cloud
-license ของ library กับ pretrained weights อาจต่างกัน: TorchVision ระบุให้ตรวจเงื่อนไขข้อมูลที่ใช้สร้าง weights สำหรับการใช้งานนั้น ไม่ถือ BSD ของ code เป็นสิทธิ์ใช้ weights เชิงพาณิชย์โดยอัตโนมัติ
+## แผนที่ทั้งโปรเจกต์และความสัมพันธ์
+| ตำแหน่ง | หน้าที่และสิ่งที่เชื่อม |
+|---|---|
+| 01_camera | Terminal/OpenCV ตัวเดิม; ใช้ Shared Core เมื่อมี validated Production หรือ Normal Reference เดิมตาม config; capture_training_images เป็นเครื่องมือเก็บภาพเดิม |
+| 02_training | CLI เตรียมข้อมูล/ฝึก detector เดิม เรียกโดย Backend และ dataset utility; ไม่ใช่ workflow บังคับก่อนตรวจ |
+| 03_dataset | ผลรอบกล้อง, human review, capture/staging/trash/CVAT และ utility เดิม; /inspection อ่านผ่าน API เดิม |
+| 04_verify | CLI ประเมิน detector; ไม่ใช่ตัวรับรอง Defect accuracy ของ Core |
+| 05_train_new_object | Dataset Library ต้นทาง, backgrounds และผลฝึกเดิมที่ Training/Jobs/Models อ้างอิง; ไม่ใช่ source pipeline ใหม่ |
+| 06_brand_classification | เครื่องมือ/ข้อมูล/model ของ Brand เสริม; ยังมี config เดิมอ้างอิง ไม่ใช้ Brand ตัดสิน Defect |
+| 07_web_app | FastAPI และ UI /inspection; app.py ให้บริการ Dataset/Jobs/Model/History เดิม, inspection/ เป็น Core; tests ตรวจทั้งสองร่วมกัน |
+| inspection_data | Store ของภาพ/Recipe/Model metadata/Validation/Evidence/Core runtime; โมเดลและ reference ผูก hash |
+| models และ jobs | น้ำหนัก/model artifact และ Job เดิม; Terminal/config และหน้า Jobs/Models ใช้ร่วมกัน ไม่คัดลอกเข้าระบบใหม่ |
+| tools/maintenance | ติดตั้ง worker และซ่อม path เมื่อย้ายเครื่องแบบสั่งเอง ไม่รัน repair ตอน startup |
+| work | รายงาน ผลทดลอง ภาพ/วิดีโอ/สไลด์ และหลักฐานย้อนหลัง; ไม่เป็น source/runtime ที่ต้องเปิดอีกชุด |
+| .venv-inspection | Environment ของ Anomalib worker/tests; setup เชื่อม torch/torchvision จาก ../venv ไม่ใช่ implementation ซ้ำ |
+| .env | credentials/การตั้งค่าเฉพาะเครื่อง; เก็บเป็นความลับ ไม่ใช่ source และไม่ย้ายค่าลงรายงาน |
+| __pycache__ / .pytest_cache | cache ที่สร้างใหม่ได้ ไม่ใช่ implementation หรือข้อมูลอ้างอิง |
+| .git / .gitignore | ประวัติ Source/ขอบเขต tracking; ไม่ครอบคลุม backup Dataset/Model/Evidence ที่ ignore |
+| .vscode / pyrightconfig.json / __init__.py | การตั้งค่า editor/package marker; ไม่ใช่ camera entrypoint |
+| requirements*, setup_new_machine.bat, start_web_app.bat | dependency lock, setup และ launcher เดิม; ไม่ติดตั้ง/สลับรุ่นเองขณะตรวจ |
+| README_TH.txt, AGENTS.md, BACKEND_HANDOVER_TH.md, MOVE_TO_NEW_MACHINE_TH.txt | จุดเริ่มใช้งาน กติกางาน คู่มือ backend และย้ายเครื่อง; อ่านสถานะล่าสุดจากรายงานหลัก |
 
-## ระบบเดิมที่ยังอยู่
-/engineering และหน้า Training เดิมถอดแล้ว: Setup → Dataset library จัดการ Upload/Preview/Metadata/Undo/Trash/Restore; Test → Jobs/Models/Training history; Review → Legacy history อ่านข้อมูลเดิมโดยไม่คัดลอกและแยก Machine/Human result
-/jobs ส่งไป /inspection#test; /api/datasets/upload, /api/datasets/summary และ /api/train/recommended-settings ถูกถอด ใช้ Dataset folder API เดิมที่หน้า Inspection เรียก
-Legacy Live และ backend เฉพาะทางสำหรับ legacy reference/configuration ยังเก็บไว้จน Core replacement ผ่าน Field Validation; ไม่ใช่หน้า workflow คู่ขนาน
-Undo ใหม่ย้ายชุด Upload ล่าสุดไป Trash โดยตรวจ server manifest/hash; ชุดเก่าที่ไม่มี safe manifest ใช้ Dataset Trash/Restore แทน ไม่มีการลบข้อมูลย้อนหลัง
-DeepPatch/YOLO ไม่เป็นข้อบังคับของ engine ใหม่ แต่ compatibility shell ยัง import dependency เก่า
-ลบ Annotation Studio API/helper ที่ซ้ำ CVAT และไม่มีผู้เรียกแล้ว ไม่ลบ annotation/data เดิม
-หยุด auto-repair ตอน startup ที่อาจเลือกโมเดลอื่น ไม่มีการแทน active model ด้วยไฟล์ล่าสุดอัตโนมัติ
-รายละเอียด: work/renovation-20261006/AUDIT_TH.md และ REPORT_TH.md
+ผลจาก Terminal เดิมเข้าถึงที่ Review → Terminal camera / Legacy history ใน /inspection
+ผ่าน /api/inspection/parts และภาพต้นฉบับใน 03_dataset/inspection_cycles; Human Review ใช้ /api/inspection/reviews
+Core Evidence อ่าน inspection_data/evidence แยกชนิดผลให้ชัด ไม่แปลง machine NG เป็น human-confirmed NG
+การเข้าถึงจากหน้าเดียวไม่ได้หมายความว่า Legacy และ Core ตัดสินเหมือนกันแล้ว: Legacy ยังต้องอยู่จนตัวแทนผ่าน field validation
+ถอด legacy web camera worker และ /start_stream, /stop_stream, /latest_frame.jpg, /status แล้ว; เว็บใช้ /api/vision runtime เท่านั้น
+ไม่ย้อนนำ /engineering กลับมา Dataset/Jobs/Models/History ใช้ backend เดิมผ่าน /inspection
+สำเนา source และสคริปต์ทดลอง 81 ไฟล์ใน work ถูกสำรองพร้อม SHA256 ไปนอกโปรเจกต์ก่อนถอด ดู archive ในรายงานหลัก

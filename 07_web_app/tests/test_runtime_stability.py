@@ -31,24 +31,6 @@ def test_registry_marks_actual_locator_instead_of_legacy_detector(tmp_path, monk
     assert not any(r['active'] for r in app.model_registry())
 
 
-def test_camera_timeout_retains_worker_and_stop_signal(monkeypatch):
-    worker = mock.Mock()
-    worker.is_alive.return_value = True
-    cap = mock.Mock()
-    event = threading.Event()
-    monkeypatch.setattr(app, 'WORKER_THREAD', worker)
-    monkeypatch.setattr(app, 'CURRENT_CAP', cap)
-    monkeypatch.setattr(app, 'STOP_EVENT', event)
-    monkeypatch.setattr(app, 'STATE', dict(app.STATE))
-    app.stop_camera_worker(join_timeout=0)
-    assert app.WORKER_THREAD is worker
-    assert event.is_set()
-    assert app.STATE['status'] == 'stopping'
-    cap.release.assert_not_called()  # The owning worker releases after read returns.
-    monkeypatch.setattr(app, 'read_project_config', lambda: {})
-    with pytest.raises(RuntimeError, match='stopping'):
-        app.start_camera_worker(0, .3, False, False)
-    assert event.is_set()
 
 
 def test_review_keeps_metadata_of_selected_evidence(tmp_path, monkeypatch):
@@ -165,9 +147,7 @@ def test_reference_cancel_exits_without_activating_model(tmp_path, monkeypatch):
 
 
 def test_reference_train_refuses_live_camera_before_reading_dataset(monkeypatch):
-    worker = mock.Mock()
-    worker.is_alive.return_value = True
-    monkeypatch.setattr(app, 'WORKER_THREAD', worker)
+    monkeypatch.setattr(app.vision_service, 'busy', lambda: True)
     with mock.patch.object(app, 'reviewed_known_good_corpus') as corpus:
         response = app.api_train_normal_reference({})
     assert response.status_code == 409

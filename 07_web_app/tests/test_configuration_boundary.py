@@ -23,7 +23,7 @@ def test_training_locks_all_runtime_configuration(monkeypatch, payload):
 
 def test_live_camera_configuration_is_immutable(monkeypatch):
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", Mock(is_alive=lambda: True))
+    monkeypatch.setattr(app.vision_service, "busy", lambda: True)
     writer = Mock()
     monkeypatch.setattr(app, "write_project_config", writer)
     assert app.api_update_project_config({"use_classifier": False}).status_code == 409
@@ -40,7 +40,7 @@ def test_live_camera_configuration_is_immutable(monkeypatch):
 ])
 def test_settings_cannot_replace_models_or_certification(monkeypatch, payload):
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", None)
+    monkeypatch.setattr(app.vision_service, "busy", lambda: False)
     writer = Mock()
     monkeypatch.setattr(app, "write_project_config", writer)
     assert app.api_update_project_config(payload).status_code == 400
@@ -49,7 +49,7 @@ def test_settings_cannot_replace_models_or_certification(monkeypatch, payload):
 
 def test_reference_settings_preserve_active_artifact_and_evidence(monkeypatch):
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", None)
+    monkeypatch.setattr(app.vision_service, "busy", lambda: False)
     existing = {"active_model": "original.npz", "quality_metrics": {"ng_recall": None},
                 "inspection_size": 320}
     monkeypatch.setattr(app, "read_project_config", lambda: {"normal_reference": existing})
@@ -61,7 +61,7 @@ def test_reference_settings_preserve_active_artifact_and_evidence(monkeypatch):
 
 def test_existing_page_project_payload_is_supported(monkeypatch):
     monkeypatch.setattr(app, "training_is_running", lambda: False)
-    monkeypatch.setattr(app, "WORKER_THREAD", None)
+    monkeypatch.setattr(app.vision_service, "busy", lambda: False)
     writer = Mock(return_value={})
     monkeypatch.setattr(app, "write_project_config", writer)
     payload = {"project_name": "Inspection", "brand": "", "model": "1", "target_classes": ["OK", "NG"],

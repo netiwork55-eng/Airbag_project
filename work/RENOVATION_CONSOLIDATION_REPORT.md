@@ -540,3 +540,33 @@ temporary server8011 ปิดแล้ว ไม่ Restart server8000หรื
 6. เก็บ GOOD/NG ที่มนุษย์ยืนยันพร้อม Capture groups และ full-frame camera setup จริง เพื่อพิสูจน์ Candidate ผ่านโปรแกรมกล้องเดิมก่อนพิจารณาถอด Legacy Live/backend ที่ยังใช้กับมัน
 
 เกณฑ์จบ Phase2 ด้าน Source/API/Regression ผ่านตามขอบเขตด้านบน; Browser และ Field Validation ยังไม่รับรอง
+
+
+## 16 October 2026 — Whole-project consolidation: retire unused web live and source snapshots
+
+User scope is the entire Airbag_Project, including ignored/hidden files, not only work or the web module. The complete inventory outside the project recorded 34,940 files / 3,036 directories with SHA256 and no read errors. This is inventory coverage, not a claim of line-by-line semantic review of every dependency or field-validation success.
+
+### Actual removals and connections
+- Removed the unused Legacy WEB live implementation from app.py: 21 functions (old detector/reference workers, camera open/stop, duplicated drawing/model loaders, JPEG/status helpers and routes), worker state, four obsolete stream tuning constants and unused Annotation Studio constants/imports. Approximately 1,100 app.py lines removed. No current UI, CLI or owned runtime caller uses these routes. /start_stream, GET/POST /stop_stream, /latest_frame.jpg and /status now return 404. /api/vision/status and Core runtime remain.
+- Kept the original 01_camera/airbag_webcam_detection.py unchanged. Its Legacy live branch still serves the real camera while no validated Core Production is active. Candidate Terminal mode remains removed as requested. No camera process was started/stopped, no camera/model settings changed.
+- Existing model/job/settings/train guards now consult vision_service.busy(), plus the existing OS project lease, instead of the retired web worker. Cross-process integration tests exercise the guard with a real separate owner process, without opening hardware.
+- Review names the existing results section “Terminal camera / Legacy history”. It reads original inspection_cycles via /api/inspection/parts; an integration test records a place/remove cycle with the same PartCycle/save_cycle used by Terminal, reads its ID/image/job/model hash through the API, and proves the files are unchanged and no Core Evidence copy was created. Machine NG remains separate from human confirmation.
+- Preserved offline image tests, Dataset, Jobs, Model services, Training/verification CLI and optional Brand modules because they still have callers. No new implementation/architecture/dependency.
+- Removed 81 historical .py/.html/.js/.css snapshots, replay/training probes and extracted UI scripts from work after archiving and verifying each entry's SHA256. Source snapshots are no longer another executable system inside the project. Historical reports/JSON/images/models/slides/video remain in place. Historical script paths in old reports now refer to this archive; restore separately for historical reproduction, not into the active runtime.
+  Archive: D:/Users/dev06/Documents/Codex/Airbag_Project_Backups/retired-work-source-20261016T013144Z.zip
+  Entries: 81 source files, 8,395,666 uncompressed bytes, plus manifest.
+  ZIP SHA256: bbf21f84e82cf09a3f387633a39d6db6939695d2198184cb2715ad6a27cb40f6
+- Updated existing root/backend/module guides and AGENTS status. NEW_SYSTEM_TH.md maps every top-level role and shows the real remaining Legacy/Core boundary. Root README no longer sends users to /engineering or claims a camera has never been tested.
+
+### Verification
+- Before deletion: Python suite 336 passed + 5 subtests.
+- After deletion and new integration coverage: 334 passed + 5 subtests (23.49 s). Retired 13 tests exclusively covering the deleted web worker; added 11 route/history/cross-process tests. No retained safety test removed to hide a failure.
+- JavaScript: 12 passed; node --check inspection.js passed; git diff --check passed.
+- Newly added integration test initially used global app lifespan incorrectly and the status router bound to another service. Corrected the isolated fixture, then reran targeted tests (48 passed) and the entire suite. No change to the production logic to make these tests pass.
+- UI evidence here is HTML/API/JS testing; no real browser or camera validation performed in this cleanup. Manual check: open /inspection → Review → Terminal camera / Legacy history → Refresh; compare a completed Terminal cycle's source image/ID with 03_dataset/inspection_cycles. Do not start a second camera to perform this check.
+- Rollback source checkpoint: cleanup-web-live-before-20261016 at f34389a. Removed work source is recoverable from the verified external archive (Git ignores these files).
+
+### Remaining truthful boundary
+One UI and shared data access do not prove one inspection algorithm. Legacy Terminal still uses Deep Patch/YOLO/config unless validated Core Production exists. Do not remove that branch or reintroduce Candidate camera mode without the user's requested direction and field evidence. Dataset/model artifacts are not rubbish because filenames are old or hashes duplicate; paths, labels, split provenance and jobs can depend on them. No training, activation, threshold edits or physical accuracy claims in this work.
+
+Final data safety: SHA256 checked 14,616 existing files (Dataset/Models/Jobs/Core store/config/.env/work non-source artifacts), zero changed or missing. Updated source/module README, report and ephemeral ownership/cache are outside this data check. Manifest: D:/Users/dev06/Documents/Codex/Airbag_Project_Backups/cleanup-data-verification-20261016.json. Removed 24 empty snapshot directories after archiving; no recursive deletion of data folders. Backups are on the same machine, not off-site.

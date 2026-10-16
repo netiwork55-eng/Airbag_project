@@ -1,10 +1,10 @@
-# ส่งต่องาน Backend — 6 ตุลาคม 2026
+# ส่งต่องาน Backend — 16 ตุลาคม 2026
 
-อ่าน NEW_SYSTEM_TH.md ก่อน คู่มือเก่าถูกสำรองใน work/renovation-20261006/before/
+อ่าน NEW_SYSTEM_TH.md และ work/RENOVATION_CONSOLIDATION_REPORT.md ก่อน; source snapshot เก่าย้ายออกนอกโปรเจกต์แล้วตามรายงานหลัก
 
 ## ขอบเขต
 FastAPI เดิม app.py mount inspection/api.py ที่ /api/vision และ UI /inspection
-recipe ไม่ขึ้นกับ YOLO/Brand/Train page; compatibility shell ยังใช้ dependency เก่าที่ Engineering ต้องใช้
+recipe ไม่ขึ้นกับ YOLO/Brand/Train page; app.py reuse services เดิมของ Dataset/Jobs/Models/Test/Review; /engineering และ legacy web stream ถูกถอดแล้ว
 schema.py กำหนด contract/decision; pipeline.py ทำ quality/align/ROI/methods; runtime.py ทำ camera/latest-frame/cycle/evidence
 store.py เก็บ atomic JSON, hashes, immutable candidates, activation และ rollback
 validation.py กัน reference/training/calibration/same-group ออกจากคะแนน
@@ -31,8 +31,15 @@ startup ไม่ auto-repair path หรือเลือก model ล่า�
 Python 3.12, base runtime ../venv, worker .venv-inspection อ่าน torch/torchvision base ผ่าน .pth
 รัน .venv-inspection/Scripts/python.exe -m pytest 07_web_app/tests -q
 JS: node --check 07_web_app/static/inspection.js และ node 07_web_app/tests/test_live_polling.cjs
-real-data experiments/replay/API training scripts และผล JSON อยู่ work/renovation-20261006/
+ผล JSON/ภาพ/รายงานอยู่ work ตามวันที่; สคริปต์ replay/ทดลองเก่าอยู่ external archive ตามรายงานหลัก ไม่ใช่ runtime
 ตัวเลขผ่าน tests ไม่รับรอง camera/defect recall อ่าน REPORT_TH.md สำหรับข้อจำกัด
-ไม่มี NG ที่ยืนยัน กล้องไม่ได้ต่อ และ CVAT ติดต่อไม่ได้ขณะทดสอบ
+LifeCam รับภาพจริงแล้ว 14 ต.ค.; Demo ใช้คราบจำลองชิ้นเดียวและ repeatability ยังไม่ผ่าน ไม่รับรอง defect accuracy; CVAT เป็น connector ตามต้องการ
 Hash ไม่เป็น security signature; server loopback ไม่ใช่ multi-user authenticated deployment
 เปลี่ยน engine/runtime หรือ camera setup ต้อง validation ใหม่ก่อนใช้งานจริง
+
+## จุดเชื่อมที่ต้องรักษา
+Terminal เดิมเขียน inspection_cycles; /api/inspection/parts อ่านไฟล์เดียวกันใน Review ของ /inspection
+Legacy jobs/config ยังใช้กับ Terminal เมื่อไม่มี Core Production; Candidate Terminal ถูกถอดตามผู้ใช้แล้ว
+Core Production ของ Terminal และเว็บใช้ runtime.py/FramePump เดียวกันเมื่อมีสูตรผ่าน Validation
+อย่าเพิ่ม worker กล้องใน app.py; ป้องกัน Model/Job/Settings ผ่าน vision_service.busy() และ OS project lease เดิม
+Tests ใช้ข้อมูลชั่วคราว ทดสอบ external owner ด้วย subprocess โดยไม่เปิดกล้องหรือแก้ production.json

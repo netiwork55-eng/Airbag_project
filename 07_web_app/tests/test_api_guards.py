@@ -397,42 +397,7 @@ class TrainingApiGuardTests(unittest.TestCase):
             app.TRAIN_STATE.clear()
             app.TRAIN_STATE.update(state_before)
 
-    def test_camera_worker_refuses_to_start_without_reference(self) -> None:
-        project = {"inspection_strategy": "normal_reference"}
-        runtime = {"ready": False, "reason": "Build a Normal Reference first."}
-        with (
-            mock.patch.object(app, "read_project_config", return_value=project),
-            mock.patch.object(app, "normal_reference_runtime_status", return_value=runtime),
-            mock.patch.object(app, "stop_camera_worker") as stop_worker,
-        ):
-            with self.assertRaisesRegex(RuntimeError, "Normal Reference"):
-                app.start_camera_worker(0, 0.5, False, False)
-        stop_worker.assert_not_called()
 
-    def test_ready_generic_runtime_clears_stale_legacy_model_error(self) -> None:
-        runtime = {
-            "strategy": "normal_reference",
-            "ready": True,
-            "model": "reference.npz",
-            "reason": "",
-        }
-        state_before = dict(app.STATE)
-        worker_before = app.WORKER_THREAD
-        try:
-            app.STATE.update({"running": False, "status": "model_error", "error": "legacy Airbag model missing"})
-            app.WORKER_THREAD = None
-            with (
-                mock.patch.object(app, "read_project_config", return_value={}),
-                mock.patch.object(app, "normal_reference_runtime_status", return_value=runtime),
-            ):
-                response = app.status()
-            payload = json.loads(response.body)
-            self.assertEqual(payload["status"], "ready")
-            self.assertEqual(payload["error"], "")
-        finally:
-            app.STATE.clear()
-            app.STATE.update(state_before)
-            app.WORKER_THREAD = worker_before
 
     def test_normal_reference_models_are_in_module_history(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:

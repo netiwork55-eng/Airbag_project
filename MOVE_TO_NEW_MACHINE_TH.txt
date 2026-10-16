@@ -15,7 +15,7 @@
 6. CVAT ใช้ server เดิม ตั้ง environment/credentials ตามการติดตั้งเดิม ไม่ติดตั้งซ้ำหรือเปิด public
 7. start_web_app.bat เปิด http://127.0.0.1:8000/inspection
    startup ไม่ซ่อม path หรือสลับโมเดลอัตโนมัติอีกแล้ว
-8. ถ้างาน Engineering เดิมมี absolute paths ให้สำรอง config แล้วตรวจ repair_after_move.py ก่อนเรียก
+8. ถ้า config/Job เดิมมี absolute paths ให้สำรอง config แล้วตรวจ repair_after_move.py ก่อนเรียก
    ตัวช่วยย้ายเฉพาะไฟล์ชื่อเดิม ไม่เลือก checkpoint ล่าสุดแทนไฟล์หาย
 9. ทดสอบ recipes ด้วยภาพอิสระใหม่ ตรวจ exact camera serial/index, resolution, exposure, light,
    locator, ROI, timing, NG/REVIEW/UNABLE และ replay/กล้องจริงก่อนเริ่ม Production
@@ -28,4 +28,4 @@ node 07_web_app/tests/test_live_polling.cjs
 
 รุ่นที่ตรึงนี้ทดสอบบนเครื่องปัจจุบัน ยังไม่ได้ clean-install และทดสอบ Basler บนเครื่องใหม่
 ถ้า package/driver ไม่ตรง อย่าเงียบปรับรุ่นแล้วอ้างผลเดิม ให้ตรวจ compatibility และทดสอบใหม่
-คู่มือหลัก NEW_SYSTEM_TH.md; รายงานล่าสุด work/renovation-20261006/REPORT_TH.md
+คู่มือหลัก NEW_SYSTEM_TH.md; รายงานล่าสุด work/RENOVATION_CONSOLIDATION_REPORT.md

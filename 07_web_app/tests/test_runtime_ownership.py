@@ -104,3 +104,23 @@ def test_worker_start_failure_releases_retained_lease(tmp_path,monkeypatch):
     monkeypatch.setattr(threading.Thread,'start',Mock(side_effect=RuntimeError('cannot start')))
     with pytest.raises(RuntimeError):lease.start_thread(lambda:None)
     with ProjectLease(tmp_path).hold('next'):pass
+
+
+@pytest.mark.parametrize('url', [
+    '/api/project/config','/api/models/activate','/api/jobs/job_missing/use',
+    '/api/inspection/reference/train','/api/train/start',
+])
+def test_terminal_owner_blocks_existing_web_management(owned_project,monkeypatch,url):
+    import app as web_app
+    root,proc,pid=owned_project
+    service=InspectionService(root)
+    monkeypatch.setattr(web_app,'vision_service',service)
+    writer=Mock(side_effect=AssertionError('Busy operation must not write configuration'))
+    monkeypatch.setattr(web_app,'write_project_config',writer)
+    try:
+        client=TestClient(web_app.app,base_url='http://127.0.0.1')
+        assert client.post(url,json={}).status_code==409
+        assert service.runtime.ownership.external_owner()['pid']==pid
+        writer.assert_not_called()
+    finally:
+        service.close()

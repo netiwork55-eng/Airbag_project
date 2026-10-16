@@ -8,7 +8,7 @@ Backend หลักของ Generic Visual Inspection Workspace (FastAPI)
   - วิเคราะห์ dataset, preflight, คำนวณค่าที่แนะนำ และควบคุม subprocess train
   - สร้าง Normal Reference จากภาพ Known-good และตรวจ OK/NG แบบไม่จำแนกชนิดตำหนิ
   - ระบุตำแหน่งความผิดปกติด้วยกรอบแดง พร้อม Confidence และ Brand ID เสริม
-  - คง legacy detector/training endpoints ไว้เฉพาะเพื่ออ่านข้อมูลย้อนหลังระหว่าง migration
+  - Reuse Dataset/Jobs/Model/Test/Training services เดิมจาก /inspection; เครื่องมือเสริมไม่ใช่ Main Workflow
 
 หลักการสำคัญสำหรับผู้รับช่วง:
   - เส้นทางหลักใหม่ใช้ inspection/ (recipe, pipeline, decision, runtime); normal_reference ยังรองรับ legacy live runtime ที่รอ field validation
@@ -16,7 +16,7 @@ Backend หลักของ Generic Visual Inspection Workspace (FastAPI)
   - endpoint ที่แก้ dataset ต้องเรียก dataset_mutation_blocked_response ระหว่าง train
   - upload ZIP ต้องผ่าน staging และ extract_zip_safely ห้าม extract path จากผู้ใช้โดยตรง
   - annotation ต้นฉบับต้องไม่ถูก augmentation แก้ทับ ให้สร้าง export ใหม่เสมอ
-  - หน้าเว็บดึงภาพล่าสุดจาก /latest_frame.jpg; Stop ต้องหยุด worker และ cap.release() จริง
+  - กล้องบนเว็บใช้ inspection/runtime.py เท่านั้น; /api/inspection/parts อ่านผลที่ Terminal เดิมบันทึก
 
 ไฟล์นี้มีหลาย subsystem เพื่อคง deployment เดิมไว้ คอมเมนต์หัวข้อแต่ละช่วงด้านล่างคือ
 แผนที่สำหรับค้นหา code path ก่อนแก้ หากจะแยกโมดูลต้องแยกพร้อม state/lock และทดสอบ API
@@ -57,7 +57,6 @@ from fastapi import Body, FastAPI, File, Form, Query, Request, UploadFile
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from inspection_area import checked_area, FULL_AREA, checked_areas
-from inspection_cycles import PartCycle, save_cycle
 from fastapi.templating import Jinja2Templates
 from starlette.concurrency import run_in_threadpool
 from starlette.middleware.trustedhost import TrustedHostMiddleware
@@ -87,7 +86,6 @@ ANNOTATION_ROOT = PROJECT_ROOT / "03_dataset" / "annotation_studio"
 PROJECT_CONFIG_PATH = WEB_APP_DIR / "project_config.json"
 DELETED_DATASETS_DIR = PROJECT_ROOT / "03_dataset" / "deleted_dataset_folders"
 ANNOTATION_SESSIONS_DIR = ANNOTATION_ROOT / "sessions"
-ANNOTATION_EXPORTS_DIR = ANNOTATION_ROOT / "exports"
 PYTHON_EXE = PROJECT_ROOT.parent / "venv" / "Scripts" / "python.exe"
 if not PYTHON_EXE.exists():
     PYTHON_EXE = Path(sys.executable)
@@ -106,11 +104,9 @@ from background_workflow import (  # noqa: E402
     install_background_upload,
 )
 from normal_reference import (  # noqa: E402
-    DecisionStabilizer,
     InspectionResult,
     NormalReferenceInspector,
     iter_images,
-    yolo_primary_box,
 )
 from deep_patch_reference import DeepPatchReference, load_inspection_reference  # noqa: E402
 from inspection_contract import RecipeBoundInspector, build_inspection_contract  # noqa: E402
@@ -124,7 +120,6 @@ JOB_DIR = PROJECT_ROOT / "jobs"
 # ให้ครบ เพื่อไม่ให้กล้องถูกล็อกหรือมี Python process ค้างหลังปิดเว็บ
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    set_latest_frame(make_status_frame("Ready", "Press Start Stream"))
     # Inspection starts from an explicitly selected recipe; legacy models load on demand.
     # CVAT is an on-demand connector after human review. Starting inspection
     # must not start annotation polling or perform remote annotation writes.
@@ -133,7 +128,6 @@ async def lifespan(_: FastAPI):
     finally:
         vision_service.close()
         REFERENCE_TRAIN_STOP_EVENT.set()
-        stop_camera_worker()
         with TRAIN_LOCK:
             if TRAIN_PROCESS is not None:
                 stop_train_process_locked()
@@ -146,34 +140,12 @@ templates = Jinja2Templates(directory=WEB_APP_DIR / "templates")
 
 
 MODEL_LOCK = threading.Lock()
-STATE_LOCK = threading.RLock()
 
-SHARED_MODELS: tuple[YOLO, YOLO | None, YOLO | None, YOLO | None] | None = None
-SHARED_MODEL_ERROR: str | None = None
 SHARED_LOCATOR: tuple[object, int] | None = None
 SHARED_LOCATOR_KEY = ""
 
-WORKER_THREAD: threading.Thread | None = None
-STOP_EVENT = threading.Event()
 CVAT_BRIDGE_LOCK = threading.RLock()
-CURRENT_CAP = None
 
-STATE = {
-    "running": False,
-    "status": "idle",
-    "error": "",
-    "camera_index": detector.DEFAULT_CAMERA_INDEX,
-    "frame_count": 0,
-    "raw_frame_count": 0,
-    "fps": 0.0,
-    "started_at": None,
-    "stopped_at": None,
-}
-
-NG_CAPTURE_INTERVAL_SECONDS = 1.0
-NG_EVENT_RELEASE_SECONDS = 1.25
-
-LATEST_JPEG: bytes | None = None
 TRAIN_LOCK = threading.RLock()
 JSON_WRITE_LOCK = threading.RLock()
 ANALYSIS_CACHE_LOCK = threading.RLock()
@@ -256,30 +228,6 @@ MAX_UPLOAD_FILE_BYTES = 2 * 1024 * 1024 * 1024
 MAX_UPLOAD_TOTAL_BYTES = 4 * 1024 * 1024 * 1024
 MAX_ZIP_MEMBERS = 100_000
 MAX_ZIP_UNCOMPRESSED_BYTES = 8 * 1024 * 1024 * 1024
-DEFAULT_ANNOTATION_COLORS = [
-    "#20f3a5",
-    "#00eaff",
-    "#ff4fd8",
-    "#ffd166",
-    "#8d6cff",
-    "#ff7a59",
-]
-ANNOTATION_SHAPE_TYPES = {"bbox", "polygon"}
-ANNOTATION_LABEL_TOOLS = {"bbox", "polygon", "ai_select"}
-ANNOTATION_EXPORT_FORMATS = {"bbox", "segmentation"}
-ANNOTATION_AUGMENTATIONS = {
-    "flip_horizontal",
-    "flip_vertical",
-    "rotate90",
-    "rotate_minus90",
-    "rotate180",
-    "rotate15",
-    "rotate_minus15",
-    "brightness_up",
-    "brightness_down",
-    "contrast_up",
-    "blur",
-}
 UPLOAD_CATEGORIES = {
     "airbag": {
         "label": "Known-good Reference Dataset",
@@ -299,13 +247,8 @@ UPLOAD_CATEGORIES = {
     },
 }
 
-# เว็บต้องให้กล้องลื่นก่อน แล้วให้ AI อัปเดตกรอบเป็นจังหวะ
-# ถ้าให้ YOLO predict ทุกเฟรมใน thread เดียว กล้องจะค้างเพราะต้องรอ AI ทุกครั้ง
-WEB_AI_MIN_INTERVAL_SECONDS = 0.42
-WEB_DISPLAY_MAX_FPS = 12.0
+# Input size for the optional detector background evaluation.
 WEB_AIRBAG_IMAGE_SIZE = 512
-WEB_GENERAL_IMAGE_SIZE = 416
-WEB_GENERAL_DETECT_EVERY_N_AI_FRAMES = 8
 BACKGROUND_MAX_FALSE_POSITIVE_RATE = 0.10
 
 DEFAULT_PROJECT_CONFIG = {
@@ -411,75 +354,6 @@ def normalize_augmentation_profile(value: object) -> dict:
         "mode": mode,
         "values": {key: round(float(base[key]), 4) for key in AUGMENTATION_LIMITS},
     }
-
-
-# ===== สถานะภาพล่าสุดที่ browser อ่าน =====
-# worker กล้องเขียน JPEG ล่าสุดไว้ใน shared state; endpoint อ่านสำเนาภายใต้ lock
-# ห้ามส่ง numpy frame ก้อนเดียวกันข้าม thread โดยไม่ copy เพราะกำลังถูกวาดทับได้
-def encode_frame(frame, quality: int = 74) -> bytes | None:
-    """แปลง OpenCV frame เป็น JPEG bytes สำหรับส่งขึ้นเว็บ."""
-    ok, encoded = cv2.imencode(".jpg", frame, [cv2.IMWRITE_JPEG_QUALITY, quality])
-    if not ok:
-        return None
-    return encoded.tobytes()
-
-
-def make_status_frame(message: str, detail: str = ""):
-    """สร้างภาพสถานะไว้แสดงแทนจอดำก่อนกล้อง/AI พร้อม."""
-    frame = np.full(
-        (detector.CAMERA_HEIGHT, detector.CAMERA_WIDTH, 3),
-        (18, 24, 31),
-        dtype=np.uint8,
-    )
-    cv2.putText(
-        frame,
-        message,
-        (28, 86),
-        cv2.FONT_HERSHEY_SIMPLEX,
-        0.82,
-        (0, 234, 255),
-        2,
-        cv2.LINE_AA,
-    )
-    if detail:
-        cv2.putText(
-            frame,
-            detail[:72],
-            (28, 128),
-            cv2.FONT_HERSHEY_SIMPLEX,
-            0.52,
-            (225, 235, 245),
-            1,
-            cv2.LINE_AA,
-        )
-    return frame
-
-
-def set_latest_frame(frame) -> None:
-    """อัปเดตรูปล่าสุดที่หน้าเว็บจะดึงไปแสดง."""
-    global LATEST_JPEG
-    jpeg = encode_frame(frame)
-    if jpeg is None:
-        return
-    with STATE_LOCK:
-        LATEST_JPEG = jpeg
-
-
-def clear_inspection_state() -> None:
-    """Invalidate a previous decision when no current inspection is available."""
-    with STATE_LOCK:
-        STATE.update({"decision": "NOT_INSPECTED", "review_required": False,
-                      "confidence": 0.0, "anomaly_score": 0.0, "regions": [],
-                      "brand": None, "brand_confidence": None, "fps": 0.0, "part_cycle": None, "frame_decision": "NOT_INSPECTED", "part_present": False})
-
-
-def set_status(status: str, error: str = "") -> None:
-    """อัปเดตสถานะให้หน้าเว็บรู้ว่าตอนนี้กำลังทำอะไร."""
-    with STATE_LOCK:
-        STATE["status"] = status
-        STATE["error"] = error
-        if status != "running":
-            clear_inspection_state()
 
 
 # ===== Utility ด้านชื่อไฟล์, path และ JSON =====
@@ -1306,10 +1180,8 @@ def normal_reference_runtime_status(config: dict | None = None) -> dict:
 
 
 def clear_shared_model_cache() -> None:
-    global SHARED_MODELS, SHARED_MODEL_ERROR, SHARED_LOCATOR, SHARED_LOCATOR_KEY
+    global SHARED_LOCATOR, SHARED_LOCATOR_KEY
     with MODEL_LOCK:
-        SHARED_MODELS = None
-        SHARED_MODEL_ERROR = ""
         SHARED_LOCATOR = None
         SHARED_LOCATOR_KEY = ""
 
@@ -3928,48 +3800,8 @@ def stop_train_process_locked() -> tuple[bool, str]:
 
 
 # ===== Shared model cache =====
-# กล้อง, Auto Label และงานวิเคราะห์ใช้โมเดลร่วมกันเพื่อลด RAM/เวลาโหลด เมื่อเปลี่ยน
+# Offline image tests reuse the Terminal locator. When changing
 # active weight ต้อง clear_shared_model_cache ก่อน request ถัดไปจึงจะเห็นโมเดลใหม่
-def load_airbag_model() -> YOLO:
-    """โหลด Airbag model จากลำดับเดียวกับไฟล์กล้องเดิม."""
-    skipped = []
-    configured_model = latest_detector_model_path()
-    dynamic_candidates = sorted(
-        MODEL_DIR.glob("*_best.pt"),
-        key=lambda path: path.stat().st_mtime,
-        reverse=True,
-    )
-    candidate_paths = []
-    seen_paths = set()
-    preferred_paths = [configured_model] if configured_model else []
-    for candidate_path in [*preferred_paths, *dynamic_candidates, *detector.MODEL_CANDIDATES]:
-        if candidate_path is None:
-            continue
-        resolved = candidate_path.resolve()
-        if resolved in seen_paths:
-            continue
-        seen_paths.add(resolved)
-        candidate_paths.append(candidate_path)
-
-    for candidate_path in candidate_paths:
-        if not candidate_path.exists():
-            continue
-
-        model = YOLO(str(candidate_path))
-        if detector.model_names_are_inspection_detector(model.names):
-            model.to(detector.DEVICE)
-            model.fuse()
-            print(f"Web app loaded inspection detector model: {candidate_path}")
-            return model
-
-        skipped.append((candidate_path, model.names))
-
-    checked = "\n".join(f"  - {path}" for path in candidate_paths)
-    skipped_text = "\n".join(f"  - skipped {path}: {names}" for path, names in skipped)
-    raise FileNotFoundError(
-        "ไม่พบ Airbag model สำหรับเว็บ\n"
-        f"Checked:\n{checked}\n\n{skipped_text}"
-    )
 
 
 def load_brand_model() -> YOLO | None:
@@ -4001,75 +3833,6 @@ def load_brand_model() -> YOLO | None:
     return None
 
 
-def load_general_model() -> YOLO | None:
-    """โหลด COCO guard model ถ้า logic เดิมเปิดใช้งานอยู่."""
-    if not (detector.USE_GENERAL_NOT_AIRBAG_DETECTOR or detector.USE_COCO_NEGATIVE_GUARD):
-        return None
-
-    general_model_path = next(
-        (path for path in detector.GENERAL_MODEL_CANDIDATES if path.exists()),
-        None,
-    )
-    if general_model_path is None:
-        print("Web app warning: yolov8n.pt not found. COCO guard disabled.")
-        return None
-
-    model = YOLO(str(general_model_path))
-    model.to(detector.DEVICE)
-    model.fuse()
-    print(f"Web app loaded general guard model: {general_model_path}")
-    return model
-
-
-def load_primary_fallback_model(active_model: YOLO) -> YOLO | None:
-    """Load an Airbag-only model to recover the main object when multi-class misses it."""
-    if detector.model_names_are_airbag_only(active_model.names):
-        return None
-
-    for fallback_path in detector.MODEL_CANDIDATES:
-        if not fallback_path.exists():
-            continue
-
-        model = YOLO(str(fallback_path))
-        if detector.model_names_are_airbag_only(model.names):
-            model.to(detector.DEVICE)
-            model.fuse()
-            print(f"Web app loaded Airbag primary fallback model: {fallback_path}")
-            return model
-
-    print("Web app warning: Airbag primary fallback model not found.")
-    return None
-
-
-def get_shared_models() -> tuple[YOLO, YOLO | None, YOLO | None, YOLO | None]:
-    """โหลดโมเดลครั้งเดียว แล้ว cache ไว้ใช้ซ้ำทุกครั้งที่กด Start."""
-    global SHARED_MODELS, SHARED_MODEL_ERROR
-
-    if SHARED_MODELS is not None:
-        return SHARED_MODELS
-    if SHARED_MODEL_ERROR:
-        raise RuntimeError(SHARED_MODEL_ERROR)
-
-    with MODEL_LOCK:
-        if SHARED_MODELS is not None:
-            return SHARED_MODELS
-        if SHARED_MODEL_ERROR:
-            raise RuntimeError(SHARED_MODEL_ERROR)
-
-        try:
-            airbag_model = load_airbag_model()
-            SHARED_MODELS = (
-                airbag_model,
-                load_brand_model(),
-                load_general_model(),
-                load_primary_fallback_model(airbag_model),
-            )
-            return SHARED_MODELS
-        except Exception as exc:
-            SHARED_MODEL_ERROR = str(exc)
-            raise
-
-
 def get_shared_locator(config: dict | None = None) -> tuple[object, int]:
     """Load and cache the generic part locator used to crop the inspection ROI."""
     global SHARED_LOCATOR, SHARED_LOCATOR_KEY
@@ -4097,512 +3860,7 @@ def get_shared_locator(config: dict | None = None) -> tuple[object, int]:
         return SHARED_LOCATOR
 
 
-# ===== Camera inference worker =====
-# มี worker ได้เพียงหนึ่งตัว ใช้ stop_event เป็นสัญญาณจบ และต้อง release กล้องใน finally
-# การเพิ่มงานหนักใน loop จะทำให้ภาพหน้าเว็บกระตุก จึงแยก general detection เป็นช่วงเวลา
-def open_camera_like_detector(camera_index: int):
-    """เปิดกล้องที่ใช้งานได้ โดยให้ index ที่ตั้งค่าไว้มีลำดับแรก."""
-    started = time.perf_counter()
-    cap, selected_camera_index = detector.open_available_camera(camera_index, max_index=10)
-    elapsed = time.perf_counter() - started
-
-    cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, detector.CAMERA_WIDTH)
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, detector.CAMERA_HEIGHT)
-    cap.set(cv2.CAP_PROP_FPS, detector.CAMERA_FPS)
-    with STATE_LOCK:
-        STATE["camera_index"] = selected_camera_index
-    if selected_camera_index != camera_index:
-        write_project_config({"camera_index": selected_camera_index})
-    print(
-        "Web app opened camera via airbag_webcam_detection.py "
-        f"requested={camera_index} selected={selected_camera_index} open_s={elapsed:.3f}"
-    )
-    return cap, selected_camera_index
-
-
-def refresh_general_detections(general_model, frame):
-    """รัน COCO guard เหมือนไฟล์กล้องเดิม."""
-    if general_model is None:
-        return []
-
-    general_result = general_model.predict(
-        frame,
-        conf=min(detector.GENERAL_CONFIDENCE_THRESHOLD, detector.COCO_NEGATIVE_GUARD_CONFIDENCE),
-        imgsz=WEB_GENERAL_IMAGE_SIZE,
-        max_det=12,
-        device=detector.DEVICE,
-        half=detector.USE_HALF,
-        verbose=False,
-    )[0]
-
-    detections = []
-    if general_result.boxes is None:
-        return detections
-
-    for box in general_result.boxes:
-        class_id = int(box.cls[0])
-        confidence = float(box.conf[0])
-        class_name = general_result.names.get(class_id, str(class_id))
-        detections.append((detector.get_xyxy(box), class_name, confidence))
-    return detections
-
-
-def find_airbag_candidates(airbag_model, frame, airbag_confidence: float, debug_detection: bool):
-    """Run the inspection detector and split main Airbag vs defect/feature detections."""
-    predict_confidence = (
-        detector.DEBUG_AIRBAG_CONFIDENCE_THRESHOLD
-        if debug_detection
-        else detector.RAW_AIRBAG_CONFIDENCE_THRESHOLD
-    )
-    result = airbag_model.predict(
-        frame,
-        conf=predict_confidence,
-        imgsz=WEB_AIRBAG_IMAGE_SIZE,
-        iou=detector.AIRBAG_NMS_IOU_THRESHOLD,
-        max_det=detector.MAX_AIRBAG_DETECTIONS,
-        device=detector.DEVICE,
-        half=detector.USE_HALF,
-        verbose=False,
-    )[0]
-
-    candidates = []
-    secondary_detections = []
-    best_raw_confidence = 0.0
-    if result.boxes is None:
-        return candidates, secondary_detections, best_raw_confidence
-
-    for box in result.boxes:
-        class_id = int(box.cls[0])
-        confidence = float(box.conf[0])
-        class_name = result.names.get(class_id, str(class_id))
-        xyxy = detector.get_xyxy(box)
-
-        if not detector.is_airbag_class(class_id, class_name):
-            if confidence >= detector.SECONDARY_CONFIDENCE_THRESHOLD or debug_detection:
-                secondary_detections.append((xyxy, class_name, confidence))
-            continue
-
-        best_raw_confidence = max(best_raw_confidence, confidence)
-        if confidence < airbag_confidence and not debug_detection:
-            continue
-        candidates.append((xyxy, confidence))
-
-    return candidates, secondary_detections, best_raw_confidence
-
-
-def draw_processed_result(
-    frame,
-    airbag_model,
-    primary_fallback_model,
-    brand_model,
-    general_model,
-    airbag_confidence: float,
-    debug_detection: bool,
-    frame_index: int,
-    cached_general_detections,
-    last_airbag_detections,
-    missed_airbag_frames: int,
-):
-    """ประมวลผล 1 frame ด้วย logic เดิม แล้ววาดกรอบลงภาพ."""
-    if general_model is not None and frame_index % detector.GENERAL_DETECT_EVERY_N_FRAMES == 0:
-        cached_general_detections = refresh_general_detections(general_model, frame)
-
-    raw_candidates, secondary_detections, best_raw_confidence = find_airbag_candidates(
-        airbag_model,
-        frame,
-        airbag_confidence,
-        debug_detection,
-    )
-
-    current_airbag_detections = detector.select_airbag_detections(
-        raw_candidates,
-        frame.shape,
-        cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-    )
-    used_visual_fallback = False
-    if not current_airbag_detections and primary_fallback_model is not None:
-        fallback_candidates, fallback_best_confidence = detector.find_airbag_only_candidates(
-            primary_fallback_model,
-            frame,
-            airbag_confidence,
-            debug_detection,
-            image_size=WEB_AIRBAG_IMAGE_SIZE,
-        )
-        best_raw_confidence = max(best_raw_confidence, fallback_best_confidence)
-        current_airbag_detections = detector.select_airbag_detections(
-            fallback_candidates,
-            frame.shape,
-            cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-        )
-    if not current_airbag_detections and detector.primary_supports_airbag_assists():
-        visual_candidates = detector.find_visual_airbag_candidates(frame, secondary_detections)
-        current_airbag_detections = detector.select_airbag_detections(
-            visual_candidates,
-            frame.shape,
-            cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-        )
-        used_visual_fallback = bool(current_airbag_detections)
-
-    if current_airbag_detections:
-        if used_visual_fallback:
-            current_airbag_detections = [
-                (xyxy, None) for xyxy, _ in current_airbag_detections
-            ]
-        last_airbag_detections = current_airbag_detections
-        missed_airbag_frames = 0
-        detections_to_draw = current_airbag_detections
-    elif missed_airbag_frames < detector.AIRBAG_HOLD_FRAMES:
-        missed_airbag_frames += 1
-        detections_to_draw = last_airbag_detections
-    else:
-        missed_airbag_frames += 1
-        detections_to_draw = []
-
-    airbag_boxes = []
-    for xyxy, confidence in detections_to_draw:
-        brand_result = detector.classify_airbag_brand(brand_model, frame, xyxy)
-        if detector.should_reject_by_brand(brand_result, xyxy, cached_general_detections):
-            continue
-
-        airbag_boxes.append(xyxy)
-        detector.draw_detection(frame, xyxy, detector.ACTIVE_PRIMARY_CLASS, confidence)
-        if brand_result is not None:
-            brand_name, brand_confidence = brand_result
-            detector.draw_brand_label(frame, xyxy, brand_name, brand_confidence)
-
-    if debug_detection:
-        color = (
-            (0, 255, 0)
-            if best_raw_confidence >= airbag_confidence
-            else (0, 255, 255)
-            if best_raw_confidence > 0
-            else (0, 0, 255)
-        )
-        detector.draw_status(frame, f"Raw {detector.ACTIVE_PRIMARY_CLASS} confidence: {best_raw_confidence:.2f}", color)
-
-    if detector.USE_GENERAL_NOT_AIRBAG_DETECTOR and general_model is not None:
-        for xyxy, class_name, confidence in cached_general_detections:
-            if detector.overlaps_airbag(xyxy, airbag_boxes):
-                continue
-            detector.draw_detection(frame, xyxy, class_name, confidence)
-
-    secondary_detections = detector.filter_secondary_detections(
-        secondary_detections,
-        airbag_boxes,
-        debug_detection=debug_detection,
-    )
-    for xyxy, class_name, confidence in secondary_detections:
-        detector.draw_detection(frame, xyxy, class_name, confidence)
-
-    return cached_general_detections, last_airbag_detections, missed_airbag_frames
-
-
-def camera_worker(
-    camera_index: int,
-    airbag_confidence: float,
-    debug_detection: bool,
-    use_brand: bool,
-) -> None:
-    """worker หลักของเว็บ: อ่านกล้องให้ลื่น และให้ AI ทำงานแยกเป็นจังหวะ."""
-    global CURRENT_CAP
-
-    cap = None
-    ai_thread: threading.Thread | None = None
-    try:
-        set_status("loading_models")
-        airbag_model, brand_model, general_model, primary_fallback_model = get_shared_models()
-        if not use_brand:
-            brand_model = None
-
-        set_status("opening_camera")
-        set_latest_frame(make_status_frame("Opening camera", f"Camera index {camera_index}"))
-        cap, camera_index = open_camera_like_detector(camera_index)
-        with STATE_LOCK:
-            CURRENT_CAP = cap
-
-        # อ่าน frame ดิบทันที เพื่อให้หน้าเว็บเห็นภาพก่อน AI frame แรกเสร็จ
-        set_status("warming_camera")
-        first_frame = None
-        for _ in range(20):
-            if STOP_EVENT.is_set():
-                return
-            ok, frame = cap.read()
-            if ok and frame is not None:
-                first_frame = frame
-                set_latest_frame(frame)
-                with STATE_LOCK:
-                    STATE["raw_frame_count"] += 1
-                break
-            time.sleep(0.05)
-
-        if first_frame is None:
-            raise RuntimeError("เปิดกล้องได้ แต่ยังอ่านภาพจากกล้องไม่ได้")
-
-        set_status("running")
-
-        raw_lock = threading.Lock()
-        overlay_lock = threading.Lock()
-
-        raw_frame_for_ai = first_frame.copy()
-        raw_frame_seq = 1
-        overlay_airbags = []
-        overlay_brands = []
-        overlay_general_detections = []
-        overlay_debug_text = None
-
-        cached_general_detections = []
-        last_airbag_detections = []
-        missed_airbag_frames = detector.AIRBAG_HOLD_FRAMES + 1
-        ai_frame_index = 0
-        fps = 0.0
-        last_time = time.perf_counter()
-        last_publish_time = 0.0
-        min_publish_interval = 1.0 / WEB_DISPLAY_MAX_FPS
-
-        def ai_detection_loop() -> None:
-            """รัน YOLO แยกจาก loop อ่านกล้อง เพื่อลดอาการภาพค้างบนเว็บ."""
-            nonlocal cached_general_detections
-            nonlocal last_airbag_detections
-            nonlocal missed_airbag_frames
-            nonlocal ai_frame_index
-            nonlocal overlay_airbags
-            nonlocal overlay_brands
-            nonlocal overlay_general_detections
-            nonlocal overlay_debug_text
-
-            last_processed_seq = -1
-            last_ai_time = 0.0
-
-            while not STOP_EVENT.is_set():
-                with raw_lock:
-                    current_seq = raw_frame_seq
-                    if raw_frame_for_ai is None or current_seq == last_processed_seq:
-                        frame_for_ai = None
-                    else:
-                        frame_for_ai = raw_frame_for_ai.copy()
-
-                if frame_for_ai is None:
-                    time.sleep(0.01)
-                    continue
-
-                now = time.perf_counter()
-                if now - last_ai_time < WEB_AI_MIN_INTERVAL_SECONDS:
-                    time.sleep(0.015)
-                    continue
-
-                last_processed_seq = current_seq
-                last_ai_time = now
-
-                try:
-                    if (
-                        general_model is not None
-                        and ai_frame_index % WEB_GENERAL_DETECT_EVERY_N_AI_FRAMES == 0
-                    ):
-                        cached_general_detections = refresh_general_detections(general_model, frame_for_ai)
-
-                    raw_candidates, secondary_detections, best_raw_confidence = find_airbag_candidates(
-                        airbag_model,
-                        frame_for_ai,
-                        airbag_confidence,
-                        debug_detection,
-                    )
-
-                    current_airbag_detections = detector.select_airbag_detections(
-                        raw_candidates,
-                        frame_for_ai.shape,
-                        cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-                    )
-                    used_visual_fallback = False
-                    if not current_airbag_detections and primary_fallback_model is not None:
-                        fallback_candidates, fallback_best_confidence = detector.find_airbag_only_candidates(
-                            primary_fallback_model,
-                            frame_for_ai,
-                            airbag_confidence,
-                            debug_detection,
-                            image_size=WEB_AIRBAG_IMAGE_SIZE,
-                        )
-                        best_raw_confidence = max(best_raw_confidence, fallback_best_confidence)
-                        current_airbag_detections = detector.select_airbag_detections(
-                            fallback_candidates,
-                            frame_for_ai.shape,
-                            cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-                        )
-                    if not current_airbag_detections and detector.primary_supports_airbag_assists():
-                        visual_candidates = detector.find_visual_airbag_candidates(
-                            frame_for_ai,
-                            secondary_detections,
-                        )
-                        current_airbag_detections = detector.select_airbag_detections(
-                            visual_candidates,
-                            frame_for_ai.shape,
-                            cached_general_detections if detector.USE_COCO_NEGATIVE_GUARD else [],
-                        )
-                        used_visual_fallback = bool(current_airbag_detections)
-
-                    if current_airbag_detections:
-                        if used_visual_fallback:
-                            current_airbag_detections = [
-                                (xyxy, None) for xyxy, _ in current_airbag_detections
-                            ]
-                        last_airbag_detections = current_airbag_detections
-                        missed_airbag_frames = 0
-                        detections_to_draw = current_airbag_detections
-                    elif missed_airbag_frames < detector.AIRBAG_HOLD_FRAMES:
-                        missed_airbag_frames += 1
-                        detections_to_draw = last_airbag_detections
-                    else:
-                        missed_airbag_frames += 1
-                        detections_to_draw = []
-
-                    new_airbags = []
-                    new_brands = []
-                    airbag_boxes = []
-                    for xyxy, confidence in detections_to_draw:
-                        brand_result = detector.classify_airbag_brand(brand_model, frame_for_ai, xyxy)
-                        if detector.should_reject_by_brand(
-                            brand_result,
-                            xyxy,
-                            cached_general_detections,
-                        ):
-                            continue
-
-                        airbag_boxes.append(xyxy)
-                        new_airbags.append((xyxy, confidence))
-                        if brand_result is not None:
-                            brand_name, brand_confidence = brand_result
-                            new_brands.append((xyxy, brand_name, brand_confidence))
-
-                    new_general_detections = []
-                    new_secondary_detections = detector.filter_secondary_detections(
-                        secondary_detections,
-                        airbag_boxes,
-                        debug_detection=debug_detection,
-                    )
-                    if detector.USE_GENERAL_NOT_AIRBAG_DETECTOR and general_model is not None:
-                        for xyxy, class_name, confidence in cached_general_detections:
-                            if detector.overlaps_airbag(xyxy, airbag_boxes):
-                                continue
-                            new_general_detections.append((xyxy, class_name, confidence))
-
-                    if debug_detection:
-                        new_debug_text = best_raw_confidence
-                    else:
-                        new_debug_text = None
-
-                    with overlay_lock:
-                        overlay_airbags = new_airbags
-                        overlay_brands = new_brands
-                        overlay_general_detections = [*new_secondary_detections, *new_general_detections]
-                        overlay_debug_text = new_debug_text
-
-                    ai_frame_index += 1
-                except Exception as exc:
-                    set_status("error", str(exc))
-                    print(f"Web app AI detection error: {exc}")
-                    break
-
-        ai_thread = threading.Thread(target=ai_detection_loop, daemon=True)
-        ai_thread.start()
-
-        while not STOP_EVENT.is_set():
-            ok, frame = cap.read()
-            if not ok or frame is None:
-                set_status("waiting_frame")
-                time.sleep(0.05)
-                continue
-
-            with STATE_LOCK:
-                STATE["raw_frame_count"] += 1
-
-            now = time.perf_counter()
-            elapsed = now - last_time
-            if elapsed > 0:
-                fps = (fps * 0.85) + ((1.0 / elapsed) * 0.15)
-            last_time = now
-
-            with raw_lock:
-                raw_frame_for_ai = frame.copy()
-                raw_frame_seq += 1
-
-            if now - last_publish_time < min_publish_interval:
-                continue
-
-            display_frame = frame.copy()
-            with overlay_lock:
-                local_airbags = list(overlay_airbags)
-                local_brands = list(overlay_brands)
-                local_general_detections = list(overlay_general_detections)
-                local_debug_text = overlay_debug_text
-
-            for xyxy, confidence in local_airbags:
-                detector.draw_detection(display_frame, xyxy, detector.ACTIVE_PRIMARY_CLASS, confidence)
-
-            for xyxy, brand_name, brand_confidence in local_brands:
-                detector.draw_brand_label(display_frame, xyxy, brand_name, brand_confidence)
-
-            for xyxy, class_name, confidence in local_general_detections:
-                detector.draw_detection(display_frame, xyxy, class_name, confidence)
-
-            if local_debug_text is not None:
-                color = (
-                    (0, 255, 0)
-                    if local_debug_text >= airbag_confidence
-                    else (0, 255, 255)
-                    if local_debug_text > 0
-                    else (0, 0, 255)
-                )
-                detector.draw_status(display_frame, f"Raw {detector.ACTIVE_PRIMARY_CLASS} confidence: {local_debug_text:.2f}", color)
-
-            detector.draw_fps(display_frame, fps)
-            set_latest_frame(display_frame)
-            last_publish_time = now
-
-            with STATE_LOCK:
-                STATE["frame_count"] += 1
-                STATE["fps"] = round(fps, 2)
-                STATE["status"] = "running"
-
-    except Exception as exc:
-        message = str(exc)
-        set_status("error", message)
-        set_latest_frame(make_status_frame("Camera error", message))
-        print(f"Web app worker error: {message}")
-    finally:
-        if ai_thread is not None and ai_thread.is_alive():
-            ai_thread.join(timeout=1.5)
-        if cap is not None:
-            cap.release()
-        with STATE_LOCK:
-            CURRENT_CAP = None
-            STATE["running"] = False
-            STATE["stopped_at"] = time.time()
-            if STATE["status"] not in {"error", "model_error"}:
-                STATE["status"] = "stopped"
-        print("Web app camera worker stopped and camera released.")
-
-
-@serialized_workflow
-def stop_camera_worker(join_timeout: float = 3.0) -> bool:
-    """Request stop; retain ownership until the worker's finally releases capture."""
-    global WORKER_THREAD, CURRENT_CAP
-    STOP_EVENT.set()
-    worker = WORKER_THREAD
-    if worker is not None and worker.is_alive():
-        set_status("stopping")
-        set_latest_frame(make_status_frame("Stopping camera"))
-        worker.join(timeout=join_timeout)
-        if worker.is_alive():
-            return False
-    WORKER_THREAD = None
-    with STATE_LOCK:
-        CURRENT_CAP = None
-        STATE["running"] = False
-        clear_inspection_state()
-        if STATE["status"] not in {"error", "model_error"}:
-            STATE["status"] = "stopped"
-            set_latest_frame(make_status_frame("Camera stopped"))
-    return True
+# ===== Optional brand identification for offline image tests =====
 
 
 def classify_product_brand(
@@ -4618,249 +3876,6 @@ def classify_product_brand(
         image,
         object_box or (0, 0, image.shape[1], image.shape[0]),
     )
-
-
-def normal_reference_camera_worker(camera_index: int, use_brand: bool) -> None:
-    """Live generic OK/NG inspection without loading the legacy defect detector."""
-    global CURRENT_CAP
-    cap = None
-    cycle = PartCycle()
-    reference_config = {}
-    try:
-        config = read_project_config()
-        reference_config = dict(config.get("normal_reference") or {})
-        model_path = Path(str(reference_config.get("active_model") or ""))
-        if not model_path.is_file():
-            raise FileNotFoundError("สร้าง Normal Reference จาก Dataset ภาพปกติก่อนเปิดตรวจสอบสด")
-        inspector = RecipeBoundInspector(load_inspection_reference(model_path), model_path, reference_config)
-        locator_model, locator_class_id = get_shared_locator(config)
-        brand_model = None
-        if use_brand and str(config.get("active_brand_model") or "").strip():
-            try:
-                brand_model = load_brand_model()
-            except Exception as exc:
-                print(f"Optional brand model unavailable: {exc}")
-
-        set_status("opening_camera")
-        cap, camera_index = open_camera_like_detector(camera_index)
-        with STATE_LOCK:
-            CURRENT_CAP = cap
-        set_status("running")
-        fps = 0.0
-        last_time = time.perf_counter()
-        last_result = None
-        last_annotated = None
-        last_inspection = 0.0
-        last_ng_capture = 0.0
-        last_anomaly_seen = 0.0
-        active_review_id = ""
-        stabilizer = DecisionStabilizer()
-        frame_unavailable = False
-
-        while not STOP_EVENT.is_set():
-            ok, frame = cap.read()
-            if not ok or frame is None:
-                set_status("waiting_frame")
-                if not frame_unavailable:
-                    set_latest_frame(make_status_frame("Camera frame unavailable", "Waiting for a fresh image"))
-                if not frame_unavailable:
-                    save_cycle(PROJECT_ROOT, cycle.finish("camera_unavailable"), reference_config, f"camera_{camera_index}")
-                frame_unavailable = True
-                stabilizer.reset()
-                last_result = last_annotated = None
-                last_inspection = last_anomaly_seen = last_ng_capture = 0.0
-                active_review_id = ""
-                fps = 0.0
-                last_time = time.perf_counter()
-                time.sleep(0.04)
-                continue
-            frame_unavailable = False
-            now = time.perf_counter()
-            elapsed = now - last_time
-            last_time = now
-            if elapsed > 0:
-                fps = fps * 0.85 + (1.0 / elapsed) * 0.15
-
-            if last_annotated is None or now - last_inspection >= WEB_AI_MIN_INTERVAL_SECONDS:
-                previous_segment = stabilizer.segment
-                located = detector.analyze_primary_object(locator_model, locator_class_id, frame)
-                if located is not None:
-                    brand_name = None
-                    brand_confidence = None
-                    if brand_model is not None:
-                        try:
-                            brand_result = classify_product_brand(brand_model, frame, located["box"])
-                            if brand_result:
-                                brand_name, brand_confidence = brand_result
-                        except Exception:
-                            pass
-                    measured = inspector.inspect(
-                        frame,
-                        object_box=located["box"],
-                        brand=brand_name,
-                        brand_confidence=brand_confidence,
-                    )
-                    last_result = stabilizer.update(measured, object_box=located["box"])
-                else:
-                    stabilizer.reset()
-                    last_result = None
-                if stabilizer.segment != previous_segment:
-                    active_review_id = ""
-                    last_anomaly_seen = last_ng_capture = 0.0
-                last_annotated = inspector.draw_result(
-                    frame,
-                    last_result or InspectionResult("NO_PART", 0.0, 0.0, inspector.threshold, []),
-                    object_box=located["box"] if located else None,
-                    object_label=located["label"] if located else "Part",
-                    object_confidence=located["confidence"] if located else None,
-                )
-                anomaly_visible = bool(
-                    located is not None
-                    and last_result is not None
-                    and not last_result.input_issue
-                    and (last_result.status == "NG" or last_result.review_required)
-                )
-                if anomaly_visible:
-                    if active_review_id and now - last_anomaly_seen > NG_EVENT_RELEASE_SECONDS:
-                        active_review_id = ""
-                    last_anomaly_seen = now
-                    if not active_review_id or now - last_ng_capture >= NG_CAPTURE_INTERVAL_SECONDS:
-                        try:
-                            review = save_inspection_review(
-                                frame,
-                                last_annotated,
-                                last_result,
-                                object_box=located["box"],
-                                object_label=located["label"],
-                                object_confidence=located["confidence"],
-                                source_name=f"camera_{camera_index}",
-                                existing_review_id=active_review_id,
-                                reference=reference_config,
-                            )
-                            active_review_id = str(review.get("id") or active_review_id)
-                            last_ng_capture = now
-                        except OSError as exc:
-                            print(f"Could not save NG review: {exc}")
-                elif active_review_id and now - last_anomaly_seen > NG_EVENT_RELEASE_SECONDS:
-                    active_review_id = ""
-                closed = cycle.observe(located is not None, last_result, now=now, frame=frame)
-                completed = save_cycle(PROJECT_ROOT, closed, reference_config, f"camera_{camera_index}")
-                with STATE_LOCK:
-                    STATE["part_cycle"] = dict(cycle.current) if cycle.current else None
-                    if completed:
-                        STATE["last_part_result"] = completed
-                last_inspection = now
-            display_frame = last_annotated.copy() if last_annotated is not None else frame
-            cycle.draw(display_frame)
-            detector.draw_fps(display_frame, fps)
-            set_latest_frame(display_frame)
-            with STATE_LOCK:
-                STATE["frame_count"] += 1
-                STATE["raw_frame_count"] += 1
-                STATE["fps"] = round(fps, 2)
-                STATE["status"] = "running"
-                if last_result is not None:
-                    STATE["decision"] = (
-                        "REVIEW" if last_result.review_required and last_result.status != "NG"
-                        else last_result.status
-                    )
-                    STATE["review_required"] = last_result.review_required
-                    STATE["confidence"] = last_result.confidence
-                    STATE["anomaly_score"] = last_result.anomaly_score
-                    STATE["regions"] = [
-                        {
-                            "x": region.x,
-                            "y": region.y,
-                            "width": region.width,
-                            "height": region.height,
-                            "score": region.score,
-                        }
-                        for region in last_result.regions
-                    ]
-                    STATE["brand"] = last_result.brand
-                    STATE["brand_confidence"] = last_result.brand_confidence
-                else:
-                    STATE["decision"] = "NO_PART"
-                    STATE["review_required"] = False
-                    STATE["confidence"] = 0.0
-                    STATE["anomaly_score"] = 0.0
-                    STATE["regions"] = []
-                    STATE["brand"] = None
-                    STATE["brand_confidence"] = None
-                STATE["frame_decision"] = STATE["decision"]
-                STATE["part_present"] = cycle.missing == 0 and cycle.current is not None
-                if cycle.current:
-                    STATE["decision"] = cycle.current["decision"]
-                    STATE["review_required"] = cycle.current["decision"] == "REVIEW"
-    except Exception as exc:
-        message = str(exc)
-        set_status("error", message)
-        set_latest_frame(make_status_frame("Inspection error", message))
-        print(f"Normal-reference camera worker error: {message}")
-    finally:
-        try:
-            save_cycle(PROJECT_ROOT, cycle.finish("camera_stopped"), reference_config, f"camera_{camera_index}")
-        except OSError as exc:
-            set_status("error", f"Could not save part result: {exc}")
-        if cap is not None:
-            cap.release()
-        with STATE_LOCK:
-            CURRENT_CAP = None
-            STATE["running"] = False
-            clear_inspection_state()
-            STATE["stopped_at"] = time.time()
-            if STATE["status"] != "error":
-                STATE["status"] = "stopped"
-                set_latest_frame(make_status_frame("Camera stopped"))
-
-
-@serialized_workflow
-def start_camera_worker(
-    camera_index: int,
-    airbag_confidence: float,
-    debug_detection: bool,
-    use_brand: bool,
-) -> None:
-    """เริ่ม worker ใหม่ โดยหยุดตัวเก่าก่อนเสมอ."""
-    global WORKER_THREAD
-
-    config = read_project_config()
-    if config.get("inspection_strategy") == "normal_reference":
-        runtime = normal_reference_runtime_status(config)
-        if not runtime["ready"]:
-            raise RuntimeError(runtime["reason"])
-        get_shared_locator(config)
-
-    if training_is_running():
-        raise RuntimeError("Training is running; stop it before opening the camera.")
-    if not stop_camera_worker():
-        raise RuntimeError("Camera is still stopping; wait for the existing worker to exit.")
-    STOP_EVENT.clear()
-
-    with STATE_LOCK:
-        clear_inspection_state()
-        STATE.update(
-            {
-                "running": True,
-                "status": "starting",
-                "error": "",
-                "camera_index": camera_index,
-                "frame_count": 0,
-                "raw_frame_count": 0,
-                "fps": 0.0,
-                "started_at": time.time(),
-                "stopped_at": None,
-            }
-        )
-    set_latest_frame(make_status_frame("Starting camera", f"Camera index {camera_index}"))
-
-    if config.get("inspection_strategy") == "normal_reference":
-        target = normal_reference_camera_worker
-        args = (camera_index, use_brand)
-    else:
-        target = camera_worker
-        args = (camera_index, airbag_confidence, debug_detection, use_brand)
-    WORKER_THREAD = vision_service.runtime.ownership.start_thread(target,args,daemon=True)
 
 
 # ===== HTTP routes: หน้าเว็บและ Annotation API =====
@@ -5412,7 +4427,7 @@ def api_activate_model(payload: dict = Body(...)) -> JSONResponse:
             {"ok": False, "error": "A model cannot be activated while training is running."},
             status_code=409,
         )
-    if WORKER_THREAD is not None and WORKER_THREAD.is_alive():
+    if vision_service.busy():
         return JSONResponse(
             {"ok": False, "error": "Stop camera detection before changing the active model."},
             status_code=409,
@@ -5498,7 +4513,7 @@ def save_job(name: str, reference: dict, locator: str, *, backbone: str,
 
 
 def job_change_blocked():
-    if training_is_running() or (WORKER_THREAD is not None and WORKER_THREAD.is_alive()):
+    if training_is_running() or (vision_service.busy()):
         return JSONResponse({"ok": False, "error": "Stop Train and the camera before changing jobs."}, status_code=409)
     return None
 
@@ -5753,7 +4768,7 @@ def api_update_project_config(payload: dict = Body(...)) -> JSONResponse:
             },
             status_code=409,
         )
-    if WORKER_THREAD is not None and WORKER_THREAD.is_alive():
+    if vision_service.busy():
         return JSONResponse({"ok": False, "error": "Stop camera detection before changing project settings."}, status_code=409)
     unknown = set(payload) - editable_fields
     if unknown:
@@ -6043,7 +5058,7 @@ def reference_region_ratio(value) -> float:
 def api_train_normal_reference(payload: dict = Body(...)) -> JSONResponse:
     """Start a durable, pollable normal-reference build from known-good images."""
     global REFERENCE_TRAIN_THREAD
-    if WORKER_THREAD is not None and WORKER_THREAD.is_alive():
+    if vision_service.busy():
         return JSONResponse({"ok": False, "error": "Stop camera detection before starting training."}, status_code=409)
     try:
         requested_ids = payload.get("dataset_ids")
@@ -7023,7 +6038,7 @@ def api_start_train(
                 {"ok": False, "error": "Training is already running.", "state": TRAIN_STATE},
                 status_code=409,
             )
-    if WORKER_THREAD is not None and WORKER_THREAD.is_alive():
+    if vision_service.busy():
         return JSONResponse(
             {
                 "ok": False,
@@ -7292,123 +6307,6 @@ def api_train_status() -> JSONResponse:
     return JSONResponse(payload)
 
 
-# ===== HTTP routes: Camera stream/status =====
-# browser poll JPEG ล่าสุดแทน MJPEG stream; start/stop ต้อง idempotent เพื่อรองรับการกดซ้ำ
-# และต้องไม่ทิ้ง camera handle เมื่อผู้ใช้ปิด tab กะทันหัน
-@app.get("/start_stream")
-def start_stream(
-    camera_index: int | None = Query(None, ge=0, le=10),
-    primary_confidence: float | None = Query(None, ge=0.01, le=0.99),
-    secondary_confidence: float | None = Query(None, ge=0.01, le=0.99),
-    debug_detection: bool = Query(False),
-    use_classifier: bool | None = Query(None),
-) -> JSONResponse:
-    """เริ่มเปิดกล้องและ detect ใน worker thread."""
-    if training_is_running():
-        return JSONResponse(
-            {
-                "ok": False,
-                "error": "Camera detection cannot start while training is running. Stop training first to avoid unstable CPU/GPU and memory usage.",
-            },
-            status_code=409,
-        )
-    config = read_project_config()
-    camera_index = int(config.get("camera_index", detector.DEFAULT_CAMERA_INDEX) if camera_index is None else camera_index)
-    primary_confidence = float(config.get("primary_confidence", detector.AIRBAG_CONFIDENCE_THRESHOLD) if primary_confidence is None else primary_confidence)
-    secondary_confidence = float(config.get("secondary_confidence", detector.SECONDARY_CONFIDENCE_THRESHOLD) if secondary_confidence is None else secondary_confidence)
-    use_classifier = bool(config.get("use_classifier", True) if use_classifier is None else use_classifier)
-    detector.SECONDARY_CONFIDENCE_THRESHOLD = secondary_confidence
-    write_project_config(
-        {
-            "camera_index": camera_index,
-            "primary_confidence": primary_confidence,
-            "secondary_confidence": secondary_confidence,
-            "use_classifier": use_classifier,
-        }
-    )
-    try:
-        start_camera_worker(camera_index, primary_confidence, debug_detection, use_classifier)
-    except RuntimeError as exc:
-        return JSONResponse(
-            {"ok": False, "status": "not_ready", "error": str(exc)},
-            status_code=409,
-        )
-    return JSONResponse(
-        {
-            "ok": True,
-            "status": "starting",
-            "camera_index": camera_index,
-            "primary_confidence": primary_confidence,
-            "secondary_confidence": secondary_confidence,
-            "use_classifier": use_classifier,
-        }
-    )
-
-
-@app.get("/stop_stream", include_in_schema=False)
-@app.post("/stop_stream")
-def stop_stream() -> JSONResponse:
-    """หยุด worker และปล่อยกล้อง."""
-    stopped = stop_camera_worker()
-    return JSONResponse({"ok": stopped, "status": "stopped" if stopped else "stopping"},
-                        status_code=200 if stopped else 202)
-
-
-@app.get("/latest_frame.jpg")
-def latest_frame() -> Response:
-    """คืนภาพล่าสุดเป็น JPEG พร้อม no-cache."""
-    with STATE_LOCK:
-        jpeg = LATEST_JPEG
-    if jpeg is None:
-        jpeg = encode_frame(make_status_frame("No frame", "Press Start Stream"))
-    return Response(
-        content=jpeg,
-        media_type="image/jpeg",
-        headers={
-            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-            "Pragma": "no-cache",
-        },
-    )
-
-
-@app.get("/status")
-def status() -> JSONResponse:
-    """คืนสถานะ worker ปัจจุบันให้ frontend ใช้แสดงผล."""
-    config = read_project_config()
-    runtime = normal_reference_runtime_status(config)
-    with STATE_LOCK:
-        payload = dict(STATE)
-        payload["inspection_strategy"] = runtime["strategy"]
-        payload["inspection_ready"] = runtime["ready"]
-        payload["inspection_model"] = runtime["model"]
-        payload["model_loaded"] = runtime["ready"]
-        payload["model_error"] = "" if runtime["ready"] else runtime["reason"]
-        payload["worker_alive"] = bool(WORKER_THREAD and WORKER_THREAD.is_alive())
-        # A ready inspection model does not imply that the camera worker opened
-        # successfully. Preserve a hardware/worker failure instead of replacing
-        # it with the misleading generic "ready" state.
-        # model_error used to be produced by an obsolete Airbag/Mark preload.
-        # In generic mode, an authoritative ready runtime supersedes that stale
-        # startup state; real camera errors remain visible until the next start.
-        stale_legacy_error = (
-            runtime["strategy"] == "normal_reference"
-            and runtime["ready"]
-            and payload.get("status") == "model_error"
-        )
-        worker_failed = payload.get("status") == "error" or (
-            bool(payload.get("error")) and not stale_legacy_error
-        )
-        if not payload["worker_alive"] and runtime["ready"] and not worker_failed:
-            payload["running"] = False
-            payload["status"] = "ready"
-            payload["error"] = ""
-        elif not payload["worker_alive"] and not runtime["ready"]:
-            payload["running"] = False
-            payload["status"] = "not_ready"
-            payload["error"] = runtime["reason"]
-    return JSONResponse(payload)
-
-
 @app.get("/api/legacy/health")
 def legacy_health() -> JSONResponse:
     """ตรวจสถานะพื้นฐานโดยไม่เปิดกล้อง."""
@@ -7622,7 +6520,7 @@ def api_system_audit() -> JSONResponse:
             },
             "runtime": {
                 "training": bool(TRAIN_PROCESS),
-                "camera": bool(WORKER_THREAD and WORKER_THREAD.is_alive()),
+                "camera": bool(vision_service.runtime.running),
                 "device": detector.DEVICE,
             },
             "detector_validation": detector_validation,
@@ -7730,7 +6628,7 @@ def pull_vision_annotations_from_cvat(event_ids):
 
 from inspection.api import InspectionService, make_router
 vision_service = InspectionService(PROJECT_ROOT,
-    legacy_busy=lambda:bool(STATE.get("running")) or training_is_running(),
+    legacy_busy=training_is_running,
     cvat_send=send_vision_reviews_to_cvat,cvat_pull=pull_vision_annotations_from_cvat,dataset_folder=dataset_folder_path)
 app.include_router(make_router(vision_service))
 
@@ -7742,14 +6640,14 @@ async def protect_inspection_workflow(request, call_next):
         if content_length.isdigit() and int(content_length)>210*1024*1024:
             return JSONResponse({"detail":"Request exceeds the local upload size limit"},status_code=413)
     # The service binds to localhost. Reject cross-origin writes from unrelated websites.
-    changes_state = request.method not in {"GET","HEAD","OPTIONS"} or request.url.path in {"/start_stream","/stop_stream"}
+    changes_state = request.method not in {"GET","HEAD","OPTIONS"}
     if changes_state:
         origin = request.headers.get("origin")
         if request.headers.get("sec-fetch-site")=="cross-site" or (origin and origin != f"{request.url.scheme}://{request.url.netloc}"):
             return JSONResponse({"detail":"Cross-origin inspection changes are not allowed"},status_code=403)
-    legacy_mutation = request.url.path in {"/start_stream","/api/train/start","/api/inspection/reference/train",
+    legacy_mutation = request.url.path in {"/api/train/start","/api/inspection/reference/train",
         "/api/models/activate","/api/project/config"} or (request.url.path.startswith("/api/jobs/") and request.url.path.endswith("/use"))
-    if vision_service.busy() and legacy_mutation and (request.method=="POST" or request.url.path=="/start_stream"):
+    if vision_service.busy() and legacy_mutation and request.method=="POST":
         return JSONResponse({"ok":False,"error":"Production inspection or candidate work is running"},status_code=409)
     return await call_next(request)
 
