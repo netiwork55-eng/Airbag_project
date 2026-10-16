@@ -123,6 +123,9 @@ def test_deep_patch_uses_separate_calibration_and_validation_sets(tmp_path, monk
         def __init__(self, _model_path, input_size=256, grid_size=16):
             self.grid_size = 4
 
+        def fit_alignment(self, paths, boxes):
+            self.alignment_reference_path = paths[0]
+
         def locate(self, image):
             return (3,3,image.shape[1]-3,image.shape[0]-3)
 
@@ -150,6 +153,12 @@ def test_deep_patch_uses_separate_calibration_and_validation_sets(tmp_path, monk
     assert len(audit["fit"]) == 19
     assert len(audit["validation"]) == 6
     assert not audit["excluded"]
+    anchor = audit["alignment_reference"]
+    assert anchor == metrics["alignment_reference"]
+    assert anchor["selection"] == "first_usable_fit_image"
+    assert anchor["path"] in {item["path"] for item in audit["fit"]}
+    assert anchor["path"] not in {item["path"] for item in audit["calibration"] + audit["validation"]}
+    assert anchor["sha256"] == deep_patch_reference.hashlib.sha256(Path(anchor["path"]).read_bytes()).hexdigest()
     assert all(len(item["sha256"]) == 64 for item in audit["fit"])
 
     assert metrics["independent_validation"] is True
@@ -392,3 +401,33 @@ def test_position_normalization_excludes_same_source_variants():
     bank,indices=deep_patch_reference.DeepPatchReference._memory(maps,return_indices=True)
     scale=deep_patch_reference.DeepPatchReference._fit_position_scale(maps,paths,bank,indices,np.ones((2,2),bool))
     np.testing.assert_allclose(scale,2.*1.03,rtol=1e-6)
+
+
+def test_alignment_anchor_is_an_actual_good_image_not_a_blurred_composite(tmp_path, monkeypatch):
+    # Software contract only: displaced texture must not be averaged into a fake anchor.
+    images=[]; paths=[]; boxes={}
+    for index in range(3):
+        image=np.full((32,32,3),40,np.uint8)
+        cv2.rectangle(image,(3+8*index,8),(7+8*index,23),(220,220,220),-1)
+        path=tmp_path/f"good_{index}.png";_write(path,image)
+        paths.append(path);images.append(image);boxes[str(path)]=(0,0,32,32)
+    encoder=object.__new__(deep_patch_reference.YoloPatchEncoder)
+    encoder.input_size=32
+    monkeypatch.setattr(deep_patch_reference,"_align_bgr",lambda image,reference,mask:(image,mask))
+    encoder.fit_alignment(paths,boxes)
+    assert any(np.array_equal(encoder.alignment_template,image) for image in images)
+    assert encoder.alignment_reference_path in paths
+    assert np.array_equal(encoder.alignment_template,images[paths.index(encoder.alignment_reference_path)])
+
+
+def test_explicit_alignment_anchor_keeps_selected_image_and_provenance(tmp_path, monkeypatch):
+    paths=[];boxes={}
+    for index in range(3):
+        image=np.full((32,32,3),30+index*60,np.uint8)
+        path=tmp_path/f"good_{index}.png";_write(path,image)
+        paths.append(path);boxes[str(path)]=(0,0,32,32)
+    encoder=object.__new__(deep_patch_reference.YoloPatchEncoder);encoder.input_size=32
+    monkeypatch.setattr(deep_patch_reference,"_align_bgr",lambda image,reference,mask:(image,mask))
+    encoder.fit_alignment(paths,boxes,reference_path=paths[1])
+    assert encoder.alignment_reference_path==paths[1]
+    assert np.array_equal(encoder.alignment_template,cv2.imread(str(paths[1])))

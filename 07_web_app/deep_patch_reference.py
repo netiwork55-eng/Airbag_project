@@ -92,6 +92,7 @@ class YoloPatchEncoder:
         self.layer_indices = sorted(set(min(index, len(self.model.model) - 2) for index in (2, 4)))
         self.hooks = [self.model.model[index].register_forward_hook(self._capture(index)) for index in self.layer_indices]
         self.alignment_template: np.ndarray | None = None
+        self.alignment_reference_path: Path | None = None
         self.object_mask: np.ndarray | None = None
 
     def _capture(self, index: int):
@@ -126,7 +127,7 @@ class YoloPatchEncoder:
         if not paths:
             return
         indices = np.linspace(0, len(paths) - 1, min(48, len(paths)), dtype=int)
-        images, masks = [], []
+        images, masks, accepted_paths = [], [], []
         valid = np.full((self.input_size, self.input_size), 255, np.uint8)
         for index in indices:
             path = paths[int(index)]
@@ -137,16 +138,21 @@ class YoloPatchEncoder:
             roi, _ = _crop(source, box)
             resized = cv2.resize(roi, (self.input_size, self.input_size), interpolation=cv2.INTER_AREA)
             images.append(resized)
+            accepted_paths.append(path)
             masks.append(_foreground_mask(resized, valid))
         if not images:
             raise ValueError("No usable Part ROI was found in Known-good images.")
-        initial = np.median(np.stack(images), axis=0).astype(np.uint8)
+        # Establish coordinates with a real fit image. A pixel median of moving
+        # parts erases texture/logo detail before ECC has a chance to align it.
+        # Keep the anchor unchanged after alignment, including an explicit ROI anchor.
+        self.alignment_reference_path = accepted_paths[0]
+        initial = images[0].copy()
         if reference_path is not None:
-            source = _read_bgr(Path(reference_path))
+            self.alignment_reference_path = Path(reference_path)
+            source = _read_bgr(self.alignment_reference_path)
             roi, _ = _crop(source, boxes[str(reference_path)])
             initial = cv2.resize(roi, (self.input_size, self.input_size), interpolation=cv2.INTER_AREA)
-        pairs = [_align_bgr(image, initial, mask) for image, mask in zip(images, masks)]
-        self.alignment_template = initial if reference_path is not None else np.median(np.stack([item[0] for item in pairs]), axis=0).astype(np.uint8)
+        self.alignment_template = initial
         pairs = [_align_bgr(image, self.alignment_template, mask) for image, mask in zip(images, masks)]
         mask = (np.mean(np.stack([item[1] > 0 for item in pairs]), axis=0) >= 0.55).astype(np.uint8) * 255
         mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8), iterations=2)
@@ -340,6 +346,11 @@ class DeepPatchReference:
                 encoder.fit_alignment(fit_paths, boxes)
             else:
                 encoder.fit_alignment(fit_paths, boxes, reference_path=anchor_path)
+            selected_anchor = getattr(encoder, "alignment_reference_path", None)
+            if alignment_reference is None and selected_anchor is not None:
+                alignment_reference = {"path": str(selected_anchor.resolve()),
+                    "sha256": hashlib.sha256(selected_anchor.read_bytes()).hexdigest(),
+                    "box": list(boxes[str(selected_anchor)]), "selection": "first_usable_fit_image"}
         active = encoder.active_grid() if hasattr(encoder, "active_grid") else np.ones((encoder.grid_size, encoder.grid_size), bool)
         active = active & areas_grid(inspection_areas, active.shape)
         if active.sum() < 8:
