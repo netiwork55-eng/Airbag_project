@@ -1,0 +1,131 @@
+{
+  "id": "event_4bafc56419ce4d0cbfb18fd2e9433939",
+  "timestamp": "2026-10-14T06:49:05.612154+00:00",
+  "source": "candidate_sample",
+  "complete": false,
+  "engine_version": "2026.10.09.2",
+  "recipe_id": "recipe_a08d724e03d5421f82b0a985671a4053",
+  "recipe_hash": "385f5cfde1d9675b2b8e5e65842031238ddff54d16788135b86a0091f61e1b6d",
+  "areas": [
+    {
+      "area_id": "surface_stain",
+      "name": "Front surface stain demonstration",
+      "required": true,
+      "method": "presence",
+      "region": {
+        "x": 0.4270833333333333,
+        "y": 0.41203703703703703,
+        "width": 0.19791666666666666,
+        "height": 0.17592592592592593
+      },
+      "settings": {
+        "kind": "presence",
+        "threshold": 0.8168526887893677,
+        "review_margin": 0.11520391702651978,
+        "low": 30.0,
+        "high": 220.0,
+        "model_id": null,
+        "target_labels": [],
+        "min_count": 0,
+        "max_count": 0
+      },
+      "source_polygon": [
+        [
+          817.0,
+          438.0
+        ],
+        [
+          1197.0,
+          438.0
+        ],
+        [
+          1197.0,
+          628.0
+        ],
+        [
+          817.0,
+          628.0
+        ]
+      ],
+      "score": 0.5571692585945129,
+      "threshold": 0.8168526887893677,
+      "reason": "Front surface stain demonstration: reference match 0.557",
+      "state": "NG"
+    }
+  ],
+  "quality": {
+    "brightness": 138.27895688657406,
+    "sharpness": 100.24925539586133,
+    "limits": {
+      "min_brightness": 1.0,
+      "max_brightness": 254.0,
+      "min_blur": 0.0
+    },
+    "blur_enabled": false
+  },
+  "locator": {
+    "method": "template",
+    "score": 0.8709614276885986,
+    "part_present": true,
+    "transform": [
+      [
+        1.0,
+        0.0,
+        3.0
+      ],
+      [
+        0.0,
+        1.0,
+        7.0
+      ]
+    ]
+  },
+  "stage": "decision",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "state": "NG",
+  "reasons": [
+    "Front surface stain demonstration: reference match 0.557"
+  ],
+  "elapsed_ms": 76.249,
+  "captured_at": "2026-10-14T06:49:05.513643+00:00",
+  "frame_sequence": 2285,
+  "camera_requested": {
+    "driver": "opencv",
+    "index": 1,
+    "serial": "",
+    "exposure_us": null,
+    "gain": null,
+    "width": 1920,
+    "height": 1080,
+    "max_frame_age_ms": 1000
+  },
+  "capture": {
+    "requested": {
+      "driver": "opencv",
+      "index": 1,
+      "serial": "",
+      "exposure_us": null,
+      "gain": null,
+      "width": 1920,
+      "height": 1080,
+      "max_frame_age_ms": 1000
+    },
+    "actual": {
+      "driver": "opencv",
+      "index": 1,
+      "width": 1920.0,
+      "height": 1080.0,
+      "exposure_driver_units": -6.0,
+      "gain": -1.0,
+      "focus_driver_units": 8.0,
+      "autofocus": 1.0,
+      "note": "Driver-reported values may include unsupported/sentinel values. Focus must be checked on the real image."
+    },
+    "timing_scope": "Host read completion; not sensor exposure time"
+  },
+  "frame_age_ms": 93.0,
+  "image_id": "image_49d3c71af4fbe360f9b7d43a7f25e97b2b5457f6fde35f0b78e15d4948a9489f"
+}

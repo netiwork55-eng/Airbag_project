@@ -1,0 +1,11 @@
+{
+  "id": "image_2d3ac35be272743b70986f10dafac3c59cfb413e24fbeeec5439d823a804362d",
+  "name": "000017_airbag_mark_20260923_090014_039_195842a1df.jpg [part crop]",
+  "label": "GOOD",
+  "group": "000017_airbag_mark_20260923_090014_039_195842a1df",
+  "width": 256,
+  "height": 256,
+  "pixel_sha256": "2d3ac35be272743b70986f10dafac3c59cfb413e24fbeeec5439d823a804362d",
+  "sha256": "0649b77e34cb1005ca8723458df76ad406d81c85dd2300cd9be4e05314711f93",
+  "created_at": "2026-10-06T02:56:03.333702+00:00"
+}

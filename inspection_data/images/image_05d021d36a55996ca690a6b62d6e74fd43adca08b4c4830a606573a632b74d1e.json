@@ -1,0 +1,38 @@
+{
+  "id": "image_05d021d36a55996ca690a6b62d6e74fd43adca08b4c4830a606573a632b74d1e",
+  "name": "GOOD before simulated stain - controlled demo",
+  "label": "GOOD",
+  "group": "sprint-20261014-same-physical-part-01",
+  "width": 1920,
+  "height": 1080,
+  "pixel_sha256": "05d021d36a55996ca690a6b62d6e74fd43adca08b4c4830a606573a632b74d1e",
+  "sha256": "3955642dd5bac271a8b17d10359042afab2eca19c767e110983ac333b5018c91",
+  "created_at": "2026-10-14T06:47:23.895236+00:00",
+  "group_confirmed": true,
+  "source_sha256": "3955642dd5bac271a8b17d10359042afab2eca19c767e110983ac333b5018c91",
+  "confirmed_at": "2026-10-14T06:47:23.896768+00:00",
+  "capture": {
+    "requested": {
+      "driver": "opencv",
+      "index": 1,
+      "serial": "",
+      "exposure_us": null,
+      "gain": null,
+      "width": 1920,
+      "height": 1080,
+      "max_frame_age_ms": 1000
+    },
+    "actual": {
+      "driver": "opencv",
+      "index": 1,
+      "width": 1920.0,
+      "height": 1080.0,
+      "exposure_driver_units": -6.0,
+      "gain": -1.0,
+      "focus_driver_units": 8.0,
+      "autofocus": 1.0,
+      "note": "Driver-reported values may include unsupported/sentinel values. Focus must be checked on the real image."
+    },
+    "timing_scope": "Host read completion; not sensor exposure time"
+  }
+}

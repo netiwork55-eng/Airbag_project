@@ -1,0 +1,101 @@
+{
+  "id": "event_92d983849866417faa0b859c865e4868",
+  "timestamp": "2026-10-15T04:01:32.370300+00:00",
+  "source": "candidate_sample",
+  "complete": false,
+  "engine_version": "2026.10.09.2",
+  "recipe_id": "recipe_a08d724e03d5421f82b0a985671a4053",
+  "recipe_hash": "385f5cfde1d9675b2b8e5e65842031238ddff54d16788135b86a0091f61e1b6d",
+  "areas": [
+    {
+      "area_id": "surface_stain",
+      "name": "Front surface stain demonstration",
+      "required": true,
+      "method": "presence",
+      "region": {
+        "x": 0.4270833333333333,
+        "y": 0.41203703703703703,
+        "width": 0.19791666666666666,
+        "height": 0.17592592592592593
+      },
+      "settings": {
+        "kind": "presence",
+        "threshold": 0.8168526887893677,
+        "review_margin": 0.11520391702651978,
+        "low": 30.0,
+        "high": 220.0,
+        "model_id": null,
+        "target_labels": [],
+        "min_count": 0,
+        "max_count": 0
+      },
+      "state": "UNABLE_TO_INSPECT",
+      "reason": "Not inspected: Part not found: template score below the locator limit"
+    }
+  ],
+  "quality": {
+    "brightness": 161.87800347222222,
+    "sharpness": 69.11517697359821,
+    "limits": {
+      "min_brightness": 1.0,
+      "max_brightness": 254.0,
+      "min_blur": 0.0
+    },
+    "blur_enabled": false
+  },
+  "locator": {
+    "method": "template",
+    "score": 0.33152762055397034,
+    "part_present": false
+  },
+  "stage": "decision",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "failed_stage": "alignment",
+  "state": "UNABLE_TO_INSPECT",
+  "reasons": [
+    "Part not found: template score below the locator limit",
+    "Not inspected: Part not found: template score below the locator limit"
+  ],
+  "elapsed_ms": 86.747,
+  "captured_at": "2026-10-15T04:01:32.254129+00:00",
+  "frame_sequence": 2232,
+  "camera_requested": {
+    "driver": "opencv",
+    "index": 1,
+    "serial": "",
+    "exposure_us": null,
+    "gain": null,
+    "width": 1920,
+    "height": 1080,
+    "max_frame_age_ms": 1000
+  },
+  "capture": {
+    "requested": {
+      "driver": "opencv",
+      "index": 1,
+      "serial": "",
+      "exposure_us": null,
+      "gain": null,
+      "width": 1920,
+      "height": 1080,
+      "max_frame_age_ms": 1000
+    },
+    "actual": {
+      "driver": "opencv",
+      "index": 1,
+      "width": 1920.0,
+      "height": 1080.0,
+      "exposure_driver_units": -6.0,
+      "gain": -1.0,
+      "focus_driver_units": 8.0,
+      "autofocus": 1.0,
+      "note": "Driver-reported values may include unsupported/sentinel values. Focus must be checked on the real image."
+    },
+    "timing_scope": "Host read completion; not sensor exposure time"
+  },
+  "frame_age_ms": 109.0,
+  "image_id": "image_c445b0cd6f070c0932274c6dc219900777179f910d77d8224cd152ceec3e798e"
+}

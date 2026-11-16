@@ -1,0 +1,58 @@
+{
+  "id": "event_8d858662d4184f549a5acd73c3e5c53e",
+  "timestamp": "2026-10-06T07:46:51.578661+00:00",
+  "source": "test",
+  "complete": true,
+  "recipe_id": "recipe_32e3fe3899ba45d29cde1dea5e147c55",
+  "recipe_hash": "19911e84b1ea8f98e858538339508673fe5f04e9d5eb8563cc60050f34999be3",
+  "areas": [
+    {
+      "area_id": "surface",
+      "name": "Main surface",
+      "required": true,
+      "method": "anomaly",
+      "region": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "score": 29.882179260253906,
+      "threshold": 23.701377868652344,
+      "model_id": "model_c022f8bbd44a44e3a4aefb0c6581de5d",
+      "model_sha256": "f16fda14246356e57baa1d69677580f63b673c2372343b02820b64a91444a9f7",
+      "reason": "Main surface: anomaly score 29.8822",
+      "state": "NG"
+    }
+  ],
+  "quality": {
+    "brightness": 83.508056640625,
+    "sharpness": 855.7289261063561
+  },
+  "locator": {
+    "method": "fixed",
+    "score": null,
+    "part_present": true,
+    "transform": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ]
+    ]
+  },
+  "state": "NG",
+  "reasons": [
+    "Main surface: anomaly score 29.8822"
+  ],
+  "elapsed_ms": 4703.596,
+  "image_id": "image_c7872ace2eb2302c16093e86987a777e9a4df340c257ffd0ccc5dd92fe8266f3",
+  "anomaly_maps": [
+    "surface"
+  ]
+}

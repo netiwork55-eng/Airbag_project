@@ -1,0 +1,13 @@
+{
+  "id": "image_b08da8c5ed072a7935bbf9d1ba826c029214c5f5545b187f3c4f232e7a977f18",
+  "name": "event_60eb852f703f4433b08638410aa49851",
+  "label": "UNKNOWN",
+  "group": "b08da8c5ed072a7935bbf9d1ba826c029214c5f5545b187f3c4f232e7a977f18",
+  "width": 1920,
+  "height": 1080,
+  "pixel_sha256": "b08da8c5ed072a7935bbf9d1ba826c029214c5f5545b187f3c4f232e7a977f18",
+  "sha256": "d33abfdf15f01c9b0cd31c8a17f46c9864aedb77138207914bc29fb9becd9c55",
+  "created_at": "2026-10-15T04:05:38.775154+00:00",
+  "group_confirmed": false,
+  "source_sha256": "d33abfdf15f01c9b0cd31c8a17f46c9864aedb77138207914bc29fb9becd9c55"
+}

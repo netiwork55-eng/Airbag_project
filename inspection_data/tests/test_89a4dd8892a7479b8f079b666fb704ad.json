@@ -1,0 +1,2436 @@
+{
+  "id": "test_89a4dd8892a7479b8f079b666fb704ad",
+  "created_at": "2026-10-06T02:56:39.042049+00:00",
+  "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+  "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+  "metrics": {
+    "good_count": 42,
+    "ng_count": 0,
+    "excluded_count": 0,
+    "good_accepted": 41,
+    "defects_rejected": 0,
+    "false_accept_count": 0,
+    "false_reject_count": 1,
+    "false_accept_rate": null,
+    "false_reject_rate": 0.023809523809523808,
+    "review_rate": 0.0,
+    "unable_rate": 0.0,
+    "counts": {
+      "PASS": 41,
+      "NG": 1
+    },
+    "mean_ms": 370.6042857142857,
+    "p95_ms": 421.27559999999994
+  },
+  "rows": [
+    {
+      "image_id": "image_283eb8ecaad0de0f34716fdb01612729d5ac8bf06606fbaf89c9915116f64396",
+      "name": "000034_airbag_mark_20260923_090102_551_f0e9682f07.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000034_airbag_mark_20260923_090102_551_f0e9682f07",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 13.405082702636719,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 13.4051",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 67.06678771972656,
+          "sharpness": 529.4914646295365
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 698.277
+      }
+    },
+    {
+      "image_id": "image_b8fecf20794fa0eecf2c1946d7ee15cbb6711ec418c25fe2fcfd44d15f15e581",
+      "name": "000115_airbag_mark_20260923_090026_150_656eb029a8.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000115_airbag_mark_20260923_090026_150_656eb029a8",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 17.6563663482666,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 17.6564",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 63.147369384765625,
+          "sharpness": 386.7626009003725
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 363.029
+      }
+    },
+    {
+      "image_id": "image_7c3ed1e20f894e2655922724e37f11ab042f67e4543941b48a996186a1b60eb5",
+      "name": "000069_airbag_mark_20260923_090018_569_48dfad4b5f.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000069_airbag_mark_20260923_090018_569_48dfad4b5f",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 10.22846508026123,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 10.2285",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 41.82537841796875,
+          "sharpness": 321.75483311130665
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 365.559
+      }
+    },
+    {
+      "image_id": "image_e748557d99edc95c9d7fbac2780fa0f4a8977c1163e253ac4e21ff9ded347e4c",
+      "name": "000032_airbag_mark_20260923_085859_575_b0e8dbf448.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000032_airbag_mark_20260923_085859_575_b0e8dbf448",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 9.481033325195312,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 9.4810",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 53.40257263183594,
+          "sharpness": 512.3201614161953
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 362.546
+      }
+    },
+    {
+      "image_id": "image_7e4909a3d37e664693e7256be1f251d1021f11a372420dde3dcb79a23eb9ad90",
+      "name": "000002_airbag_mark_20260923_085852_905_cfb8670b02.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000002_airbag_mark_20260923_085852_905_cfb8670b02",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 8.116671562194824,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 8.1167",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 48.9395751953125,
+          "sharpness": 519.414988424629
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 370.771
+      }
+    },
+    {
+      "image_id": "image_5ce5286e82f2f12e51f3b483dfed794386c2f67c3e5c0c0b1dd39455a1c5e887",
+      "name": "000113_airbag_mark_20260923_090054_054_e2cd04d187.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000113_airbag_mark_20260923_090054_054_e2cd04d187",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 19.327960968017578,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 19.3280",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 49.52069091796875,
+          "sharpness": 320.27604679670185
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 389.661
+      }
+    },
+    {
+      "image_id": "image_919aabfaec61b56b155fd33b598ea3789f85c05537fd95be6544017d93e2014a",
+      "name": "000083_airbag_mark_20260923_085825_929_daab4eef68.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000083_airbag_mark_20260923_085825_929_daab4eef68",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.504932403564453,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.5049",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 57.634246826171875,
+          "sharpness": 586.3916186613496
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 375.927
+      }
+    },
+    {
+      "image_id": "image_b57de9304594fe7273749b214e4efb4fd7f33adfa537d942b9365e852d83d125",
+      "name": "000088_airbag_mark_20260923_085901_816_6e4b0782a2.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000088_airbag_mark_20260923_085901_816_6e4b0782a2",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 13.145930290222168,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 13.1459",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 58.87945556640625,
+          "sharpness": 642.0289236602839
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 326.236
+      }
+    },
+    {
+      "image_id": "image_ba83f521855f321416d8852465448ad34e9fc7323d5ba05125ab3233666469e6",
+      "name": "000093_airbag_mark_20260923_090109_416_a0bfcb0056.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000093_airbag_mark_20260923_090109_416_a0bfcb0056",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 12.416007995605469,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 12.4160",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 69.12451171875,
+          "sharpness": 531.6040928883012
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 318.512
+      }
+    },
+    {
+      "image_id": "image_64f1476819772a61fe02c8709b0e4a364a0f3795ffb3f7955848a8096203244c",
+      "name": "000075_airbag_mark_20260923_090108_311_af94d2767e.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000075_airbag_mark_20260923_090108_311_af94d2767e",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 9.661202430725098,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 9.6612",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 72.72853088378906,
+          "sharpness": 466.31837382819504
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 369.468
+      }
+    },
+    {
+      "image_id": "image_a9f24cee57082617d2ac2e0bd570d8d9261f97bb959eb8d6cf271161e199866e",
+      "name": "000127_airbag_mark_20260923_085828_967_c3bf096722.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000127_airbag_mark_20260923_085828_967_c3bf096722",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.890130519866943,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.8901",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 58.42680358886719,
+          "sharpness": 606.2463364452124
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 423.938
+      }
+    },
+    {
+      "image_id": "image_8e0052c30c594de51d18bd18acfc45413ffdf18d8e9b172df71f1dbae24dc2fb",
+      "name": "000061_airbag_mark_20260923_090112_391_66bbe44a01.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000061_airbag_mark_20260923_090112_391_66bbe44a01",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 11.817498207092285,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 11.8175",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 69.78579711914062,
+          "sharpness": 712.6004310508724
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 356.491
+      }
+    },
+    {
+      "image_id": "image_e1d3ceefec0e872f6d783767aa106e139e1a5cc9e7a39c6ea52f060bdc8d41f1",
+      "name": "000120_airbag_mark_20260923_085848_630_a2ad0670bf.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000120_airbag_mark_20260923_085848_630_a2ad0670bf",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 10.402962684631348,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 10.4030",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 48.41874694824219,
+          "sharpness": 450.82748427591287
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 351.978
+      }
+    },
+    {
+      "image_id": "image_827aabdf44172fc76d6a0929eded115404bd966f7b6254b5a1593476f6a4b3c3",
+      "name": "000042_airbag_mark_20260923_090040_247_e4317b0c94.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000042_airbag_mark_20260923_090040_247_e4317b0c94",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 8.793814659118652,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 8.7938",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 76.236572265625,
+          "sharpness": 428.0800628622528
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 375.14
+      }
+    },
+    {
+      "image_id": "image_311cffc23e987052cc5c0b6df4a8307fa8f24cd42dea221dcf44fb79306129f7",
+      "name": "000105_airbag_mark_20260923_090053_591_6e099e0590.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000105_airbag_mark_20260923_090053_591_6e099e0590",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 19.41619300842285,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 19.4162",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 47.98088073730469,
+          "sharpness": 357.20478952582926
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 340.314
+      }
+    },
+    {
+      "image_id": "image_d829e8af2ee8850287785ddf85673d227457632899a1e86fa39dc4f41f63a69d",
+      "name": "000151_airbag_mark_20260923_085836_535_898451a3b5.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000151_airbag_mark_20260923_085836_535_898451a3b5",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.6413187980651855,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.6413",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 58.18659973144531,
+          "sharpness": 386.9559393876698
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 334.476
+      }
+    },
+    {
+      "image_id": "image_69016ffa0170f4706ebda6cd093226547022f792c934a0fc161eb0d9185ab7bc",
+      "name": "000057_airbag_mark_20260923_090103_240_5f272c08b2.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000057_airbag_mark_20260923_090103_240_5f272c08b2",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 16.22003746032715,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 16.2200",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 68.0595703125,
+          "sharpness": 498.4845271995291
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 327.303
+      }
+    },
+    {
+      "image_id": "image_c7872ace2eb2302c16093e86987a777e9a4df340c257ffd0ccc5dd92fe8266f3",
+      "name": "000124_airbag_mark_20260923_085932_503_91d21d4df7.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000124_airbag_mark_20260923_085932_503_91d21d4df7",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 29.882183074951172,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 29.8822",
+            "state": "NG"
+          }
+        ],
+        "quality": {
+          "brightness": 83.508056640625,
+          "sharpness": 855.7289261063561
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "NG",
+        "reasons": [
+          "Main surface: anomaly score 29.8822"
+        ],
+        "elapsed_ms": 351.629
+      }
+    },
+    {
+      "image_id": "image_c5ffb903832b6557ed0d3eb1336f1ec9a5cbda8b1d5dba10713ed287d22b1f42",
+      "name": "000007_airbag_mark_20260923_085831_832_7f43ff6fe8.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000007_airbag_mark_20260923_085831_832_7f43ff6fe8",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 8.054795265197754,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 8.0548",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 65.14547729492188,
+          "sharpness": 636.5141097435262
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 336.879
+      }
+    },
+    {
+      "image_id": "image_e35b7e6937ce10a3a54d76937e3c12ec9bbfbca090f3b9a0fd45f616da88cef2",
+      "name": "000134_airbag_mark_20260923_090053_095_5d43bad10b.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000134_airbag_mark_20260923_090053_095_5d43bad10b",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 16.650964736938477,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 16.6510",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 41.465789794921875,
+          "sharpness": 460.1763271689415
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 338.659
+      }
+    },
+    {
+      "image_id": "image_7a2b683fe6c40ba7b74ea722a7020de70ef8ac69b4ff77aa5105f067d5deefc5",
+      "name": "000194_airbag_mark_20260923_085845_128_0d3f680292.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000194_airbag_mark_20260923_085845_128_0d3f680292",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 10.698719024658203,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 10.6987",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 60.78680419921875,
+          "sharpness": 660.5795450916048
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 354.035
+      }
+    },
+    {
+      "image_id": "image_10172a99e970e6d2ef7b1fa1beb6c76b554ec70b3432a6a17cda1aa9253ae5ce",
+      "name": "000195_airbag_mark_20260923_090105_577_59aa56c6b2.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000195_airbag_mark_20260923_090105_577_59aa56c6b2",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 12.23263931274414,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 12.2326",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 81.75701904296875,
+          "sharpness": 634.7592514744028
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 412.99
+      }
+    },
+    {
+      "image_id": "image_1e5733ec3b16aa8e0a5b0fd2580f7d5411c0a458b78d7979cf3e9a2305427d65",
+      "name": "000006_airbag_mark_20260923_090047_559_61fbe6960a.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000006_airbag_mark_20260923_090047_559_61fbe6960a",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 9.413579940795898,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 9.4136",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 68.9541015625,
+          "sharpness": 357.5539474559482
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 385.004
+      }
+    },
+    {
+      "image_id": "image_212c61bec09959b70aa9ed913cf21e14afa9879ce97b227c2282486211bdbae2",
+      "name": "000056_airbag_mark_20260923_085902_487_cb6c88c7b9.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000056_airbag_mark_20260923_085902_487_cb6c88c7b9",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 14.31060791015625,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 14.3106",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 61.74310302734375,
+          "sharpness": 358.19184373668395
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 359.298
+      }
+    },
+    {
+      "image_id": "image_cf933c28459e5fbbba96f9bd568cbc8c67c8cb64c18cb19434dbb06daccbd078",
+      "name": "000001_airbag_mark_20260923_090008_327_627ce8d513.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000001_airbag_mark_20260923_090008_327_627ce8d513",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 8.635993003845215,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 8.6360",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 60.63981628417969,
+          "sharpness": 308.62660580780357
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 365.209
+      }
+    },
+    {
+      "image_id": "image_02c77765d2e261511230bb22840e42fe133a4e5a1d70fe9689b9e4d046ee5f90",
+      "name": "000022_airbag_mark_20260923_085905_416_7834171ae0.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000022_airbag_mark_20260923_085905_416_7834171ae0",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 14.91506290435791,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 14.9151",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 79.24859619140625,
+          "sharpness": 319.9648530483246
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 363.472
+      }
+    },
+    {
+      "image_id": "image_a7f742dbd7b6cca95ee290e8da6c32fb44d37ac124985f1636b414ad50b32dab",
+      "name": "000086_airbag_mark_20260923_090046_711_cabfd12439.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000086_airbag_mark_20260923_090046_711_cabfd12439",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.6676225662231445,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.6676",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 65.48333740234375,
+          "sharpness": 718.7357104485855
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 357.777
+      }
+    },
+    {
+      "image_id": "image_51dec8a671ddc3dfd3f9d76d66bf66e17b19e6f9cab8311f404ad5e13ed74832",
+      "name": "000005_airbag_mark_20260923_085835_415_f7a009acad.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000005_airbag_mark_20260923_085835_415_f7a009acad",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.153090953826904,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.1531",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 56.32749938964844,
+          "sharpness": 563.7649780772626
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 369.632
+      }
+    },
+    {
+      "image_id": "image_9a4a9c931ba0fe7b299f927b5c77c2c87ac3bd3017faded1afbab23b92c1ff06",
+      "name": "000100_airbag_mark_20260923_090017_830_7492e5d155.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000100_airbag_mark_20260923_090017_830_7492e5d155",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 13.418334007263184,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 13.4183",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 40.62632751464844,
+          "sharpness": 293.0029748787638
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 380.293
+      }
+    },
+    {
+      "image_id": "image_136102942e081e479ed40acc19b3fe0fe60626c7ac80a837b0fabfd7bb7fca3e",
+      "name": "000125_airbag_mark_20260923_090058_999_e5884df5f8.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000125_airbag_mark_20260923_090058_999_e5884df5f8",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 21.951454162597656,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 21.9515",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 64.00454711914062,
+          "sharpness": 258.3632629176136
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 421.4
+      }
+    },
+    {
+      "image_id": "image_701ce3eb0d37201efcc59f9ddc579e4dbffffa6592b14f092cd1e58558678f63",
+      "name": "000063_airbag_mark_20260923_085901_256_588ee0bd39.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000063_airbag_mark_20260923_085901_256_588ee0bd39",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 13.874420166015625,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 13.8744",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 56.02001953125,
+          "sharpness": 608.7232377668843
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 349.197
+      }
+    },
+    {
+      "image_id": "image_de25ca53bf720c5354e51a0f87a5cad6f0d5cf4d50bf9b11884c5bf35cad3964",
+      "name": "000156_airbag_mark_20260923_085847_223_3558e02cbd.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000156_airbag_mark_20260923_085847_223_3558e02cbd",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 10.66454029083252,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 10.6645",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 57.20454406738281,
+          "sharpness": 576.3792432749178
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 358.592
+      }
+    },
+    {
+      "image_id": "image_fabc0dd1bd147c540c403e0fd171db002af569f5a1ac2c159f5dc1d69cb4ec3a",
+      "name": "000094_airbag_mark_20260923_090013_271_a27f4da4c2.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000094_airbag_mark_20260923_090013_271_a27f4da4c2",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 9.85719108581543,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 9.8572",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 53.645904541015625,
+          "sharpness": 354.63776128715836
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 374.153
+      }
+    },
+    {
+      "image_id": "image_09a63a070e3a1e877d52fec854e4b661fd0de1ad4f8b2ea388ea6efa6554249f",
+      "name": "000117_airbag_mark_20260923_090107_911_e305994251.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000117_airbag_mark_20260923_090107_911_e305994251",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 12.82463264465332,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 12.8246",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 73.36991882324219,
+          "sharpness": 493.6972075467929
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 346.6
+      }
+    },
+    {
+      "image_id": "image_f0045b7c84f988aeb0d77780d9f5706735fee0a2a9d3a3dac937a1a4a4b3da74",
+      "name": "000202_airbag_mark_20260923_090041_447_a2af6268be.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000202_airbag_mark_20260923_090041_447_a2af6268be",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.058887481689453,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.0589",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 65.25843811035156,
+          "sharpness": 668.0861582548823
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 330.572
+      }
+    },
+    {
+      "image_id": "image_a0d0f40fbde6866f244047472066ec99acf8a06f8f06bad7fa7d56d2b1f474df",
+      "name": "000188_airbag_mark_20260923_090054_872_17d05a3d51.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000188_airbag_mark_20260923_090054_872_17d05a3d51",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 16.669212341308594,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 16.6692",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 51.36384582519531,
+          "sharpness": 467.056978341192
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 374.172
+      }
+    },
+    {
+      "image_id": "image_2197206e748226ffc1efc7b14c8ed4f96ed88f451d63bbd9545733a2a8ab7e41",
+      "name": "000187_airbag_mark_20260923_085934_343_634ef0f825.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000187_airbag_mark_20260923_085934_343_634ef0f825",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 17.68686866760254,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 17.6869",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 78.03514099121094,
+          "sharpness": 734.4359320066869
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 326.778
+      }
+    },
+    {
+      "image_id": "image_f948f3690236afdfcfa2a69e66f8b1bf8accde9ef0cc09fe11308e00c4636284",
+      "name": "000022_airbag_mark_20260923_090018_199_cc04780328.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000022_airbag_mark_20260923_090018_199_cc04780328",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 11.057066917419434,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 11.0571",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 42.266143798828125,
+          "sharpness": 432.8121902027633
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 362.711
+      }
+    },
+    {
+      "image_id": "image_e9e9bbfea6ede8369508d69481c36ee72dcacb24ac564bf3049b45fac2c3f095",
+      "name": "000098_airbag_mark_20260923_085851_063_f8c2ed11e2.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000098_airbag_mark_20260923_085851_063_f8c2ed11e2",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 7.751678943634033,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 7.7517",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 46.72621154785156,
+          "sharpness": 485.3936739824712
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 394.186
+      }
+    },
+    {
+      "image_id": "image_4e18276d8ccda1412d1208db2e096602e4b1fbb89a91a1ad2387d819ba14230b",
+      "name": "000009_airbag_mark_20260923_085842_679_adbd4aee69.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000009_airbag_mark_20260923_085842_679_adbd4aee69",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 8.107779502868652,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 8.1078",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 58.04981994628906,
+          "sharpness": 575.917828258127
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 418.912
+      }
+    },
+    {
+      "image_id": "image_4d9296525bc6431880ba26e0948643ca2e83388779a635b4d81c7a26c727fc17",
+      "name": "000103_airbag_mark_20260923_085848_167_765a74b574.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000103_airbag_mark_20260923_085848_167_765a74b574",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 9.594156265258789,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 9.5942",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 51.445709228515625,
+          "sharpness": 462.49457195191644
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 340.291
+      }
+    },
+    {
+      "image_id": "image_0feee34ae75b235473079a9121c019d146e073875624f3f85d150420278fd214",
+      "name": "000008_airbag_mark_20260923_090024_247_9ef850e173.jpg [part crop]",
+      "label": "GOOD",
+      "group": "000008_airbag_mark_20260923_090024_247_9ef850e173",
+      "excluded": "",
+      "result": {
+        "recipe_id": "recipe_2152679b9e594e05aa695abd8bcc8848",
+        "recipe_hash": "221bbdaaeb2864519f35a57a2f6dc4f480f0e2762b15862c7df00e0929510d7a",
+        "areas": [
+          {
+            "area_id": "surface",
+            "name": "Main surface",
+            "required": true,
+            "method": "anomaly",
+            "region": {
+              "x": 0.0,
+              "y": 0.0,
+              "width": 1.0,
+              "height": 1.0
+            },
+            "score": 15.806709289550781,
+            "threshold": 23.701377868652344,
+            "model_id": "model_1a3ddaf886fb45bf9a07d4b3ab2fd9fc",
+            "model_sha256": "c90a2b59c84ba378a7c408f5c642a4664d4fafc2c94eef4c4fa9b5d65b0aa820",
+            "reason": "Main surface: anomaly score 15.8067",
+            "state": "PASS"
+          }
+        ],
+        "quality": {
+          "brightness": 51.7742919921875,
+          "sharpness": 406.3788138618693
+        },
+        "locator": {
+          "method": "fixed",
+          "score": null,
+          "part_present": true,
+          "transform": [
+            [
+              1.0,
+              0.0,
+              0.0
+            ],
+            [
+              0.0,
+              1.0,
+              0.0
+            ]
+          ]
+        },
+        "state": "PASS",
+        "reasons": [
+          "All required checks passed"
+        ],
+        "elapsed_ms": 343.313
+      }
+    }
+  ],
+  "limits": {
+    "min_good": 10,
+    "min_ng": 10,
+    "max_false_accept": 0.0,
+    "max_false_reject": 0.05,
+    "max_review": 0.1,
+    "max_unable": 0.0
+  },
+  "eligible": false,
+  "blockers": [
+    "Need at least 10 independent NG images; defect recall is unverified",
+    "false_accept_rate does not meet limit 0",
+    "Fixed-position inspection requires confirmation of a repeatable fixture"
+  ],
+  "purpose": "Independent validation; no automatic activation"
+}

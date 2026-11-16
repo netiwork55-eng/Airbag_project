@@ -1,0 +1,99 @@
+{
+  "id": "event_2e47f3ff78e3459ab2fcd1ce82c760e2",
+  "timestamp": "2026-10-08T02:02:58.671165+00:00",
+  "source": "test",
+  "complete": true,
+  "engine_version": "2026.10.07.2",
+  "recipe_id": "recipe_32e3fe3899ba45d29cde1dea5e147c55",
+  "recipe_hash": "19911e84b1ea8f98e858538339508673fe5f04e9d5eb8563cc60050f34999be3",
+  "areas": [
+    {
+      "area_id": "surface",
+      "name": "Main surface",
+      "required": true,
+      "method": "anomaly",
+      "region": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "settings": {
+        "kind": "anomaly",
+        "threshold": 23.701377868652344,
+        "review_margin": 1.1850688934326172,
+        "low": 30.0,
+        "high": 220.0,
+        "model_id": "model_c022f8bbd44a44e3a4aefb0c6581de5d",
+        "target_labels": [],
+        "min_count": 0,
+        "max_count": 0
+      },
+      "source_polygon": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          256.0,
+          0.0
+        ],
+        [
+          256.0,
+          256.0
+        ],
+        [
+          0.0,
+          256.0
+        ]
+      ],
+      "score": 13.405082702636719,
+      "threshold": 23.701377868652344,
+      "model_id": "model_c022f8bbd44a44e3a4aefb0c6581de5d",
+      "model_sha256": "f16fda14246356e57baa1d69677580f63b673c2372343b02820b64a91444a9f7",
+      "reason": "Main surface: anomaly score 13.4051",
+      "state": "PASS"
+    }
+  ],
+  "quality": {
+    "brightness": 67.06678771972656,
+    "sharpness": 529.4914646295365,
+    "limits": {
+      "min_brightness": 1.0,
+      "max_brightness": 254.0,
+      "min_blur": 0.0
+    },
+    "blur_enabled": false
+  },
+  "locator": {
+    "method": "fixed",
+    "score": null,
+    "part_present": true,
+    "transform": [
+      [
+        1.0,
+        0.0,
+        0.0
+      ],
+      [
+        0.0,
+        1.0,
+        0.0
+      ]
+    ]
+  },
+  "stage": "decision",
+  "image_size": {
+    "width": 256,
+    "height": 256
+  },
+  "state": "PASS",
+  "reasons": [
+    "All required checks passed"
+  ],
+  "elapsed_ms": 5648.549,
+  "image_id": "image_283eb8ecaad0de0f34716fdb01612729d5ac8bf06606fbaf89c9915116f64396",
+  "anomaly_maps": [
+    "surface"
+  ]
+}

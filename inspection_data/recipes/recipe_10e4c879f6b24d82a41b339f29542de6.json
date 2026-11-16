@@ -1,0 +1,69 @@
+{
+  "id": "recipe_10e4c879f6b24d82a41b339f29542de6",
+  "created_at": "2026-10-06T02:56:08.705323+00:00",
+  "parent": null,
+  "config": {
+    "schema_version": 1,
+    "product": "Toyota surface — cropped image study",
+    "reference_id": "image_61c69eabeed01d4c33ff540b9e65954dbc1def90dbf161aade9befe7f8e2bc6a",
+    "camera": {
+      "driver": "opencv",
+      "index": 0,
+      "serial": "",
+      "exposure_us": null,
+      "gain": null
+    },
+    "quality": {
+      "min_brightness": 1.0,
+      "max_brightness": 254.0,
+      "min_blur": 0
+    },
+    "locator": {
+      "method": "fixed",
+      "region": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "min_score": 0.8,
+      "min_matches": 12,
+      "max_shift": 0.2,
+      "max_rotation": 15,
+      "scale_tolerance": 0.15,
+      "fixture_confirmed": false
+    },
+    "areas": [
+      {
+        "id": "surface",
+        "name": "Main surface",
+        "region": {
+          "x": 0.0,
+          "y": 0.0,
+          "width": 1.0,
+          "height": 1.0
+        },
+        "method": {
+          "kind": "anomaly",
+          "threshold": 0.8,
+          "review_margin": 0.03,
+          "low": 30,
+          "high": 220,
+          "model_id": null
+        },
+        "required": true
+      }
+    ],
+    "validation": {
+      "min_good": 10,
+      "min_ng": 10,
+      "max_false_accept": 0,
+      "max_false_reject": 0.05,
+      "max_review": 0.1,
+      "max_unable": 0
+    }
+  },
+  "reference_sha256": "c9b510644ccf35d8c13ef07439d2ba83502280640a0829e88a2af4b6f3e33561",
+  "models": {},
+  "hash": "44b22541dac689d70f14023047c3660ceea669b2aafe147e60373628cea9886a"
+}

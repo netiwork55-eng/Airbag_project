@@ -1,0 +1,102 @@
+{
+  "id": "event_cdd18ccf676d4a41a3939ff5e4a062ad",
+  "timestamp": "2026-10-14T01:30:30.393541+00:00",
+  "source": "test",
+  "complete": false,
+  "engine_version": "2026.10.09.2",
+  "recipe_id": "recipe_00edecc594b149358ae66695d927730d",
+  "recipe_hash": "d9ce20f7f1c4468206f9bc1cf580e9e600228b3eb482c3863315ed9732fbf1e6",
+  "areas": [
+    {
+      "area_id": "surface",
+      "name": "Main surface",
+      "required": true,
+      "method": "anomaly",
+      "region": {
+        "x": 0.0,
+        "y": 0.0,
+        "width": 1.0,
+        "height": 1.0
+      },
+      "settings": {
+        "kind": "anomaly",
+        "threshold": 1.9498082399368286,
+        "review_margin": 0.09749041199684144,
+        "low": 30.0,
+        "high": 220.0,
+        "model_id": "model_a9c0bb94934e4f24a422efe1c8e8c1f3",
+        "target_labels": [],
+        "min_count": 0,
+        "max_count": 0
+      },
+      "state": "UNABLE_TO_INSPECT",
+      "reason": "Not inspected: Image dimensions differ from the reference; configure the camera first"
+    }
+  ],
+  "quality": {
+    "brightness": 120.09184413580248,
+    "sharpness": 85.67246870943175,
+    "limits": {
+      "min_brightness": 1.0,
+      "max_brightness": 254.0,
+      "min_blur": 0.0
+    },
+    "blur_enabled": false
+  },
+  "locator": {
+    "method": "fixed",
+    "score": null,
+    "part_present": null
+  },
+  "stage": "decision",
+  "image_size": {
+    "width": 1920,
+    "height": 1080
+  },
+  "failed_stage": "alignment",
+  "state": "UNABLE_TO_INSPECT",
+  "reasons": [
+    "Image dimensions differ from the reference; configure the camera first",
+    "Not inspected: Image dimensions differ from the reference; configure the camera first"
+  ],
+  "elapsed_ms": 17.095,
+  "capture": {
+    "requested": {
+      "driver": "opencv",
+      "index": 1,
+      "serial": "",
+      "exposure_us": null,
+      "gain": null,
+      "width": 1920,
+      "height": 1080,
+      "max_frame_age_ms": 1000
+    },
+    "actual": {
+      "driver": "opencv",
+      "index": 1,
+      "width": 1920.0,
+      "height": 1080.0,
+      "exposure_driver_units": -6.0,
+      "gain": -1.0,
+      "focus_driver_units": 7.0,
+      "autofocus": 1.0,
+      "note": "Driver-reported values may include unsupported/sentinel values. Focus must be checked on the real image."
+    },
+    "timing_scope": "Host read completion; not sensor exposure time"
+  },
+  "captured_at": "2026-10-14T01:30:30.375602+00:00",
+  "frame_sequence": 299,
+  "verification_kind": "real_camera_incompatible_recipe_check",
+  "camera_requested": {
+    "driver": "opencv",
+    "index": 0,
+    "serial": "",
+    "exposure_us": null,
+    "gain": null,
+    "width": null,
+    "height": null,
+    "max_frame_age_ms": 1000
+  },
+  "frame_age_ms": 15.99999999996271,
+  "image_id": "image_28c0d8c93f241d38c5c94bc559b1a2302088167e8ee14ef9da4cc864f100dceb"
+}
