@@ -1,0 +1,13 @@
+{
+  "dataset_name": "Airbag.v2i.yolov8",
+  "brand": "",
+  "model": "",
+  "target": "Airbag",
+  "dataset_type": "Detection",
+  "notes": "Restored from original ZIP on 2026-06-10 14:17:30.",
+  "updated_at": "2026-06-10T14:17:30",
+  "created_at": "2026-06-10T14:17:30",
+  "auto_filled": false,
+  "review_status": "reviewed",
+  "reviewed_at": "2026-06-10T14:17:30"
+}

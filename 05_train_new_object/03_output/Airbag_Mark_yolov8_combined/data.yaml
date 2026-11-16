@@ -1,0 +1,6 @@
+train: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\03_output\Airbag_Mark_yolov8_combined\train\images
+val: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\03_output\Airbag_Mark_yolov8_combined\valid\images
+test: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\03_output\Airbag_Mark_yolov8_combined\test\images
+
+nc: 2
+names: ["Airbag", "Mark"]

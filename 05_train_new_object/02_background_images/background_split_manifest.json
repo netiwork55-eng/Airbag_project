@@ -1,0 +1,449 @@
+{
+  "version": 1,
+  "seed": 42,
+  "near_duplicate_hamming_distance": 5,
+  "updated_at": "2026-07-03T08:51:46",
+  "entries": [
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083315_315.jpg",
+      "split": "train",
+      "sha256": "640de62051b6fc1ec7d81fe710dd1da85a7e24ff7b60b6e1ed215d45cf805be3",
+      "dhash": "30918c4c4c0b0307",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083303_731.jpg",
+      "split": "train",
+      "sha256": "82a4ef7ea3a0e0774403d053cfc8414f5296fee78ccc913c595676c970c5186e",
+      "dhash": "98938b1b9bf3f3eb",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083308_662.jpg",
+      "split": "train",
+      "sha256": "59cce8ddf170576e0494dbe09b4e48b53ebdd7d0b8590fdc6b426fce9360d3df",
+      "dhash": "c6c3cac9e1b292d2",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083220_021.jpg",
+      "split": "train",
+      "sha256": "a21e73620bcdecd72a10ef43db945531fc91ba373a751dacb5929304ea378f78",
+      "dhash": "030c1c989c343058",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083306_814.jpg",
+      "split": "train",
+      "sha256": "80747ecb66ef662bd3cca69a7368fc9cf60a6c1b891ea8b60ba62cd7e97b896b",
+      "dhash": "f0f0d9c9e9d0d2d0",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083331_540.jpg",
+      "split": "train",
+      "sha256": "03e79d6c9b57bcdcdc940533319d1f81f0bb8d4be9bb4d1056587177f00466da",
+      "dhash": "8793d3f3d3f2f0f0",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083317_877.jpg",
+      "split": "train",
+      "sha256": "71b2ab766c9f0ec37ec8d3199d42643e5c0d4eaf7e6b47338fb8a1535b009b2a",
+      "dhash": "00000018185848c8",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083327_795.jpg",
+      "split": "train",
+      "sha256": "01d18ed39ee1789511d4c994cde40e5644cf1ca1d894a611dd394f51b8538e48",
+      "dhash": "8800083839595959",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083331_027.jpg",
+      "split": "train",
+      "sha256": "d5dc9c5f03ffd6b36818f317247e831bd0df3b70b84336fc9bb502b57d1282a3",
+      "dhash": "e692d0d0f0e2f296",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083221_458.jpg",
+      "split": "train",
+      "sha256": "29396b6eb86b3706cf34ef55941bd728dbf45d80781bc1785be70facd67c4973",
+      "dhash": "0939317951613133",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083314_002.jpg",
+      "split": "train",
+      "sha256": "9202d5ea2e4002fa665d4c3aefe4a31a7c2cdc2fe865fb1e4192f69d1c79308c",
+      "dhash": "4ccc980898989291",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083219_250.jpg",
+      "split": "train",
+      "sha256": "52655d45f22966d98ac6dc47388728791b6f2a8d591794b957bec3259337c041",
+      "dhash": "1818303131313313",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083222_662.jpg",
+      "split": "train",
+      "sha256": "5a1ee901264c9eb1a6995972f289232e59d325c016b2d9cf51955407d8de0a5f",
+      "dhash": "633372e0e6623616",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083316_372.jpg",
+      "split": "train",
+      "sha256": "f69f8559b94e382db9e497e3604db962d35f255ef0a7c35e7f374d214427bda8",
+      "dhash": "3131248484850931",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083322_598.jpg",
+      "split": "train",
+      "sha256": "f48e47b631fffc85c6e6e10b25cc380bb7f62edb636572bb66f0602974ab6e9c",
+      "dhash": "071b1959cac2d303",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083324_085.jpg",
+      "split": "train",
+      "sha256": "fd56aceb29de1835a57f99de9f5d60d54fd7a4ea050516b5c959c637c2618142",
+      "dhash": "0b13135a48c8c8c8",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083223_300.jpg",
+      "split": "train",
+      "sha256": "247eaa74f85877f02f9460a0457d941fc82987e49dad39b4c6d22ab31913500f",
+      "dhash": "003272e0f2c6cce6",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083217_216.jpg",
+      "split": "train",
+      "sha256": "50e9936549afe2128c43c9eacee317bc22855994de565b6c97a5bb0fa08c9df9",
+      "dhash": "01013131b1b0b233",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083326_103.jpg",
+      "split": "train",
+      "sha256": "609c421aabd5c281bfe260a911184c531f55a0e7694152df4df61c0055800d2b",
+      "dhash": "2c24646464642c4a",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083220_792.jpg",
+      "split": "train",
+      "sha256": "62c645967a0f87db4c1862e2057136093019564b8d22cdf7f6611f2f5113fab6",
+      "dhash": "82850c9c98343038",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083332_597.jpg",
+      "split": "train",
+      "sha256": "7fbf7b4950c5cddb9373827c7162593876ca74ca0fdf7dffaf5a7edc87fc4252",
+      "dhash": "8713135a585859c1",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083310_313.jpg",
+      "split": "train",
+      "sha256": "e1bd6d47bfbe6e243c4998f169b8a6b30e2f705d879107e46aabb340442155e6",
+      "dhash": "73f2d8cce9c8d2d2",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083315_846.jpg",
+      "split": "train",
+      "sha256": "23760100e58729320bcfb4a29468df024211736ed39c224dabd20a991f91536c",
+      "dhash": "4c2c060303632313",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083216_388.jpg",
+      "split": "train",
+      "sha256": "83404a938fffeb5bfc8d3982e12c6641d28c596d2d20ccb6972a6b8e5efe0e38",
+      "dhash": "0333333333333373",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083213_568.jpg",
+      "split": "train",
+      "sha256": "191eb0926fe34d49a53f0b61e92e08a006e6de812b86666050c2ab1ba4e697a9",
+      "dhash": "3919d9d890b170d8",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083316_851.jpg",
+      "split": "train",
+      "sha256": "2da7063be15fbf566d0894f3d4331e3098f5e3e06a0de660e1757d29bb8a34a0",
+      "dhash": "60c0c1c4e4616161",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083314_712.jpg",
+      "split": "train",
+      "sha256": "f62f7268f860c38fa1c826fad2fb19dbf2ea0c2eb738b817cf401bcd68058a59",
+      "dhash": "6060606331327373",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083330_372.jpg",
+      "split": "train",
+      "sha256": "62ca7246b40ea802f96a09a322f3a765b2f6b29b9d0301993e2c2b3a512b9469",
+      "dhash": "968e4f4e6586a4e0",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083313_378.jpg",
+      "split": "train",
+      "sha256": "671116f73d3e28e909d7313799bb92cabeea05af016814c38fd8740b04851ebc",
+      "dhash": "9888c862306560d8",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083321_249.jpg",
+      "split": "train",
+      "sha256": "a8669693be7c1aef7af331ba2b0fe1b5e239a0b260d933fc847062d89668963d",
+      "dhash": "0c0c484c4ccccc0c",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083321_990.jpg",
+      "split": "train",
+      "sha256": "bdd5b63fce654361a639cb8386003f71003d651bda36b2dc6886a3cc7f5a5a1c",
+      "dhash": "090c2c6869696c0c",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083215_655.jpg",
+      "split": "train",
+      "sha256": "f90a2c9ca16b75243de0b5ce34d0f42bf5c1a35049cf03fc294acdd30ed9313d",
+      "dhash": "333030b0b0b2b370",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083224_386.jpg",
+      "split": "train",
+      "sha256": "dee8ae2257134071b34623c714a9fee0c62d43d9eff745603859cfe4fdb26a72",
+      "dhash": "33397971f9cbc343",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083318_420.jpg",
+      "split": "train",
+      "sha256": "15eaeed17458d7c08b39f5b04521211aa6524887dd8ce2c73c8c885cf309c5ff",
+      "dhash": "3231319292989992",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083328_288.jpg",
+      "split": "train",
+      "sha256": "d567fcf025321e14d6b97ca60896eb9521091f58e9ef4e33e55f9fcfaaab8c66",
+      "dhash": "11d3d29090f28005",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083323_398.jpg",
+      "split": "train",
+      "sha256": "fe9f1364e69b49b3253c09c342408a66811aadeec5a6695393e6d7294110ce44",
+      "dhash": "04021969694c484a",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083222_082.jpg",
+      "split": "train",
+      "sha256": "ec6322478d09f45b1383cdecb66b7868d2df808990c7da1c558c5265727337c1",
+      "dhash": "39317252c3e76317",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083211_475.jpg",
+      "split": "train",
+      "sha256": "aead646a748fcc6d5b9e9015e172d1a9401ebd2bd99e62702d0994fa9adbf9c7",
+      "dhash": "03195959d9d89999",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083306_228.jpg",
+      "split": "train",
+      "sha256": "fa7edebec8afdf2314149ef87eed0f9809bb921900939eb667ba19689e5f63fa",
+      "dhash": "ecece8c960f0f2e6",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083328_768.jpg",
+      "split": "train",
+      "sha256": "ea030373adf93c33897fcc5729f87d1363fe85af884af54f1d70d005ec4bfe47",
+      "dhash": "892a91939383c3c3",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083327_264.jpg",
+      "split": "train",
+      "sha256": "483a04d4a8fa5e5e72c4088d9809e52b95a7fb4e922d6926297f4b76fe6da845",
+      "dhash": "313113192c302040",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083329_943.jpg",
+      "split": "train",
+      "sha256": "7aa2d0db3fb5d374f5293e1ce80262ef0690aa6a2c8325901ec4e709b40f8a9e",
+      "dhash": "182d2d989d99ca4b",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083332_072.jpg",
+      "split": "train",
+      "sha256": "78a6f7d2631968a332749433b54790167e1f19c64c241f9b72abe6e6d2b6cb39",
+      "dhash": "1b333333333c2001",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083325_620.jpg",
+      "split": "train",
+      "sha256": "6c1d2eef06758c42da74dee029b56a0f16a1419c68618550b50457f169bfa41f",
+      "dhash": "2b69696969293935",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "train/20260703_083505_background_recovered/airbag_mark_20260703_083319_075.jpg",
+      "split": "train",
+      "sha256": "651fa9e8f5df1b7d43353cab65e3b2fbffb9c32b8318c45845cc1b6e33be0f82",
+      "dhash": "1c4c4cc9c9c84961",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083310_929.jpg",
+      "split": "eval_valid",
+      "sha256": "5baef7b5686c40831c9cfa7f937609d4c6150b282c344661f64c194aeae85e16",
+      "dhash": "e4edc7e1a1d0d292",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083304_418.jpg",
+      "split": "eval_valid",
+      "sha256": "1500ee718a69c16010a89c1a32e494b037581eda757b1eafcca1cf754c3b51a5",
+      "dhash": "3207133333b3f3c3",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083320_848.jpg",
+      "split": "eval_valid",
+      "sha256": "314eb44c8f48b7dc6fa57a239f3de4707820307ed2c46de3aeb22dfa3c293580",
+      "dhash": "0808494ccccccccc",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083333_296.jpg",
+      "split": "eval_valid",
+      "sha256": "302216d64a90ba1562c8f4050f33a88544249eae3b8dd643c576627e8dde6f08",
+      "dhash": "6c6c6c69f0f0c1cd",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083302_754.jpg",
+      "split": "eval_valid",
+      "sha256": "036be0d2091bf8fde939cf2e57b42b7f939f586eb06ecf36cb3c5d6bf9a6d86d",
+      "dhash": "0b13333363636373",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083329_341.jpg",
+      "split": "eval_valid",
+      "sha256": "ffdab06b18924c597854cfccc6cb3506565385b8fef387dbcedf8b75a8a962a9",
+      "dhash": "86989c8c929399e4",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083320_242.jpg",
+      "split": "eval_valid",
+      "sha256": "1d02d62b6f1edff4587ba680e68ac2da298feb27cbb320c7b32e538644f9f64a",
+      "dhash": "c90c0319195949c9",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083307_458.jpg",
+      "split": "eval_valid",
+      "sha256": "ec7664db6f9c75f655d120708cc49f2d09624dd8e8944d4f737d9db676c0e9c5",
+      "dhash": "f3e3e1f1d9c0d192",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_valid/20260703_083505_background_recovered/airbag_mark_20260703_083317_346.jpg",
+      "split": "eval_valid",
+      "sha256": "24c07415640a3ea5f5d0a5838f1ab96213383afcb5e0e1903e2860ba47a39053",
+      "dhash": "b0000000303070d1",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083324_930.jpg",
+      "split": "eval_test",
+      "sha256": "a0540a2eb2329115d62953f7793bf7b013fb43a2f007319b19ef8e944a451f38",
+      "dhash": "03131b6969494948",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083225_456.jpg",
+      "split": "eval_test",
+      "sha256": "6f2b1380dce85d895fbd8df04c58809e0a82d20693767319ae2420d0bb2e2d13",
+      "dhash": "0000007070f0e0e1",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083223_827.jpg",
+      "split": "eval_test",
+      "sha256": "6505dbfd2b8c2804ded01b9d74934efa312309f6ffe73c0896f23402e5fadbf5",
+      "dhash": "363271f2f2d2c666",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083326_601.jpg",
+      "split": "eval_test",
+      "sha256": "5cc414f22e07593166f413caa0ede0863dd7249740bb07861079b0d31ee93f77",
+      "dhash": "512640010c0c2c24",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083319_679.jpg",
+      "split": "eval_test",
+      "sha256": "e3417770648e01eee6340ad3eb737fa816512949bdb576d8ab68ad2f4a04c623",
+      "dhash": "03191949c9cac8c9",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083304_899.jpg",
+      "split": "eval_test",
+      "sha256": "37abdd2efbb8bafdd8ffd037fb69fd63ae7ae6190a4b0c843f6dd3fc605e8949",
+      "dhash": "9592810c34b4e4f4",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083214_879.jpg",
+      "split": "eval_test",
+      "sha256": "c718953d6ca0bfcc9cd39b2f2acab5a9f513420878c652b0451a5226884eeeea",
+      "dhash": "31b0b0b0b3b372f2",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083225_027.jpg",
+      "split": "eval_test",
+      "sha256": "6b88532bb10db7a743fc6f81133083cf42b59eac66ba1fd271b99895c3331601",
+      "dhash": "0101113978746161",
+      "batch": "20260703_083505_background_recovered"
+    },
+    {
+      "path": "eval_test/20260703_083505_background_recovered/airbag_mark_20260703_083305_456.jpg",
+      "split": "eval_test",
+      "sha256": "70550f7a329ee751c83137a7d87bca635b8dc83351d61d6164c5993bc6b8f8b2",
+      "dhash": "e8e9e9607072e676",
+      "batch": "20260703_083505_background_recovered"
+    }
+  ]
+}

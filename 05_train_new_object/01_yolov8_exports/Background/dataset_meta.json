@@ -1,0 +1,18 @@
+{
+  "dataset_name": "Background",
+  "dataset_name_label": "Dataset Name",
+  "brand": "",
+  "brand_label": "Brand",
+  "model": "",
+  "model_label": "Model",
+  "target": "",
+  "target_label": "Target / Object",
+  "dataset_type": "Negative / Background",
+  "dataset_type_label": "Dataset Type",
+  "notes": "Auto-filled from existing workspace folder.",
+  "notes_label": "Notes",
+  "updated_at": "2026-09-29T09:04:24",
+  "auto_filled": true,
+  "review_status": "needs_info",
+  "created_at": "2026-09-29T09:04:24"
+}

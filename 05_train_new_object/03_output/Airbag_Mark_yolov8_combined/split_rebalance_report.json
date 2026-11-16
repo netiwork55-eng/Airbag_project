@@ -1,0 +1,33 @@
+{
+  "enabled": true,
+  "images": 845,
+  "moved": 845,
+  "groups": 757,
+  "near_duplicate_threshold": 4,
+  "splits": {
+    "train": {
+      "images": 726,
+      "groups": 651,
+      "class_counts": {
+        "Airbag": 1364,
+        "Mark": 517
+      }
+    },
+    "valid": {
+      "images": 68,
+      "groups": 64,
+      "class_counts": {
+        "Airbag": 159,
+        "Mark": 46
+      }
+    },
+    "test": {
+      "images": 51,
+      "groups": 42,
+      "class_counts": {
+        "Airbag": 113,
+        "Mark": 41
+      }
+    }
+  }
+}

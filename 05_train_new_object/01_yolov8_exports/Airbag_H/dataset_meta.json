@@ -1,0 +1,19 @@
+{
+  "dataset_name": "Airbag H",
+  "dataset_name_label": "Dataset Name",
+  "brand": "",
+  "brand_label": "Brand",
+  "model": "Honda",
+  "model_label": "Model",
+  "target": "Airbag",
+  "target_label": "Target / Object",
+  "dataset_type": "Detection",
+  "dataset_type_label": "Dataset Type",
+  "notes": "Auto-filled from existing workspace folder.",
+  "notes_label": "Notes",
+  "updated_at": "2026-08-17T14:45:00",
+  "created_at": "2026-08-17T14:44:45",
+  "auto_filled": false,
+  "review_status": "reviewed",
+  "reviewed_at": "2026-08-17T14:45:00"
+}

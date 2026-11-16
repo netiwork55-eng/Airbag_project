@@ -1,0 +1,6 @@
+train: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\01_yolov8_exports\Airbag_H\20260817_144445_auto_split\train\images
+val: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\01_yolov8_exports\Airbag_H\20260817_144445_auto_split\valid\images
+test: D:\Users\dev06\Desktop\Airbag_Project\05_train_new_object\01_yolov8_exports\Airbag_H\20260817_144445_auto_split\test\images
+
+nc: 1
+names: ["Airbag"]

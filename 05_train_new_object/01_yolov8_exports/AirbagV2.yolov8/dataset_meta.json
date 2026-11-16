@@ -1,0 +1,16 @@
+{
+  "dataset_name": "AirbagV2.yolov8",
+  "dataset_name_label": "Dataset Name",
+  "brand": "",
+  "brand_label": "Brand",
+  "model": "",
+  "model_label": "Model",
+  "target": "Airbag",
+  "target_label": "Target / Object",
+  "dataset_type": "Detection",
+  "dataset_type_label": "Dataset Type",
+  "notes": "Auto-filled from existing workspace folder.",
+  "notes_label": "Notes",
+  "updated_at": "2026-06-09T12:05:11",
+  "created_at": "2026-06-09T12:05:11"
+}

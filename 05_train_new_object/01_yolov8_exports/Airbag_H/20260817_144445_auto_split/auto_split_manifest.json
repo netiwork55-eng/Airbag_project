@@ -1,0 +1,497 @@
+{
+  "version": 1,
+  "mode": "automatic_class_aware_split",
+  "created_at": "2026-08-17T14:44:45",
+  "seed": 42,
+  "requested_ratios": {
+    "train": 0.8,
+    "valid": 0.15,
+    "test": 0.05
+  },
+  "counts": {
+    "train": 46,
+    "valid": 9,
+    "test": 3
+  },
+  "class_names": [
+    "Airbag"
+  ],
+  "class_counts": {
+    "train": {
+      "Airbag": 46
+    },
+    "valid": {
+      "Airbag": 9
+    },
+    "test": {
+      "Airbag": 3
+    }
+  },
+  "notes": [],
+  "items": [
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095847_508.jpg",
+      "split": "train",
+      "image": "000001_airbag_mark_20260817_095847_508_dc8e4171f7.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095818_019.jpg",
+      "split": "train",
+      "image": "000002_airbag_mark_20260817_095818_019_4e56d744ab.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095937_618.jpg",
+      "split": "train",
+      "image": "000003_airbag_mark_20260817_095937_618_2c8a6daa09.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095833_859.jpg",
+      "split": "train",
+      "image": "000004_airbag_mark_20260817_095833_859_a82907c44d.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095922_066.jpg",
+      "split": "train",
+      "image": "000005_airbag_mark_20260817_095922_066_9f575421cd.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095900_066.jpg",
+      "split": "train",
+      "image": "000006_airbag_mark_20260817_095900_066_4f35cae062.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095938_322.jpg",
+      "split": "train",
+      "image": "000007_airbag_mark_20260817_095938_322_87150cd8fe.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095826_835.jpg",
+      "split": "train",
+      "image": "000008_airbag_mark_20260817_095826_835_79753ceb7b.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095832_979.jpg",
+      "split": "train",
+      "image": "000009_airbag_mark_20260817_095832_979_f5020b8083.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095831_380.jpg",
+      "split": "train",
+      "image": "000010_airbag_mark_20260817_095831_380_5098ba8305.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095845_105.jpg",
+      "split": "train",
+      "image": "000011_airbag_mark_20260817_095845_105_f198f4aed2.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095808_913.jpg",
+      "split": "train",
+      "image": "000012_airbag_mark_20260817_095808_913_af72b4e310.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095926_034.jpg",
+      "split": "train",
+      "image": "000013_airbag_mark_20260817_095926_034_dce7a200c2.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095914_913.jpg",
+      "split": "train",
+      "image": "000014_airbag_mark_20260817_095914_913_abc855e415.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095924_706.jpg",
+      "split": "train",
+      "image": "000015_airbag_mark_20260817_095924_706_6d7972afff.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095919_251.jpg",
+      "split": "train",
+      "image": "000016_airbag_mark_20260817_095919_251_ed28b93b10.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095812_482.jpg",
+      "split": "train",
+      "image": "000017_airbag_mark_20260817_095812_482_8d431ad7b1.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095910_737.jpg",
+      "split": "train",
+      "image": "000018_airbag_mark_20260817_095910_737_8c972cb472.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095843_364.jpg",
+      "split": "train",
+      "image": "000019_airbag_mark_20260817_095843_364_831d4c896f.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095925_362.jpg",
+      "split": "train",
+      "image": "000020_airbag_mark_20260817_095925_362_e751a9d913.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095905_874.jpg",
+      "split": "train",
+      "image": "000021_airbag_mark_20260817_095905_874_cd4a0d97c2.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095840_402.jpg",
+      "split": "train",
+      "image": "000022_airbag_mark_20260817_095840_402_b9bfc5d2d7.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095938_962.jpg",
+      "split": "train",
+      "image": "000023_airbag_mark_20260817_095938_962_06250e3894.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095922_722.jpg",
+      "split": "train",
+      "image": "000024_airbag_mark_20260817_095922_722_2ad765d8e4.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095926_643.jpg",
+      "split": "train",
+      "image": "000025_airbag_mark_20260817_095926_643_6ec21be856.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095846_545.jpg",
+      "split": "train",
+      "image": "000026_airbag_mark_20260817_095846_545_2c2a81ae30.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095810_018.jpg",
+      "split": "train",
+      "image": "000027_airbag_mark_20260817_095810_018_5077260d01.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095842_161.jpg",
+      "split": "train",
+      "image": "000028_airbag_mark_20260817_095842_161_a4a06b9877.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095823_299.jpg",
+      "split": "train",
+      "image": "000029_airbag_mark_20260817_095823_299_fd04b74c3b.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095936_417.jpg",
+      "split": "train",
+      "image": "000030_airbag_mark_20260817_095936_417_38496a8931.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095935_090.jpg",
+      "split": "train",
+      "image": "000031_airbag_mark_20260817_095935_090_de40d7a35b.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095919_922.jpg",
+      "split": "train",
+      "image": "000032_airbag_mark_20260817_095919_922_593db7a249.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095927_778.jpg",
+      "split": "train",
+      "image": "000033_airbag_mark_20260817_095927_778_f0763b5322.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095825_811.jpg",
+      "split": "train",
+      "image": "000034_airbag_mark_20260817_095825_811_903b55127d.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095903_634.jpg",
+      "split": "train",
+      "image": "000035_airbag_mark_20260817_095903_634_ce4bf897f7.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095918_418.jpg",
+      "split": "train",
+      "image": "000036_airbag_mark_20260817_095918_418_c9458b891a.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095923_970.jpg",
+      "split": "train",
+      "image": "000037_airbag_mark_20260817_095923_970_07f18e307f.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095927_235.jpg",
+      "split": "train",
+      "image": "000038_airbag_mark_20260817_095927_235_f4aa9e4abc.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095815_057.jpg",
+      "split": "train",
+      "image": "000039_airbag_mark_20260817_095815_057_1890301758.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095821_299.jpg",
+      "split": "train",
+      "image": "000040_airbag_mark_20260817_095821_299_3addf06c3d.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095802_994.jpg",
+      "split": "train",
+      "image": "000041_airbag_mark_20260817_095802_994_5994dee709.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095839_426.jpg",
+      "split": "train",
+      "image": "000042_airbag_mark_20260817_095839_426_c160336bcd.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095801_731.jpg",
+      "split": "train",
+      "image": "000043_airbag_mark_20260817_095801_731_34ed811a02.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095908_434.jpg",
+      "split": "train",
+      "image": "000044_airbag_mark_20260817_095908_434_118d816475.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095909_602.jpg",
+      "split": "train",
+      "image": "000045_airbag_mark_20260817_095909_602_de89572081.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095920_627.jpg",
+      "split": "train",
+      "image": "000046_airbag_mark_20260817_095920_627_ebe57dd8ab.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095805_410.jpg",
+      "split": "valid",
+      "image": "000001_airbag_mark_20260817_095805_410_08687bc0e6.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095933_586.jpg",
+      "split": "valid",
+      "image": "000002_airbag_mark_20260817_095933_586_cf60fa2ea6.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095848_913.jpg",
+      "split": "valid",
+      "image": "000003_airbag_mark_20260817_095848_913_1ed86b2a82.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095828_083.jpg",
+      "split": "valid",
+      "image": "000004_airbag_mark_20260817_095828_083_d1c5a66b88.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095940_627.jpg",
+      "split": "valid",
+      "image": "000005_airbag_mark_20260817_095940_627_d9b30bcd83.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095832_147.jpg",
+      "split": "valid",
+      "image": "000006_airbag_mark_20260817_095832_147_e80240e770.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095830_386.jpg",
+      "split": "valid",
+      "image": "000007_airbag_mark_20260817_095830_386_7c7da9251b.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095824_339.jpg",
+      "split": "valid",
+      "image": "000008_airbag_mark_20260817_095824_339_022c2cf6bc.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095939_489.jpg",
+      "split": "valid",
+      "image": "000009_airbag_mark_20260817_095939_489_99eb792624.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095921_426.jpg",
+      "split": "test",
+      "image": "000001_airbag_mark_20260817_095921_426_fa2f1eb251.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095912_146.jpg",
+      "split": "test",
+      "image": "000002_airbag_mark_20260817_095912_146_69185c4585.jpg",
+      "classes": [
+        0
+      ]
+    },
+    {
+      "source": "Airbag_H/obj_train_data/airbag_mark_20260817_095923_363.jpg",
+      "split": "test",
+      "image": "000003_airbag_mark_20260817_095923_363_6a1f3dd2f0.jpg",
+      "classes": [
+        0
+      ]
+    }
+  ]
+}

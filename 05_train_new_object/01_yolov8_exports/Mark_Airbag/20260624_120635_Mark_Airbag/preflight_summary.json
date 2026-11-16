@@ -1,0 +1,21 @@
+{
+  "total_images": 128,
+  "train_images": 102,
+  "val_images": 26,
+  "image_size": "1280x720",
+  "total_boxes": 731,
+  "classes": {
+    "0": "Mark",
+    "1": "Airbag"
+  },
+  "train_class_counts": {
+    "0": 473,
+    "1": 101
+  },
+  "val_class_counts": {
+    "0": 131,
+    "1": 26
+  },
+  "missing_pairs": 0,
+  "bad_label_rows": 0
+}

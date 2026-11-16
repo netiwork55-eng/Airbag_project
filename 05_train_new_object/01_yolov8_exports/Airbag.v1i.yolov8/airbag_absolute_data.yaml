@@ -1,0 +1,6 @@
+train: D:\Users\is00001\Downloads\Airbag.v1i.yolov8\train\images
+val: D:\Users\is00001\Downloads\Airbag.v1i.yolov8\valid\images
+test: D:\Users\is00001\Downloads\Airbag.v1i.yolov8\test\images
+
+nc: 1
+names: ["Airbag"]

@@ -1,0 +1,58 @@
+{
+  "source_fingerprint": "086016655e42c177c0a957e61d2e34bdb589b1cefd2335a04627ea0cdabe860f",
+  "dataset": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\03_output\\Airbag_Mark_yolov8_combined",
+  "classes": [
+    "Airbag",
+    "Mark"
+  ],
+  "splits": {
+    "train": {
+      "images": 726,
+      "labels": 726,
+      "missing_label_images": 0,
+      "empty_labels": 122,
+      "rows": 1881,
+      "class_counts": {
+        "Airbag": 1364,
+        "Mark": 517
+      },
+      "bad_rows": 0,
+      "full_frame_boxes": 0,
+      "edge_touch_boxes": 1105
+    },
+    "valid": {
+      "images": 68,
+      "labels": 68,
+      "missing_label_images": 0,
+      "empty_labels": 0,
+      "rows": 205,
+      "class_counts": {
+        "Airbag": 159,
+        "Mark": 46
+      },
+      "bad_rows": 0,
+      "full_frame_boxes": 0,
+      "edge_touch_boxes": 121
+    },
+    "test": {
+      "images": 51,
+      "labels": 51,
+      "missing_label_images": 0,
+      "empty_labels": 0,
+      "rows": 154,
+      "class_counts": {
+        "Airbag": 113,
+        "Mark": 41
+      },
+      "bad_rows": 0,
+      "full_frame_boxes": 0,
+      "edge_touch_boxes": 95
+    }
+  },
+  "cross_split_duplicates": {
+    "exact_pairs": 0,
+    "near_pairs": 0,
+    "threshold": 4,
+    "samples": []
+  }
+}

@@ -1,0 +1,6 @@
+train: D:\Users\is00001\Desktop\YOLO\Airbag_Project\05_train_new_object\04_camera_collection\03_yolov8_auto_labeled_draft\train\images
+val: D:\Users\is00001\Desktop\YOLO\Airbag_Project\05_train_new_object\04_camera_collection\03_yolov8_auto_labeled_draft\valid\images
+test: D:\Users\is00001\Desktop\YOLO\Airbag_Project\05_train_new_object\04_camera_collection\03_yolov8_auto_labeled_draft\test\images
+nc: 1
+names:
+- Airbag
