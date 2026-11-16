@@ -1,0 +1,266 @@
+{
+  "version": 1,
+  "id": "job_e64743c6e55848d5813bd6e5c4148fbd",
+  "name": "Toyota 1 — saved model",
+  "created_at": "2026-09-30T07:19:59.537397+00:00",
+  "use": "test",
+  "production_ready": false,
+  "files": {
+    "model": {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\normal_reference\\Airbag_Toyota_20260929_154205_deep_patch.npz",
+      "sha256": "e9efcd50b809608f5cf4ff51da590efcbd9107782563ab48975849c953c22171"
+    },
+    "locator": {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+      "sha256": "978e052da33c7e5f62a1d758864cbe903645dd10c8643eefd1da2ce0b2a370cc"
+    },
+    "backbone": {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+      "sha256": "978e052da33c7e5f62a1d758864cbe903645dd10c8643eefd1da2ce0b2a370cc"
+    },
+    "brand": {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\06_brand_classification\\04_trained_models\\airbag_brand_best.pt",
+      "sha256": "5f16204f6a64057088979c915b29b8764f160dc5cc0127366b5fdea658d0c480"
+    }
+  },
+  "settings": {
+    "normal_reference": {
+      "active_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\normal_reference\\Airbag_Toyota_20260929_154205_deep_patch.npz",
+      "source_dataset": "reviewed_known_good",
+      "inspection_size": 320,
+      "min_good_images": 5,
+      "min_region_ratio": 0.00035,
+      "trained_at": "2026-09-29T15:42:07",
+      "training_images": 214,
+      "pipeline_version": 7,
+      "background_handling": "aligned_part_mask_only",
+      "quality_metrics": {
+        "engine": "deep_patch",
+        "pipeline_version": 7,
+        "feature_mode": "aligned_masked_multiscale_position_aware",
+        "metric_scope": "independent_known_good_holdout",
+        "independent_validation": true,
+        "calibration_images": 35,
+        "fit_images": 137,
+        "production_memory_scope": "fit_only_frozen",
+        "roi_policy": "shared_runtime_locator_complete_part",
+        "split_policy": "source_group_disjoint",
+        "validation_in_production_memory": false,
+        "source_images_considered": 268,
+        "usable_training_images": 214,
+        "images_excluded_no_part": 43,
+        "images_excluded_clipped_part": 11,
+        "images_excluded_total": 54,
+        "validation_images": 42,
+        "normal_acceptance_rate": 1.0,
+        "false_ng_rate": 0.0,
+        "anomaly_score_mean": 0.9719,
+        "anomaly_score_p95": 1.1914,
+        "anomaly_score_max": 2.326,
+        "production_threshold": 3.241,
+        "review_threshold": 3.0141,
+        "region_threshold": 2.1067,
+        "memory_positions": 1024,
+        "memory_samples_per_position": 64,
+        "foreground_coverage": 0.8916,
+        "threshold_calibration": "fit_group_excluded_scale_then_calibration_threshold",
+        "defect_metrics_available": false,
+        "defect_metrics_reason": "No human-confirmed NG evaluation images are available yet.",
+        "confirmed_ng_images": 0,
+        "detected_ng_images": 0,
+        "ng_recall": null,
+        "false_ok_rate": null,
+        "false_ok_images": 0,
+        "confirmed_ng_review_images": 0,
+        "confirmed_ng_uninspectable_images": 0,
+        "reviewed_ok_images": 0,
+        "accepted_reviewed_ok_images": 0,
+        "reviewed_ok_acceptance_rate": null,
+        "balanced_accuracy": null,
+        "evaluation_note": "Human-reviewed production captures; excluded from Normal Reference training.",
+        "strict_ok_rate": 1.0,
+        "review_rate": 0.0,
+        "uninspectable_rate": 0.0,
+        "holdout_decisions": {
+          "OK": 42,
+          "REVIEW": 0,
+          "NG": 0,
+          "UNINSPECTABLE": 0
+        },
+        "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575"
+      },
+      "source_datasets": [
+        "Airbag_Toyota"
+      ],
+      "source_images": 268,
+      "duplicates_removed": 0,
+      "training_fingerprint": "c1ca454f0089d9518b6376e9383cd3cf8bc2ce25cd6004153a505045a8869fc9",
+      "anomaly_engine": "deep_patch",
+      "backbone_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+      "locator_retrained": false,
+      "recipe_id": "job_e64743c6e55848d5813bd6e5c4148fbd",
+      "recipe_name": "Toyota 1 — saved model",
+      "effective_inspection_size": 320,
+      "candidate_comparison": {
+        "promote": true,
+        "decision": "promoted_provisional",
+        "provisional": true,
+        "checks": [
+          {
+            "name": "independent_holdout_required",
+            "passed": true,
+            "candidate": true,
+            "incumbent": true,
+            "detail": "Training-set scores cannot authorize automatic model activation."
+          },
+          {
+            "name": "clear_ok_acceptance_minimum",
+            "passed": true,
+            "candidate": 1.0,
+            "incumbent": 0.9,
+            "detail": "REVIEW is not a clean OK decision."
+          },
+          {
+            "name": "same_comparison_images_and_roi",
+            "passed": true,
+            "candidate": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+            "incumbent": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+            "detail": ""
+          },
+          {
+            "name": "known_good_acceptance_minimum",
+            "passed": true,
+            "candidate": 1.0,
+            "incumbent": 0.9,
+            "detail": ""
+          },
+          {
+            "name": "known_good_not_regressed",
+            "passed": true,
+            "candidate": 1.0,
+            "incumbent": 0.0238,
+            "detail": "Candidate may be at most 3 percentage points lower on Known-good holdout."
+          }
+        ],
+        "failed_checks": [],
+        "candidate_metrics": {
+          "engine": "deep_patch",
+          "pipeline_version": 7,
+          "feature_mode": "aligned_masked_multiscale_position_aware",
+          "metric_scope": "independent_known_good_holdout",
+          "independent_validation": true,
+          "calibration_images": 35,
+          "fit_images": 137,
+          "production_memory_scope": "fit_only_frozen",
+          "roi_policy": "shared_runtime_locator_complete_part",
+          "split_policy": "source_group_disjoint",
+          "validation_in_production_memory": false,
+          "source_images_considered": 268,
+          "usable_training_images": 214,
+          "images_excluded_no_part": 43,
+          "images_excluded_clipped_part": 11,
+          "images_excluded_total": 54,
+          "validation_images": 42,
+          "normal_acceptance_rate": 1.0,
+          "false_ng_rate": 0.0,
+          "anomaly_score_mean": 0.9719,
+          "anomaly_score_p95": 1.1914,
+          "anomaly_score_max": 2.326,
+          "production_threshold": 3.241,
+          "review_threshold": 3.0141,
+          "region_threshold": 2.1067,
+          "memory_positions": 1024,
+          "memory_samples_per_position": 64,
+          "foreground_coverage": 0.8916,
+          "threshold_calibration": "fit_group_excluded_scale_then_calibration_threshold",
+          "defect_metrics_available": false,
+          "defect_metrics_reason": "No human-confirmed NG evaluation images are available yet.",
+          "confirmed_ng_images": 0,
+          "detected_ng_images": 0,
+          "ng_recall": null,
+          "false_ok_rate": null,
+          "false_ok_images": 0,
+          "confirmed_ng_review_images": 0,
+          "confirmed_ng_uninspectable_images": 0,
+          "reviewed_ok_images": 0,
+          "accepted_reviewed_ok_images": 0,
+          "reviewed_ok_acceptance_rate": null,
+          "balanced_accuracy": null,
+          "evaluation_note": "Human-reviewed production captures; excluded from Normal Reference training.",
+          "strict_ok_rate": 1.0,
+          "review_rate": 0.0,
+          "uninspectable_rate": 0.0,
+          "holdout_decisions": {
+            "OK": 42,
+            "REVIEW": 0,
+            "NG": 0,
+            "UNINSPECTABLE": 0
+          },
+          "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575"
+        },
+        "incumbent_metrics": {
+          "validation_images": 42,
+          "independent_validation": false,
+          "normal_acceptance_rate": 0.0238,
+          "strict_ok_rate": 0.0238,
+          "review_rate": 0.0,
+          "false_ng_rate": 0.9762,
+          "uninspectable_rate": 0.0,
+          "holdout_decisions": {
+            "OK": 1,
+            "REVIEW": 0,
+            "NG": 41,
+            "UNINSPECTABLE": 0
+          },
+          "comparison_set_sha256": "985740ce21225fe74280a61cd68a02219e69967d2f5e9fee25933e94411ce575",
+          "confirmed_ng_images": 0,
+          "detected_ng_images": 0,
+          "ng_recall": null,
+          "false_ok_rate": null,
+          "false_ok_images": 0,
+          "confirmed_ng_review_images": 0,
+          "confirmed_ng_uninspectable_images": 0,
+          "reviewed_ok_images": 0,
+          "accepted_reviewed_ok_images": 0,
+          "reviewed_ok_acceptance_rate": null,
+          "balanced_accuracy": null,
+          "evaluation_note": "Paired candidate holdout; incumbent may have seen these images during its historical training."
+        },
+        "reason": "Candidate passed Known-good checks; NG performance is not yet measurable."
+      },
+      "inspection_contract": {
+        "schema_version": 2,
+        "check_brand": true,
+        "model_sha256": "e9efcd50b809608f5cf4ff51da590efcbd9107782563ab48975849c953c22171",
+        "brand": "Toyota",
+        "min_brand_confidence": 0.8,
+        "datasets": [
+          {
+            "id": "Airbag_Toyota",
+            "recipe": {
+              "brand": "Toyota",
+              "model": "1",
+              "target": "1"
+            }
+          }
+        ]
+      },
+      "recipe_datasets": [
+        {
+          "id": "Airbag_Toyota",
+          "recipe": {
+            "brand": "Toyota",
+            "model": "1",
+            "target": "1"
+          }
+        }
+      ],
+      "job_id": "job_e64743c6e55848d5813bd6e5c4148fbd"
+    },
+    "active_locator_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\models\\Part_20260901_141313_best.pt",
+    "active_brand_model": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\06_brand_classification\\04_trained_models\\airbag_brand_best.pt",
+    "use_classifier": true,
+    "inspection_strategy": "normal_reference",
+    "detection_mode": "normal_reference"
+  }
+}

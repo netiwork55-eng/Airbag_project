@@ -1,0 +1,29 @@
+{
+  "ok": true,
+  "minimum_images_per_split": 5,
+  "maximum_false_positive_rate": 0.1,
+  "thresholds": {
+    "primary": 0.3,
+    "secondary": 0.4
+  },
+  "splits": {
+    "eval_valid": {
+      "images": 9,
+      "false_positive_images": 0,
+      "false_positive_rate": 0.0,
+      "detections": 0,
+      "max_confidence": 0.0,
+      "examples": []
+    },
+    "eval_test": {
+      "images": 9,
+      "false_positive_images": 0,
+      "false_positive_rate": 0.0,
+      "detections": 0,
+      "max_confidence": 0.0,
+      "examples": []
+    }
+  },
+  "error": "",
+  "checked_at": "2026-07-03T11:28:26"
+}

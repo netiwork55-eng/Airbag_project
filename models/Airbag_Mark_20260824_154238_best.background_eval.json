@@ -1,0 +1,139 @@
+{
+  "ok": false,
+  "minimum_images_per_split": 5,
+  "maximum_false_positive_rate": 0.1,
+  "thresholds": {
+    "primary": 0.3,
+    "secondary": 0.4
+  },
+  "splits": {
+    "eval_valid": {
+      "images": 9,
+      "false_positive_images": 7,
+      "false_positive_rate": 0.77778,
+      "detections": 8,
+      "max_confidence": 0.87014,
+      "examples": [
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083302_754.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.50234
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083304_418.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.87014
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083307_458.jpg",
+          "detections": [
+            {
+              "class": "Mark",
+              "confidence": 0.46441
+            },
+            {
+              "class": "Airbag",
+              "confidence": 0.38837
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083317_346.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.50722
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083320_242.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.44192
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083320_848.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.43727
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_valid\\20260703_083505_background_recovered\\airbag_mark_20260703_083333_296.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.32098
+            }
+          ]
+        }
+      ]
+    },
+    "eval_test": {
+      "images": 9,
+      "false_positive_images": 3,
+      "false_positive_rate": 0.33333,
+      "detections": 3,
+      "max_confidence": 0.3558,
+      "examples": [
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_test\\20260703_083505_background_recovered\\airbag_mark_20260703_083225_456.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.33537
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_test\\20260703_083505_background_recovered\\airbag_mark_20260703_083319_679.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.34423
+            }
+          ]
+        },
+        {
+          "image": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\02_background_images\\eval_test\\20260703_083505_background_recovered\\airbag_mark_20260703_083326_601.jpg",
+          "detections": [
+            {
+              "class": "Airbag",
+              "confidence": 0.3558
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "visual_assist": {
+    "eval_valid": {
+      "images": 9,
+      "hit_images": 0,
+      "hit_rate": 0.0,
+      "examples": []
+    },
+    "eval_test": {
+      "images": 9,
+      "hit_images": 0,
+      "hit_rate": 0.0,
+      "examples": []
+    }
+  },
+  "error": "False-positive rate exceeds the activation limit.",
+  "checked_at": "2026-08-24T15:42:55"
+}

@@ -1,0 +1,2694 @@
+{
+  "pipeline_version": 7,
+  "independent_validation": true,
+  "fit": [
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000138_airbag_mark_20260923_090106_886_72dce27307.jpg",
+      "sha256": "98178dede62c11b6cd2e3561ada05885c9e6e97a19b17a249d6be1f07ebe10ff",
+      "source_group": "000138_airbag_mark_20260923_090106_886_72dce27307",
+      "box": [
+        561,
+        124,
+        1137,
+        656
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000081_airbag_mark_20260923_090043_079_45bd67caac.jpg",
+      "sha256": "3aa4b1d7c1e18710df52471ba591f3b9bc9595ad7caf7d928c5a7136eab0376b",
+      "source_group": "000081_airbag_mark_20260923_090043_079_45bd67caac",
+      "box": [
+        44,
+        65,
+        745,
+        692
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000008_airbag_mark_20260923_090025_591_bd3e052039.jpg",
+      "sha256": "f0c191bacf5c5d91fa1de145e15f3e585ad71c7f4c9eb10abc5f96221953f46e",
+      "source_group": "000008_airbag_mark_20260923_090025_591_bd3e052039",
+      "box": [
+        532,
+        256,
+        1006,
+        686
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000035_airbag_mark_20260923_090049_463_ce82d4c872.jpg",
+      "sha256": "349976e39e9b26066cffb77d1c9a650197a28f9e1477e9a468eb1a761912831b",
+      "source_group": "000035_airbag_mark_20260923_090049_463_ce82d4c872",
+      "box": [
+        397,
+        147,
+        851,
+        552
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000122_airbag_mark_20260923_085840_743_87bae3b3d7.jpg",
+      "sha256": "b44c5878b8657e912c4f86825e49a37b3421060758eeb2cc5c41aa314207f2b1",
+      "source_group": "000122_airbag_mark_20260923_085840_743_87bae3b3d7",
+      "box": [
+        270,
+        215,
+        815,
+        712
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000026_airbag_mark_20260923_085857_079_33f8b2279c.jpg",
+      "sha256": "446e17657b7d84c5e756ecc88264614ffa7446cfbe154ddc94736e7f52bf5f64",
+      "source_group": "000026_airbag_mark_20260923_085857_079_33f8b2279c",
+      "box": [
+        433,
+        145,
+        966,
+        620
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000080_airbag_mark_20260923_085837_112_8467c68d6a.jpg",
+      "sha256": "4ed19061892e4a2b5df987f8fb49934c20a30491610ea65fa0da752073eda4e7",
+      "source_group": "000080_airbag_mark_20260923_085837_112_8467c68d6a",
+      "box": [
+        534,
+        208,
+        1074,
+        695
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000013_airbag_mark_20260923_090012_359_4ad2056a8a.jpg",
+      "sha256": "f1f8efaad24e688f9aecb25aaf38f0f1132979f00a240109f541b4ae3a1ec3bd",
+      "source_group": "000013_airbag_mark_20260923_090012_359_4ad2056a8a",
+      "box": [
+        587,
+        255,
+        989,
+        617
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000182_airbag_mark_20260923_090112_727_acc4692178.jpg",
+      "sha256": "fbdcf898048ebdf01119e776fb0204b30806b47f129553a6a700c5122115fd4d",
+      "source_group": "000182_airbag_mark_20260923_090112_727_acc4692178",
+      "box": [
+        172,
+        128,
+        725,
+        643
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000007_airbag_mark_20260923_085905_015_8fac6fbbdf.jpg",
+      "sha256": "55c153e79359304df0823a658a6cb1447fac5224d170298187a27f9c56b9f0c0",
+      "source_group": "000007_airbag_mark_20260923_085905_015_8fac6fbbdf",
+      "box": [
+        286,
+        77,
+        997,
+        626
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000064_airbag_mark_20260923_085846_200_4d3f1047d6.jpg",
+      "sha256": "322820d9ec6fe24d06dd356dd272faa38fb3c80086b1fe0205265332cc504287",
+      "source_group": "000064_airbag_mark_20260923_085846_200_4d3f1047d6",
+      "box": [
+        14,
+        78,
+        592,
+        576
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000037_airbag_mark_20260923_090057_334_0a384af137.jpg",
+      "sha256": "6db0e01cdbe18254d77f3f38db5686b3c09e88ef00572ce4606ceeab0175f640",
+      "source_group": "000037_airbag_mark_20260923_090057_334_0a384af137",
+      "box": [
+        294,
+        177,
+        793,
+        641
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000020_airbag_mark_20260923_090101_703_64d8a3ea68.jpg",
+      "sha256": "5a6dba20b8d510e5578e4aa3611df80518a35ee2f84be084d31ee41701dd42a6",
+      "source_group": "000020_airbag_mark_20260923_090101_703_64d8a3ea68",
+      "box": [
+        212,
+        115,
+        872,
+        685
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000017_airbag_mark_20260923_090014_039_195842a1df.jpg",
+      "sha256": "1d0e014ee211c3af867008aa4ab38beb48bb86e7ab2fcee374ef6b0ff8034d45",
+      "source_group": "000017_airbag_mark_20260923_090014_039_195842a1df",
+      "box": [
+        435,
+        263,
+        827,
+        621
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000200_airbag_mark_20260923_090004_151_0dc0fd404c.jpg",
+      "sha256": "57e43141a52517e79e3e1824c6298a4f17a70d64e5dee73d1cdb954a651fd970",
+      "source_group": "000200_airbag_mark_20260923_090004_151_0dc0fd404c",
+      "box": [
+        163,
+        13,
+        589,
+        384
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000041_airbag_mark_20260923_085839_241_dab3bea613.jpg",
+      "sha256": "ccd01b7ec73c89db57c22225d44f5fba4760c2b9c9c1cc3bf28788381c010540",
+      "source_group": "000041_airbag_mark_20260923_085839_241_dab3bea613",
+      "box": [
+        369,
+        200,
+        915,
+        694
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000024_airbag_mark_20260923_090017_031_4180c8813b.jpg",
+      "sha256": "4073911e21e88c8bdd8d65dda54f974dbb7d9cdbfa0174de48dcd2086dde65ea",
+      "source_group": "000024_airbag_mark_20260923_090017_031_4180c8813b",
+      "box": [
+        51,
+        304,
+        483,
+        674
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000133_airbag_mark_20260923_090058_231_6d7bc51824.jpg",
+      "sha256": "570e00bc30715d96ec0351bb09e78dbc3707d0cc9f5077ce39b97666790f920c",
+      "source_group": "000133_airbag_mark_20260923_090058_231_6d7bc51824",
+      "box": [
+        209,
+        197,
+        764,
+        695
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000029_airbag_mark_20260923_085904_391_5e48a38188.jpg",
+      "sha256": "ee904b4545cec12b36559c897748bedd212d26655583cdd9ce962bccd8fd719f",
+      "source_group": "000029_airbag_mark_20260923_085904_391_5e48a38188",
+      "box": [
+        298,
+        64,
+        1003,
+        601
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000049_airbag_mark_20260923_085839_784_73e17ec386.jpg",
+      "sha256": "f46aadac627f315063883820ac3528a0fc4ee44bee64684e9df5f7c202872ada",
+      "source_group": "000049_airbag_mark_20260923_085839_784_73e17ec386",
+      "box": [
+        332,
+        195,
+        872,
+        689
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000096_airbag_mark_20260923_085825_063_6d1016fc3b.jpg",
+      "sha256": "3cf7d9d3412007f93003199762df6a80d410339c73f3b8795616b391a41654d1",
+      "source_group": "000096_airbag_mark_20260923_085825_063_6d1016fc3b",
+      "box": [
+        447,
+        98,
+        988,
+        581
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000025_airbag_mark_20260923_090042_279_d9af75e26c.jpg",
+      "sha256": "13b3b9343a79e3c71db5735a90b32b3640f9daa49a08b2730cb2ac08f9a6322b",
+      "source_group": "000025_airbag_mark_20260923_090042_279_d9af75e26c",
+      "box": [
+        138,
+        80,
+        824,
+        677
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000028_airbag_mark_20260923_090020_842_5d5739b3ab.jpg",
+      "sha256": "628685b2a91eb3ef2f848fd271186d5c38bb483a3bb6e65aaa972e2829b2fea6",
+      "source_group": "000028_airbag_mark_20260923_090020_842_5d5739b3ab",
+      "box": [
+        402,
+        131,
+        853,
+        536
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000097_airbag_mark_20260923_090020_310_a2bb31da52.jpg",
+      "sha256": "97d31bcb33c91333344d392705d1166d89833ab05cbb13f7c076dd48ef8b7d56",
+      "source_group": "000097_airbag_mark_20260923_090020_310_a2bb31da52",
+      "box": [
+        373,
+        83,
+        835,
+        503
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000111_airbag_mark_20260923_090046_343_1347bd5549.jpg",
+      "sha256": "c7ba35bd68e04fcb389b73e83230278f4964857db26aceb12727d98d63df52c0",
+      "source_group": "000111_airbag_mark_20260923_090046_343_1347bd5549",
+      "box": [
+        329,
+        69,
+        989,
+        653
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000012_airbag_mark_20260923_085856_039_954ab30649.jpg",
+      "sha256": "8b3243d898cc6353cbf011b69ec10177db570330541b370c17770696008eaf29",
+      "source_group": "000012_airbag_mark_20260923_085856_039_954ab30649",
+      "box": [
+        704,
+        129,
+        1255,
+        610
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000171_airbag_mark_20260923_090006_248_ce261da419.jpg",
+      "sha256": "4bab67876fc27e261374680f4648fb6fadc58f7fbece8a1f072d674832ef831a",
+      "source_group": "000171_airbag_mark_20260923_090006_248_ce261da419",
+      "box": [
+        412,
+        82,
+        787,
+        417
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000004_airbag_mark_20260923_085855_336_7001333b70.jpg",
+      "sha256": "b9610daf935277a1c72a7fb6295e0ca7810bf14d8e12159028c675c3f8843b14",
+      "source_group": "000004_airbag_mark_20260923_085855_336_7001333b70",
+      "box": [
+        587,
+        109,
+        1108,
+        577
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000011_airbag_mark_20260923_090051_158_ffccc237f9.jpg",
+      "sha256": "0bc31f470bf0b68a68861e0a557433fa4c1f4d032beebfbc61cddcfec4d3bfd6",
+      "source_group": "000011_airbag_mark_20260923_090051_158_ffccc237f9",
+      "box": [
+        425,
+        153,
+        845,
+        527
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000193_airbag_mark_20260923_085903_927_677ac3135a.jpg",
+      "sha256": "2cd8b2b92daec3e26ea11012702dc0f890ef4da6e3a26cb23bd3433ef7b15314",
+      "source_group": "000193_airbag_mark_20260923_085903_927_677ac3135a",
+      "box": [
+        299,
+        70,
+        987,
+        611
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000155_airbag_mark_20260923_085902_950_5028671c13.jpg",
+      "sha256": "b50d8712b05ecbb7ffdeca86d4f8206ed09a9d35c14017cf4094c7501136848c",
+      "source_group": "000155_airbag_mark_20260923_085902_950_5028671c13",
+      "box": [
+        327,
+        100,
+        978,
+        633
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000106_airbag_mark_20260923_090048_422_e88630991c.jpg",
+      "sha256": "d6a386fe4139acf27f39a407fa1f2770a04405c53f41dd7cbdce5537d044f330",
+      "source_group": "000106_airbag_mark_20260923_090048_422_e88630991c",
+      "box": [
+        405,
+        93,
+        926,
+        558
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000087_airbag_mark_20260923_090110_984_ffe7a931bd.jpg",
+      "sha256": "f799de7d86953f169381b823cb98d365fe70119794959191623a9ffbf9788e7b",
+      "source_group": "000087_airbag_mark_20260923_090110_984_ffe7a931bd",
+      "box": [
+        280,
+        141,
+        843,
+        654
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000191_airbag_mark_20260923_090058_598_74bc8bbadf.jpg",
+      "sha256": "a8c39b9bfde5049768e16f7a3d84dab7686f11be8a972d080aa3420364fc97bc",
+      "source_group": "000191_airbag_mark_20260923_090058_598_74bc8bbadf",
+      "box": [
+        115,
+        180,
+        705,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000009_airbag_mark_20260923_085854_712_278ac3295e.jpg",
+      "sha256": "9da83bfa25aea53cea1d8a2950e62e7b4f8e998053a4188e9c038d4635fa604c",
+      "source_group": "000009_airbag_mark_20260923_085854_712_278ac3295e",
+      "box": [
+        570,
+        16,
+        1111,
+        515
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000016_airbag_mark_20260923_090005_719_9e65bf90e6.jpg",
+      "sha256": "8852db8d1fb1c64fbcc9ae06d5301ccd2b8e971bf039b64e3038be9e234f34a4",
+      "source_group": "000016_airbag_mark_20260923_090005_719_9e65bf90e6",
+      "box": [
+        374,
+        65,
+        747,
+        394
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000104_airbag_mark_20260923_085856_616_d143c2bd65.jpg",
+      "sha256": "dee86c8b11f8362bfa807a51968593a140b16ac25d5ea497753746ee6f5a545a",
+      "source_group": "000104_airbag_mark_20260923_085856_616_d143c2bd65",
+      "box": [
+        554,
+        150,
+        1093,
+        615
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000164_airbag_mark_20260923_090015_271_0dfd27718e.jpg",
+      "sha256": "e4e9017d74cf540ef611caf372f187186c3042c6c8edd6eed05fd355a199a99b",
+      "source_group": "000164_airbag_mark_20260923_090015_271_0dfd27718e",
+      "box": [
+        283,
+        306,
+        662,
+        657
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000203_airbag_mark_20260923_085919_083_2cf4d30bf2.jpg",
+      "sha256": "a252a0147f78dc3d1d18c7358bdfb2e0a7078467d72f458f40b2329f515aa286",
+      "source_group": "000203_airbag_mark_20260923_085919_083_2cf4d30bf2",
+      "box": [
+        235,
+        62,
+        1025,
+        680
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000208_airbag_mark_20260923_085852_472_03da8237c9.jpg",
+      "sha256": "1e9820c2949ee93ec173171520f1e13670444688cbbae11081f98b8301538903",
+      "source_group": "000208_airbag_mark_20260923_085852_472_03da8237c9",
+      "box": [
+        365,
+        7,
+        920,
+        500
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000074_airbag_mark_20260923_090102_904_db6a98d23a.jpg",
+      "sha256": "c0ca178a42c3fb5bdae71391cd4982bba3571a59e761961d2bc25a22b2cb6152",
+      "source_group": "000074_airbag_mark_20260923_090102_904_db6a98d23a",
+      "box": [
+        230,
+        79,
+        921,
+        662
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000178_airbag_mark_20260923_090021_352_b252d0bb41.jpg",
+      "sha256": "6889fc4c4c1936c33a040f66b1ff918b615c7a43212714c5c87e4a8fe2cdfddb",
+      "source_group": "000178_airbag_mark_20260923_090021_352_b252d0bb41",
+      "box": [
+        396,
+        149,
+        847,
+        560
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000068_airbag_mark_20260923_090019_447_4fa778788d.jpg",
+      "sha256": "2406af5ee9930991593fe4f6bf5a9f0eabab22988fba866415419c430cb6672d",
+      "source_group": "000068_airbag_mark_20260923_090019_447_4fa778788d",
+      "box": [
+        197,
+        70,
+        652,
+        472
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000085_airbag_mark_20260923_085826_728_c26ff8e0eb.jpg",
+      "sha256": "86f98ac2088c24d3c1b981961d3fa9903b899a1a086c2d70076cad2bc0845f10",
+      "source_group": "000085_airbag_mark_20260923_085826_728_c26ff8e0eb",
+      "box": [
+        500,
+        98,
+        1049,
+        586
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000015_airbag_mark_20260923_090038_504_b505bcb17d.jpg",
+      "sha256": "3b1663a6f63f171a024d80eba4341bf7cbe0eb71ee5e1d4586278cf035d1104d",
+      "source_group": "000015_airbag_mark_20260923_090038_504_b505bcb17d",
+      "box": [
+        374,
+        19,
+        1133,
+        687
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000092_airbag_mark_20260923_090019_815_265e4afb21.jpg",
+      "sha256": "f339022fffc5365a9132da3f442e073b1f67dcb872da71a0595bd250da1f2b75",
+      "source_group": "000092_airbag_mark_20260923_090019_815_265e4afb21",
+      "box": [
+        278,
+        66,
+        725,
+        472
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000110_airbag_mark_20260923_085938_903_6df7d038d2.jpg",
+      "sha256": "17d55a585d9439ca2b9ee6544e1eaab75e0912db0ed976a3ce03c47dec7bd5bd",
+      "source_group": "000110_airbag_mark_20260923_085938_903_6df7d038d2",
+      "box": [
+        286,
+        119,
+        972,
+        646
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000214_airbag_mark_20260923_090007_813_5ee731da8a.jpg",
+      "sha256": "6cc00f523a7c77edc8a2b5d01c6a555dbdae119f33cf21f9d14b8872e9996700",
+      "source_group": "000214_airbag_mark_20260923_090007_813_5ee731da8a",
+      "box": [
+        519,
+        99,
+        904,
+        442
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000165_airbag_mark_20260923_090106_422_d960884029.jpg",
+      "sha256": "bc04383de8ca1b473cfe195feb64d818b78aac821f1f728882acd5ad86b1281b",
+      "source_group": "000165_airbag_mark_20260923_090106_422_d960884029",
+      "box": [
+        556,
+        66,
+        1137,
+        613
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000175_airbag_mark_20260923_090016_136_030eea6b12.jpg",
+      "sha256": "5a97662b9f68c9035d238377ae50be334bf4f0940237b98a705caa7c2a7d3761",
+      "source_group": "000175_airbag_mark_20260923_090016_136_030eea6b12",
+      "box": [
+        161,
+        319,
+        557,
+        673
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000072_airbag_mark_20260923_090103_672_90c1e3d599.jpg",
+      "sha256": "ae296702189308532b0d6f6613b85e00c35f45a07490a88629ded4041dae457b",
+      "source_group": "000072_airbag_mark_20260923_090103_672_90c1e3d599",
+      "box": [
+        288,
+        74,
+        1016,
+        678
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000153_airbag_mark_20260923_085849_095_32d2ac1a46.jpg",
+      "sha256": "15c29db313ae236b9be925c79d60d181b43e97708f080dc3c41354da702faff0",
+      "source_group": "000153_airbag_mark_20260923_085849_095_32d2ac1a46",
+      "box": [
+        135,
+        9,
+        709,
+        505
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000038_airbag_mark_20260923_090043_479_45d09766b8.jpg",
+      "sha256": "abe2d9e5253c420fb71b847996370702a02135d2253c6b9003fd869022b392ca",
+      "source_group": "000038_airbag_mark_20260923_090043_479_45d09766b8",
+      "box": [
+        12,
+        45,
+        724,
+        683
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000010_airbag_mark_20260923_090011_463_83e88f1199.jpg",
+      "sha256": "8e2bb0addb5f711d42974b6e45b1c1a44adce0699d87dc0fb29cb271e68cdca3",
+      "source_group": "000010_airbag_mark_20260923_090011_463_83e88f1199",
+      "box": [
+        663,
+        240,
+        1077,
+        605
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000079_airbag_mark_20260923_085939_480_675910ccec.jpg",
+      "sha256": "ee212f974f419fa159acd595b7180aafd9d6dbd74487e2ba16c3f2fe8f0e2561",
+      "source_group": "000079_airbag_mark_20260923_085939_480_675910ccec",
+      "box": [
+        252,
+        102,
+        949,
+        645
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000180_airbag_mark_20260923_085823_095_f2bae88d16.jpg",
+      "sha256": "efc25895c8e1f327d998bf464c0e870902c8f94454d14f15c9db7d5ba2497349",
+      "source_group": "000180_airbag_mark_20260923_085823_095_f2bae88d16",
+      "box": [
+        404,
+        85,
+        944,
+        568
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000021_airbag_mark_20260923_090039_879_0a73e2aafc.jpg",
+      "sha256": "d5301a9251459f6516f1753a55f213301fc7c87d250413568b4bc70cc6eba8dd",
+      "source_group": "000021_airbag_mark_20260923_090039_879_0a73e2aafc",
+      "box": [
+        404,
+        31,
+        1152,
+        681
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000147_airbag_mark_20260923_090100_566_8d0382a6df.jpg",
+      "sha256": "0d9af15f0b36d6249e91056cd76b39c665e5dc231d9faf49bf2cdbcd023bb6b1",
+      "source_group": "000147_airbag_mark_20260923_090100_566_8d0382a6df",
+      "box": [
+        196,
+        136,
+        838,
+        703
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000162_airbag_mark_20260923_090104_376_f4c5d4dc92.jpg",
+      "sha256": "ba249f23c126e38c68696f32291457441a70bede90b1054c431388da3455b0b7",
+      "source_group": "000162_airbag_mark_20260923_090104_376_f4c5d4dc92",
+      "box": [
+        394,
+        73,
+        1120,
+        680
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000001_airbag_mark_20260923_085844_663_235c551325.jpg",
+      "sha256": "846c78904355fa35a47204a2d6478fed6929c694853b73ba9f388ef3f10fb1ff",
+      "source_group": "000001_airbag_mark_20260923_085844_663_235c551325",
+      "box": [
+        46,
+        141,
+        627,
+        647
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000011_airbag_mark_20260923_090005_227_4461af3359.jpg",
+      "sha256": "1153b7572362e06e5631a47dcf1dda3ecaf090bacab36e16c21d8df20a2a49a7",
+      "source_group": "000011_airbag_mark_20260923_090005_227_4461af3359",
+      "box": [
+        308,
+        33,
+        687,
+        375
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000046_airbag_mark_20260923_090049_959_97fc021da0.jpg",
+      "sha256": "13baa71ec6fb38d4f2757015e7da4e4d90f0103d44160bc5be4577aad27fab97",
+      "source_group": "000046_airbag_mark_20260923_090049_959_97fc021da0",
+      "box": [
+        380,
+        142,
+        817,
+        533
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000135_airbag_mark_20260923_085841_721_24e730bb4c.jpg",
+      "sha256": "668280edaad392e71bce4eee13f579ca797c232f98602e23c643df05b4a9b37b",
+      "source_group": "000135_airbag_mark_20260923_085841_721_24e730bb4c",
+      "box": [
+        183,
+        217,
+        741,
+        718
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000020_airbag_mark_20260923_090009_432_66c14766b0.jpg",
+      "sha256": "fbc9869b428dec1f1d915648c178a4b13c7ed578b4ecfcf3a718fdb3904105fd",
+      "source_group": "000020_airbag_mark_20260923_090009_432_66c14766b0",
+      "box": [
+        690,
+        83,
+        1133,
+        465
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000014_airbag_mark_20260923_085828_231_ebbc095695.jpg",
+      "sha256": "511c64666d029b591b9e13a43a08a2ba93752e969da4eae5dd3fd3793bc48f29",
+      "source_group": "000014_airbag_mark_20260923_085828_231_ebbc095695",
+      "box": [
+        559,
+        117,
+        1111,
+        593
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000076_airbag_mark_20260923_090105_257_1454a95b11.jpg",
+      "sha256": "68559e29ee860788c4c4048a74fafbd011092d0d1decb474130f8fdbeaada380",
+      "source_group": "000076_airbag_mark_20260923_090105_257_1454a95b11",
+      "box": [
+        473,
+        86,
+        1134,
+        667
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000078_airbag_mark_20260923_090109_815_5c0cddbe65.jpg",
+      "sha256": "8bd6d0863956b56af8a996a3d5fb0e0b85915abc464adba51fa839768f099145",
+      "source_group": "000078_airbag_mark_20260923_090109_815_5c0cddbe65",
+      "box": [
+        328,
+        97,
+        890,
+        609
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000012_airbag_mark_20260923_090037_606_59b2becc0b.jpg",
+      "sha256": "23e7f38b6054d2e50e6ebc812da65d2be1cbd6b9c65f28553703f22dcad4f3e9",
+      "source_group": "000012_airbag_mark_20260923_090037_606_59b2becc0b",
+      "box": [
+        315,
+        47,
+        1058,
+        697
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000215_airbag_mark_20260923_085838_744_7891f379bd.jpg",
+      "sha256": "37577d674ffd04df1d523fb24d9f627b701a60527edd56f46de49b5172ef277a",
+      "source_group": "000215_airbag_mark_20260923_085838_744_7891f379bd",
+      "box": [
+        409,
+        203,
+        945,
+        695
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000209_airbag_mark_20260923_085907_288_a82a2958c5.jpg",
+      "sha256": "ff38030c8f231143f3db87074bb66be0981a2969e0e67132b648f973b32159f3",
+      "source_group": "000209_airbag_mark_20260923_085907_288_a82a2958c5",
+      "box": [
+        235,
+        77,
+        1001,
+        636
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000051_airbag_mark_20260923_090022_983_b4cff20169.jpg",
+      "sha256": "ee31dd2657664ad7817bb7d1ce45efff62ae4fd486c4b82abe2b2cab6783d63a",
+      "source_group": "000051_airbag_mark_20260923_090022_983_b4cff20169",
+      "box": [
+        318,
+        169,
+        756,
+        577
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000003_airbag_mark_20260923_090044_311_a9eb3afa0a.jpg",
+      "sha256": "f09b1758292301b15ed322d6f73cc624e559ba52ca0a7e4acbee1b1029cdd830",
+      "source_group": "000003_airbag_mark_20260923_090044_311_a9eb3afa0a",
+      "box": [
+        39,
+        7,
+        756,
+        633
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000037_airbag_mark_20260923_090022_583_c59517c52f.jpg",
+      "sha256": "bb9f715613fe6b4a61dccece164f4abc8098a21b305e0675f44992b14e66d258",
+      "source_group": "000037_airbag_mark_20260923_090022_583_c59517c52f",
+      "box": [
+        331,
+        160,
+        772,
+        570
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000160_airbag_mark_20260923_090010_455_598aabc2a4.jpg",
+      "sha256": "b063344c3a3c14dfb012730e995b5a304b253a9db90d0760a0dea05055c5f7da",
+      "source_group": "000160_airbag_mark_20260923_090010_455_598aabc2a4",
+      "box": [
+        749,
+        160,
+        1186,
+        537
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000189_airbag_mark_20260923_085846_728_1e8adaecb4.jpg",
+      "sha256": "a8387817fa1805bbc4de7df573a170dd76a1298ca7413409295cfb9f03debe16",
+      "source_group": "000189_airbag_mark_20260923_085846_728_1e8adaecb4",
+      "box": [
+        3,
+        53,
+        590,
+        551
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000034_airbag_mark_20260923_085843_624_471107d8a0.jpg",
+      "sha256": "f93194ccc28d2c2ebeee2d67ab4845978588056876f438e55f1d7b64df246391",
+      "source_group": "000034_airbag_mark_20260923_085843_624_471107d8a0",
+      "box": [
+        6,
+        198,
+        609,
+        714
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000011_airbag_mark_20260923_090021_703_55d55e6a90.jpg",
+      "sha256": "cd01ae6257801c5943e2fd55dd23d36ba69cfbb031cb435fdbb849fb847ee2f0",
+      "source_group": "000011_airbag_mark_20260923_090021_703_55d55e6a90",
+      "box": [
+        385,
+        152,
+        833,
+        564
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000036_airbag_mark_20260923_090004_678_1c86a5f695.jpg",
+      "sha256": "05105dae39748fe4e1cfef4fcf52952f5f107bb8e82badad4e4d4dff27e52c77",
+      "source_group": "000036_airbag_mark_20260923_090004_678_1c86a5f695",
+      "box": [
+        259,
+        23,
+        655,
+        378
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000172_airbag_mark_20260923_090011_959_8ff89f33c5.jpg",
+      "sha256": "84de643a3891786ef6f9ab2e3d1eb8263acd97c68d7dc1b131443e50b78c449c",
+      "source_group": "000172_airbag_mark_20260923_090011_959_8ff89f33c5",
+      "box": [
+        615,
+        239,
+        1024,
+        604
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000199_airbag_mark_20260923_085847_655_268c385061.jpg",
+      "sha256": "cd79c8509ec66e4cfb72adee10fad8846a4b346be69290db41bf8643701f41d5",
+      "source_group": "000199_airbag_mark_20260923_085847_655_268c385061",
+      "box": [
+        41,
+        14,
+        628,
+        519
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000013_airbag_mark_20260923_090047_159_1f9dfd4676.jpg",
+      "sha256": "99597bb522c7a159b3658cbeaebc2d5406b0e811ca81a8e00f10fe9db63ac1a1",
+      "source_group": "000013_airbag_mark_20260923_090047_159_1f9dfd4676",
+      "box": [
+        453,
+        86,
+        1103,
+        656
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000140_airbag_mark_20260923_085857_575_4c886dab06.jpg",
+      "sha256": "b3c184ee91cd269fe11d05c8a486c2b6402e1431b76cc8d61a6e20f33233e509",
+      "source_group": "000140_airbag_mark_20260923_085857_575_4c886dab06",
+      "box": [
+        360,
+        167,
+        906,
+        660
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000177_airbag_mark_20260923_090013_672_cab5806709.jpg",
+      "sha256": "0ad62622c4fcd88ca55797cbc69a21e155134de8889ec97875dd6de02cf5099a",
+      "source_group": "000177_airbag_mark_20260923_090013_672_cab5806709",
+      "box": [
+        456,
+        253,
+        853,
+        610
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000062_airbag_mark_20260923_090014_903_d310ac06ea.jpg",
+      "sha256": "6e5674b06f4c90f8bdd9b65001aba507e91217d5dc23ada549d6de9d1aa87846",
+      "source_group": "000062_airbag_mark_20260923_090014_903_d310ac06ea",
+      "box": [
+        359,
+        306,
+        732,
+        652
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000144_airbag_mark_20260923_085851_559_8a9aa8ca7f.jpg",
+      "sha256": "be92c8f8540ce4448a9eb12baf0d8022f563f344ce8583138a71f1ef6b38ba28",
+      "source_group": "000144_airbag_mark_20260923_085851_559_8a9aa8ca7f",
+      "box": [
+        304,
+        3,
+        858,
+        492
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000006_airbag_mark_20260923_090111_687_de9ea91ea3.jpg",
+      "sha256": "729489bda6be8d6ee9c5ac8296285e231c53b0426f529a91b92111b996d42266",
+      "source_group": "000006_airbag_mark_20260923_090111_687_de9ea91ea3",
+      "box": [
+        200,
+        91,
+        784,
+        622
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000139_airbag_mark_20260923_085933_063_ccb3381c71.jpg",
+      "sha256": "d5f650b79667993e2b76701d29d47aae65ea7264f86cf66de77c93e9ee7792d0",
+      "source_group": "000139_airbag_mark_20260923_085933_063_ccb3381c71",
+      "box": [
+        320,
+        109,
+        992,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000010_airbag_mark_20260923_090054_534_440f215d85.jpg",
+      "sha256": "fc3bd9df64fbe555815f50e930bb43f9d1a989568f3720ac3d4b06cfbc9a5d6f",
+      "source_group": "000010_airbag_mark_20260923_090054_534_440f215d85",
+      "box": [
+        442,
+        177,
+        924,
+        613
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000032_airbag_mark_20260923_085836_039_d3a2dcb362.jpg",
+      "sha256": "b37f4740cc867936b4afbc59ef9c974a1a330b69540ca7b27b3c9a311da443dc",
+      "source_group": "000032_airbag_mark_20260923_085836_039_d3a2dcb362",
+      "box": [
+        559,
+        202,
+        1108,
+        690
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000003_airbag_mark_20260923_090107_559_4a9f42bcce.jpg",
+      "sha256": "1fde734d9558606fbb0c767c337311aac5a631d0cf156a557243f5caf3e74606",
+      "source_group": "000003_airbag_mark_20260923_090107_559_4a9f42bcce",
+      "box": [
+        635,
+        27,
+        1253,
+        576
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000145_airbag_mark_20260923_085833_143_2d2fb0d3af.jpg",
+      "sha256": "5844507037fdf7a8ceb954bd243501cafb03f62de5bf52949aacd4308f2801dc",
+      "source_group": "000145_airbag_mark_20260923_085833_143_2d2fb0d3af",
+      "box": [
+        664,
+        173,
+        1227,
+        662
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000183_airbag_mark_20260923_085827_464_cca86af762.jpg",
+      "sha256": "41bdbae1a3936365a5c3dabda7d028698d3e875ea74b5cccab3fd5f3cecf77f3",
+      "source_group": "000183_airbag_mark_20260923_085827_464_cca86af762",
+      "box": [
+        519,
+        97,
+        1071,
+        586
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000009_airbag_mark_20260923_090024_711_e79415b485.jpg",
+      "sha256": "11897cb79f2f29ef45c796161cfe0c5840f8956b9bcb37d0e2add3ba130ec5fb",
+      "source_group": "000009_airbag_mark_20260923_090024_711_e79415b485",
+      "box": [
+        426,
+        249,
+        874,
+        660
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000184_airbag_mark_20260923_090050_727_32047a5288.jpg",
+      "sha256": "3c97904d0e60c00aaa04c43c6855b401b9bafd26f19b5455af262caf3c8d515b",
+      "source_group": "000184_airbag_mark_20260923_090050_727_32047a5288",
+      "box": [
+        415,
+        164,
+        833,
+        539
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000065_airbag_mark_20260923_090108_649_a61336e79d.jpg",
+      "sha256": "ce9527a4a8d24b93d7eeb2a1a3b297713e1737697ea5accb6b071b396be2083e",
+      "source_group": "000065_airbag_mark_20260923_090108_649_a61336e79d",
+      "box": [
+        453,
+        17,
+        1069,
+        557
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000108_airbag_mark_20260923_085830_407_04e9742b5c.jpg",
+      "sha256": "3ce301523c1e40fbf6536ae9508114478d2b2b7fac46053085af2d2b4a5126ee",
+      "source_group": "000108_airbag_mark_20260923_085830_407_04e9742b5c",
+      "box": [
+        618,
+        114,
+        1173,
+        596
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000167_airbag_mark_20260923_090015_702_9d0fe4301b.jpg",
+      "sha256": "96c1171ea1020cfebbb4d5b2656ae0f20f9b97c2e10a028a886d1bb078c43f6d",
+      "source_group": "000167_airbag_mark_20260923_090015_702_9d0fe4301b",
+      "box": [
+        243,
+        320,
+        624,
+        666
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000131_airbag_mark_20260923_090045_880_2391206eff.jpg",
+      "sha256": "bb33c0513046bcdd16ce1d4e1e73d920048eee751b6466f6288e496c10e75fe2",
+      "source_group": "000131_airbag_mark_20260923_090045_880_2391206eff",
+      "box": [
+        241,
+        62,
+        909,
+        650
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000002_airbag_mark_20260923_085842_214_e58bddb93f.jpg",
+      "sha256": "ea6530060f398a02ec8128f71d8655c093ca50968554dce1d6eef4de73ba747c",
+      "source_group": "000002_airbag_mark_20260923_085842_214_e58bddb93f",
+      "box": [
+        150,
+        208,
+        717,
+        712
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000031_airbag_mark_20260923_085900_679_323a02e098.jpg",
+      "sha256": "d0fec879676155fcde2fe43488045e9ac7f260a80c3b05593c37f11b18cf66f4",
+      "source_group": "000031_airbag_mark_20260923_085900_679_323a02e098",
+      "box": [
+        340,
+        109,
+        956,
+        654
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000039_airbag_mark_20260923_090007_319_6f899c47ed.jpg",
+      "sha256": "d7a2baf3366c6c5a66f573155ab2eb7d272d868ae8bc64be57e63ab6662243dc",
+      "source_group": "000039_airbag_mark_20260923_090007_319_6f899c47ed",
+      "box": [
+        491,
+        93,
+        870,
+        432
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000028_airbag_mark_20260923_090055_366_e1e79290db.jpg",
+      "sha256": "fa3232e3eba3e01ff580e8a8c478ef9c2b1542d8734b8100626b57edf7d6d801",
+      "source_group": "000028_airbag_mark_20260923_090055_366_e1e79290db",
+      "box": [
+        545,
+        191,
+        1031,
+        637
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000058_airbag_mark_20260923_085834_839_e07b8ca387.jpg",
+      "sha256": "ebc80a8ad8470fcd59dec3ef72f59aea25ce03ec8958ccaaf40356e7cd329e27",
+      "source_group": "000058_airbag_mark_20260923_085834_839_e07b8ca387",
+      "box": [
+        597,
+        185,
+        1145,
+        667
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000163_airbag_mark_20260923_090110_552_011fc8daa4.jpg",
+      "sha256": "06b8ed9ec661fe46f354f6b1550894dd96e41fdaeda91d33ab363c9c6add5ab0",
+      "source_group": "000163_airbag_mark_20260923_090110_552_011fc8daa4",
+      "box": [
+        313,
+        136,
+        867,
+        647
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000213_airbag_mark_20260923_090019_047_727f4bd030.jpg",
+      "sha256": "b13310699d1712e6404099622d168407549c1fa4b08e51db106eac3dfedd0fee",
+      "source_group": "000213_airbag_mark_20260923_090019_047_727f4bd030",
+      "box": [
+        130,
+        76,
+        586,
+        478
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000168_airbag_mark_20260923_090105_975_681a0c4152.jpg",
+      "sha256": "de9f810ce29b6e8989f863fc9ed5251c12542c46c00bd24a2e3cc85d5117ca34",
+      "source_group": "000168_airbag_mark_20260923_090105_975_681a0c4152",
+      "box": [
+        504,
+        114,
+        1114,
+        670
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000210_airbag_mark_20260923_090051_686_8b5abaa1e7.jpg",
+      "sha256": "720dda73c6f0785465210cf95e3c6b4e74667a30d48cc8d2e9add4640ad0ec4b",
+      "source_group": "000210_airbag_mark_20260923_090051_686_8b5abaa1e7",
+      "box": [
+        429,
+        111,
+        861,
+        498
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000071_airbag_mark_20260923_085937_640_8c0e7e5344.jpg",
+      "sha256": "ab6d42721afee95350ee1e791a2813d1fc76971b2fcefa43b6f8e46a37a0d424",
+      "source_group": "000071_airbag_mark_20260923_085937_640_8c0e7e5344",
+      "box": [
+        357,
+        113,
+        1039,
+        629
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000054_airbag_mark_20260923_090008_854_777df70645.jpg",
+      "sha256": "4f609878d109fbb97330b944c7c155f04997b5ae4eb31c670164ce0204881db4",
+      "source_group": "000054_airbag_mark_20260923_090008_854_777df70645",
+      "box": [
+        594,
+        65,
+        1006,
+        434
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000090_airbag_mark_20260923_085903_415_6aa1a82619.jpg",
+      "sha256": "19d34baa62a8723bb597d85d90ba9529c81b4cc939e0f260172a3ac7dcdb384a",
+      "source_group": "000090_airbag_mark_20260923_085903_415_6aa1a82619",
+      "box": [
+        324,
+        68,
+        992,
+        603
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000109_airbag_mark_20260923_090022_183_53f274b7de.jpg",
+      "sha256": "ced6ae906eebe46f72ab6d8ee41efd9ca929edb5d4582008bc7c8dd8a89ce831",
+      "source_group": "000109_airbag_mark_20260923_090022_183_53f274b7de",
+      "box": [
+        362,
+        150,
+        813,
+        564
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000023_airbag_mark_20260923_090052_662_eea6bd05e2.jpg",
+      "sha256": "5391c108c2a09f45128f0443c8ec74d613dbd680b2698058e4b89739d55c532e",
+      "source_group": "000023_airbag_mark_20260923_090052_662_eea6bd05e2",
+      "box": [
+        414,
+        164,
+        865,
+        578
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000130_airbag_mark_20260923_085938_311_b3e81c8dd2.jpg",
+      "sha256": "a0aa36854d26aba8a673de05c37ad4dce8b01071f0ad19829b24f6bf69e8ea4c",
+      "source_group": "000130_airbag_mark_20260923_085938_311_b3e81c8dd2",
+      "box": [
+        365,
+        116,
+        1043,
+        630
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000141_airbag_mark_20260923_085832_568_44ab75fe28.jpg",
+      "sha256": "2d06f6e77a3d08b1fea30f461a60f634ef1e8413abce7b74cef7d52b446f9ddf",
+      "source_group": "000141_airbag_mark_20260923_085832_568_44ab75fe28",
+      "box": [
+        677,
+        165,
+        1235,
+        655
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000204_airbag_mark_20260923_090038_007_b797405eaf.jpg",
+      "sha256": "d9e4f616ba1200af01fdb3df5cb56abb5794742e94b8b74905efbcd44f74e956",
+      "source_group": "000204_airbag_mark_20260923_090038_007_b797405eaf",
+      "box": [
+        343,
+        28,
+        1099,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000174_airbag_mark_20260923_090006_823_ef0c8811b1.jpg",
+      "sha256": "a8e37abba0956e7ab32d15b5b65c709c8894cb2a53189be32e80b9c2fec48dd0",
+      "source_group": "000174_airbag_mark_20260923_090006_823_ef0c8811b1",
+      "box": [
+        449,
+        90,
+        827,
+        428
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000101_airbag_mark_20260923_090056_167_294fc94745.jpg",
+      "sha256": "5819e3044b9ac6b25f482ddc0868b3bc308ddc32cc92a0b1e3c1790b7f323b03",
+      "source_group": "000101_airbag_mark_20260923_090056_167_294fc94745",
+      "box": [
+        437,
+        146,
+        937,
+        594
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000143_airbag_mark_20260923_090100_903_7fb8f5f67d.jpg",
+      "sha256": "e671e57609297017b3e819ec60a802b2c5d3b92a86346d302124b2f10e6eb2cc",
+      "source_group": "000143_airbag_mark_20260923_090100_903_7fb8f5f67d",
+      "box": [
+        196,
+        144,
+        838,
+        710
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000050_airbag_mark_20260923_085843_127_66308cdc81.jpg",
+      "sha256": "446718a3ccbfb056461186c3a343c3c59e4d182549fa1f9f607ba9309e59baac",
+      "source_group": "000050_airbag_mark_20260923_085843_127_66308cdc81",
+      "box": [
+        73,
+        204,
+        654,
+        711
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000003_airbag_mark_20260923_085900_087_88a83a4396.jpg",
+      "sha256": "ec45f0f7d93ea766589725a96c922e3c231375f2d0036e47ca5b69211a020f11",
+      "source_group": "000003_airbag_mark_20260923_085900_087_88a83a4396",
+      "box": [
+        314,
+        136,
+        936,
+        680
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000089_airbag_mark_20260923_085906_087_35bedbeee7.jpg",
+      "sha256": "917d5ea7a8f7fd0a95e54812fcb58ea192d87a156dd9236d72c795a30ecca6a3",
+      "source_group": "000089_airbag_mark_20260923_085906_087_35bedbeee7",
+      "box": [
+        255,
+        83,
+        1010,
+        634
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000059_airbag_mark_20260923_085834_199_7e793251d7.jpg",
+      "sha256": "7866369445e46129bff56479397f76c3879b5b23909a25611b8aab6ee1607d28",
+      "source_group": "000059_airbag_mark_20260923_085834_199_7e793251d7",
+      "box": [
+        617,
+        181,
+        1170,
+        665
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000157_airbag_mark_20260923_090023_851_834045c738.jpg",
+      "sha256": "df673b4955e70c4100f3a3f77101a0ed976a4775a67e6f1ad00c918cef3fc421",
+      "source_group": "000157_airbag_mark_20260923_090023_851_834045c738",
+      "box": [
+        388,
+        199,
+        828,
+        603
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000206_airbag_mark_20260923_085833_735_7e13d666d5.jpg",
+      "sha256": "f6bcc4660e5259a9491f9b8dd3e3489244e85e8b37428a97b6bf8d1b9fedb7e3",
+      "source_group": "000206_airbag_mark_20260923_085833_735_7e13d666d5",
+      "box": [
+        633,
+        185,
+        1191,
+        672
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000142_airbag_mark_20260923_090052_167_314703b8b7.jpg",
+      "sha256": "acde4938a38f4608dedd31f07f3533509d6caf93a965b9c8b43d42139c64fd40",
+      "source_group": "000142_airbag_mark_20260923_090052_167_314703b8b7",
+      "box": [
+        425,
+        140,
+        863,
+        534
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000149_airbag_mark_20260923_085854_040_dd3e25fcdd.jpg",
+      "sha256": "ed17326d37e50fdb55eb676fdd8db860312776bf0879abaed82b2d67412689bc",
+      "source_group": "000149_airbag_mark_20260923_085854_040_dd3e25fcdd",
+      "box": [
+        499,
+        7,
+        1056,
+        498
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000186_airbag_mark_20260923_090111_352_cf39ab16ff.jpg",
+      "sha256": "c3e9cc25dbcfa9f238a50ff4e2b9a6c465da6adf867029189dfef9ebf976e2a8",
+      "source_group": "000186_airbag_mark_20260923_090111_352_cf39ab16ff",
+      "box": [
+        238,
+        124,
+        809,
+        641
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000205_airbag_mark_20260923_090100_198_f2feb5205a.jpg",
+      "sha256": "6960b3fc965fe655ebd0ba2c2d6d4d2006a5d83ac21430d4d819245cf187370b",
+      "source_group": "000205_airbag_mark_20260923_090100_198_f2feb5205a",
+      "box": [
+        127,
+        12,
+        789,
+        596
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000027_airbag_mark_20260923_085850_104_cad18f984f.jpg",
+      "sha256": "3aa626e012785637e9e90f68624ace61b88a96a5a08af26129744c4b54c9f57b",
+      "source_group": "000027_airbag_mark_20260923_085850_104_cad18f984f",
+      "box": [
+        202,
+        9,
+        759,
+        497
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000001_airbag_mark_20260923_090056_935_094154fa22.jpg",
+      "sha256": "6ac974679a0842fec7d9f5150d7882cf7603df114f1eb5e78b7b87247ee5be74",
+      "source_group": "000001_airbag_mark_20260923_090056_935_094154fa22",
+      "box": [
+        325,
+        161,
+        817,
+        611
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000043_airbag_mark_20260923_090056_534_39fe32409a.jpg",
+      "sha256": "069857c33c2402c018e51304cf79779654e6d71344b74ae1f03d1251cf3e3e91",
+      "source_group": "000043_airbag_mark_20260923_090056_534_39fe32409a",
+      "box": [
+        371,
+        144,
+        868,
+        592
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000005_airbag_mark_20260923_090023_384_c962f0ddaf.jpg",
+      "sha256": "eef3a485ca2105a42fdff576134fbd7f7c78fdaad983a3f76e8807ca04df4af8",
+      "source_group": "000005_airbag_mark_20260923_090023_384_c962f0ddaf",
+      "box": [
+        346,
+        180,
+        787,
+        583
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000040_airbag_mark_20260923_085933_577_bf0e499d04.jpg",
+      "sha256": "e53a62ed8b2c322bce95ec0929dd0ffe94a52fa8c094f054c24d166b0adf89af",
+      "source_group": "000040_airbag_mark_20260923_085933_577_bf0e499d04",
+      "box": [
+        320,
+        82,
+        1000,
+        662
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000099_airbag_mark_20260923_085850_567_d6c8ec93ee.jpg",
+      "sha256": "dbc39ee8e58bf6f37fc594d23f40ed8ffc9c79890489dd40b66fb8b9aca6d807",
+      "source_group": "000099_airbag_mark_20260923_085850_567_d6c8ec93ee",
+      "box": [
+        231,
+        11,
+        781,
+        500
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000038_airbag_mark_20260923_090037_096_a7528c3235.jpg",
+      "sha256": "6527b97b41fc7f59c6f9536db03c55264acfe70b177dd3440fb467ee1f0e19a7",
+      "source_group": "000038_airbag_mark_20260923_090037_096_a7528c3235",
+      "box": [
+        302,
+        38,
+        1040,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000091_airbag_mark_20260923_090055_798_d27705a800.jpg",
+      "sha256": "fb295caee324d4e6fcf58033caa52c3185a560229ea0f4364ebf98223cd3127f",
+      "source_group": "000091_airbag_mark_20260923_090055_798_d27705a800",
+      "box": [
+        513,
+        168,
+        1015,
+        613
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000013_airbag_mark_20260923_085845_719_3394f0a187.jpg",
+      "sha256": "8039bb22ffe8799d2f3ea4c11508d34a647b4c9d5d7414a4517265a92a0da25a",
+      "source_group": "000013_airbag_mark_20260923_085845_719_3394f0a187",
+      "box": [
+        53,
+        93,
+        619,
+        590
+      ]
+    }
+  ],
+  "calibration": [
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000060_airbag_mark_20260923_085831_176_e1a4913205.jpg",
+      "sha256": "5405a37ef17191e605afb5b79cf0e1f15263044c77837b0bbb957370c4150713",
+      "source_group": "000060_airbag_mark_20260923_085831_176_e1a4913205",
+      "box": [
+        646,
+        129,
+        1201,
+        613
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000018_airbag_mark_20260923_090045_415_23530a99b2.jpg",
+      "sha256": "b7303ec93713395b7c8a04a8a2fc67cd7fd218d1cec82534d30afe2061ff8b5f",
+      "source_group": "000018_airbag_mark_20260923_090045_415_23530a99b2",
+      "box": [
+        219,
+        32,
+        882,
+        616
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000154_airbag_mark_20260923_085829_704_717a51b285.jpg",
+      "sha256": "849d07bf8e42b1099985531b33a0ed4ef21149c90317a5c4613577035b565e8b",
+      "source_group": "000154_airbag_mark_20260923_085829_704_717a51b285",
+      "box": [
+        594,
+        117,
+        1147,
+        595
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000048_airbag_mark_20260923_090014_439_eb116f91fb.jpg",
+      "sha256": "7698207bdc911a4c27aa8ef93e29509f7acc4d65fddf8f923de1bfff6b55bbfd",
+      "source_group": "000048_airbag_mark_20260923_090014_439_eb116f91fb",
+      "box": [
+        407,
+        285,
+        782,
+        638
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000021_airbag_mark_20260923_090102_071_e89be8ee1a.jpg",
+      "sha256": "5e513e957c4020d2b34a846abe1beb640503f49d974c87328a14fa50d7edbe76",
+      "source_group": "000021_airbag_mark_20260923_090102_071_e89be8ee1a",
+      "box": [
+        233,
+        108,
+        899,
+        686
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000112_airbag_mark_20260923_090041_079_fc3822d5fc.jpg",
+      "sha256": "0b1767a2f9b6b58f0f0e75f23d9b83082cf249935834dd41860f025bc5a2c427",
+      "source_group": "000112_airbag_mark_20260923_090041_079_fc3822d5fc",
+      "box": [
+        246,
+        71,
+        944,
+        686
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000070_airbag_mark_20260923_090009_991_80352a1293.jpg",
+      "sha256": "5944c37a5b9c3b791bbd6a68e2b4d3516f63f6ddc6955d56a5de6dc5a3bb5a9e",
+      "source_group": "000070_airbag_mark_20260923_090009_991_80352a1293",
+      "box": [
+        732,
+        121,
+        1179,
+        498
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000126_airbag_mark_20260923_090048_023_e9dce6c5e9.jpg",
+      "sha256": "b8f9a012c76748d4591c950e4c5ecf5d938899295cf9d73ab5991f623bf3f4fb",
+      "source_group": "000126_airbag_mark_20260923_090048_023_e9dce6c5e9",
+      "box": [
+        395,
+        104,
+        936,
+        585
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000026_airbag_mark_20260923_090104_839_109ebe370d.jpg",
+      "sha256": "84bffa17074193687d74f018127bc3a13ca62ef974b6be1986bd3cf64189bba5",
+      "source_group": "000026_airbag_mark_20260923_090104_839_109ebe370d",
+      "box": [
+        426,
+        65,
+        1130,
+        665
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000030_airbag_mark_20260923_085840_310_9309b6cdab.jpg",
+      "sha256": "07ac809757e0c5e2eeecfc4f905b7b10d14e24ee3eaa59dba2f6fc3e6c1f2be6",
+      "source_group": "000030_airbag_mark_20260923_085840_310_9309b6cdab",
+      "box": [
+        295,
+        206,
+        839,
+        707
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000031_airbag_mark_20260923_085852_039_0cde1f8504.jpg",
+      "sha256": "6fb487cc29b38211e41833031f648c42f290534d0298d325db16491d76408505",
+      "source_group": "000031_airbag_mark_20260923_085852_039_0cde1f8504",
+      "box": [
+        329,
+        9,
+        883,
+        499
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000207_airbag_mark_20260923_085907_832_8af5949fdb.jpg",
+      "sha256": "6e5f4693d6d773cfa1fa8f3ba687e05d634be080793e2ba3bf6068a39e5df017",
+      "source_group": "000207_airbag_mark_20260923_085907_832_8af5949fdb",
+      "box": [
+        247,
+        86,
+        1010,
+        648
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000002_airbag_mark_20260923_090048_886_d65952d032.jpg",
+      "sha256": "ee840f7cc798fe8fea8e98ec3283a58f6f80301541769da80630647f806f9ff5",
+      "source_group": "000002_airbag_mark_20260923_090048_886_d65952d032",
+      "box": [
+        384,
+        114,
+        868,
+        532
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000179_airbag_mark_20260923_085849_559_f16ace4613.jpg",
+      "sha256": "d9d19a6960deb7c9e85ccdbc42c754bb3245d5702ff4ed81b31876e1c6573128",
+      "source_group": "000179_airbag_mark_20260923_085849_559_f16ace4613",
+      "box": [
+        176,
+        5,
+        733,
+        491
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000019_airbag_mark_20260923_090026_518_35cd64bcfd.jpg",
+      "sha256": "8a7bb0d605008fc369dc61fdf79ed53f3897dd0bfda30ca8591336e85a89e3a2",
+      "source_group": "000019_airbag_mark_20260923_090026_518_35cd64bcfd",
+      "box": [
+        565,
+        151,
+        1096,
+        598
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000047_airbag_mark_20260923_090112_998_55d5d6c7bf.jpg",
+      "sha256": "82abe1019227b9e235c2369258162c4316914a36d1b51aef23a4222f791414a3",
+      "source_group": "000047_airbag_mark_20260923_090112_998_55d5d6c7bf",
+      "box": [
+        164,
+        144,
+        725,
+        661
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000136_airbag_mark_20260923_085844_151_4f71faf428.jpg",
+      "sha256": "9602cfd43276bfd9949e15de1769eb9edc93fbe857a941e2edca68fdaf95f448",
+      "source_group": "000136_airbag_mark_20260923_085844_151_4f71faf428",
+      "box": [
+        38,
+        156,
+        622,
+        666
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000052_airbag_mark_20260923_085837_574_9f369b3bdb.jpg",
+      "sha256": "342b4f7597e7ddb10d0bdea85b99ab9751d4b6cc85a49a5ef682a54c8a266401",
+      "source_group": "000052_airbag_mark_20260923_085837_574_9f369b3bdb",
+      "box": [
+        520,
+        204,
+        1056,
+        689
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000095_airbag_mark_20260923_090016_568_2fe6a71516.jpg",
+      "sha256": "bc1f561bd55e8150c41efa942f02c44444f525a5d459bb33a764c26c738f9edb",
+      "source_group": "000095_airbag_mark_20260923_090016_568_2fe6a71516",
+      "box": [
+        100,
+        316,
+        514,
+        680
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000055_airbag_mark_20260923_085935_032_99b3f8816b.jpg",
+      "sha256": "ce7129c50d1c954d12bf5e65496e7093ed6c49369131faaae9978a1d8228589b",
+      "source_group": "000055_airbag_mark_20260923_085935_032_99b3f8816b",
+      "box": [
+        395,
+        84,
+        1067,
+        661
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000121_airbag_mark_20260923_090010_967_45de0de525.jpg",
+      "sha256": "211b56715a19afae9087a29b0fd6632efd8af56cf7d1bbf9c6a9f43409a3326c",
+      "source_group": "000121_airbag_mark_20260923_090010_967_45de0de525",
+      "box": [
+        689,
+        203,
+        1113,
+        568
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000190_airbag_mark_20260923_090038_998_7fc14a79bb.jpg",
+      "sha256": "08a52ddc6851845a36c5ee33fcc5d7b6d4689916fd4794d4b47389c5147501a2",
+      "source_group": "000190_airbag_mark_20260923_090038_998_7fc14a79bb",
+      "box": [
+        419,
+        18,
+        1182,
+        681
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000114_airbag_mark_20260923_090059_768_016092dcb5.jpg",
+      "sha256": "8ff1f0825acdb1f69fd3abf851378e6dae3269f900ab983d38ee9bbc62d0fcc5",
+      "source_group": "000114_airbag_mark_20260923_090059_768_016092dcb5",
+      "box": [
+        11,
+        10,
+        697,
+        592
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000173_airbag_mark_20260923_090042_678_d93af48777.jpg",
+      "sha256": "943cc16883813c18d07f09f6601e8521effa98620479e72505e77e83b0cd85d3",
+      "source_group": "000173_airbag_mark_20260923_090042_678_d93af48777",
+      "box": [
+        121,
+        68,
+        814,
+        674
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000033_airbag_mark_20260923_090039_449_da7ca077a0.jpg",
+      "sha256": "2836adc92ccd1a4ca3858d2f3ea5740da8a490cd94d0e7552f303def3e61cf35",
+      "source_group": "000033_airbag_mark_20260923_090039_449_da7ca077a0",
+      "box": [
+        437,
+        28,
+        1197,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000185_airbag_mark_20260923_090025_143_d5a95a3a31.jpg",
+      "sha256": "e252d9f09d01e4dba6f47f42080ddbd17a0fe1df4929f5ab4ec3b7f8ca5a180a",
+      "source_group": "000185_airbag_mark_20260923_090025_143_d5a95a3a31",
+      "box": [
+        487,
+        258,
+        951,
+        681
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000017_airbag_mark_20260923_085854_343_ed64331f5d.jpg",
+      "sha256": "b4475c23ad2ca59cc5711b9e1e090b578684698b584ab1a6ac0f7b83f0fceebc",
+      "source_group": "000017_airbag_mark_20260923_085854_343_ed64331f5d",
+      "box": [
+        537,
+        8,
+        1081,
+        501
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000045_airbag_mark_20260923_085838_151_29775a16d8.jpg",
+      "sha256": "f6292a54eb952c12117ac7220e9eea7906d1091be0fa19209c9b328cedb79619",
+      "source_group": "000045_airbag_mark_20260923_085838_151_29775a16d8",
+      "box": [
+        476,
+        199,
+        1014,
+        688
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000014_airbag_mark_20260923_090110_216_f9c5e8f5ea.jpg",
+      "sha256": "073e69c342962ad262e1a317cf7164e62510e770f10a80ed563d7a924950b857",
+      "source_group": "000014_airbag_mark_20260923_090110_216_f9c5e8f5ea",
+      "box": [
+        321,
+        116,
+        878,
+        624
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000152_airbag_mark_20260923_090041_879_66a5800747.jpg",
+      "sha256": "dda2f1b1f8e849f4f4aca127aabea5a09c4ceda63374a421b94d0606de679393",
+      "source_group": "000152_airbag_mark_20260923_090041_879_66a5800747",
+      "box": [
+        149,
+        71,
+        846,
+        681
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000084_airbag_mark_20260923_090040_679_9d782cfa76.jpg",
+      "sha256": "990a874779ad3493ef0e4858986a100696d7c86ade151b27d7ca43ff6094d5b7",
+      "source_group": "000084_airbag_mark_20260923_090040_679_9d782cfa76",
+      "box": [
+        326,
+        59,
+        1038,
+        679
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000035_airbag_mark_20260923_090112_023_bb08a28221.jpg",
+      "sha256": "78aada86ad630063216ba99021041cc486ba69a0a469da8fe1eb082d4ddcd740",
+      "source_group": "000035_airbag_mark_20260923_090112_023_bb08a28221",
+      "box": [
+        187,
+        91,
+        770,
+        616
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000044_airbag_mark_20260923_090012_871_e5b67e7cf8.jpg",
+      "sha256": "7a19bbd300db1f36adb2690acc62fdd4eb3123f40332ff6a571d3cc3cd76db6c",
+      "source_group": "000044_airbag_mark_20260923_090012_871_e5b67e7cf8",
+      "box": [
+        539,
+        257,
+        940,
+        614
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000197_airbag_mark_20260923_090109_015_d7121fdf44.jpg",
+      "sha256": "987b31f607ccb8c89fefc02ddb80d610c242a8169dea24f9166fa563fc9f0ceb",
+      "source_group": "000197_airbag_mark_20260923_090109_015_d7121fdf44",
+      "box": [
+        387,
+        26,
+        986,
+        548
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000039_airbag_mark_20260923_090057_767_81b657a9ba.jpg",
+      "sha256": "16aba6637b99cb34f930612dc5c68908a355eb11ffcfd7cab3d26aa4336ab6d2",
+      "source_group": "000039_airbag_mark_20260923_090057_767_81b657a9ba",
+      "box": [
+        258,
+        188,
+        780,
+        660
+      ]
+    }
+  ],
+  "validation": [
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000034_airbag_mark_20260923_090102_551_f0e9682f07.jpg",
+      "sha256": "5ee6cbdaacf08eeaf6b3ba973723ab4cce708b57bf6c185a27e8c55c7df0180b",
+      "source_group": "000034_airbag_mark_20260923_090102_551_f0e9682f07",
+      "box": [
+        236,
+        99,
+        912,
+        688
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000115_airbag_mark_20260923_090026_150_656eb029a8.jpg",
+      "sha256": "1a4f3c17560c99315b08e62059c83cb27493a1e735c1746c6a857ce7b0801bf5",
+      "source_group": "000115_airbag_mark_20260923_090026_150_656eb029a8",
+      "box": [
+        568,
+        210,
+        1069,
+        658
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000069_airbag_mark_20260923_090018_569_48dfad4b5f.jpg",
+      "sha256": "ff0c0cf500a483b83ab41c0e06084c87482a3f54b74091e29a319bc401619e42",
+      "source_group": "000069_airbag_mark_20260923_090018_569_48dfad4b5f",
+      "box": [
+        86,
+        135,
+        534,
+        518
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000032_airbag_mark_20260923_085859_575_b0e8dbf448.jpg",
+      "sha256": "dddc122a69cbf39186b5fb85440e6337c990777223ce99cba930767ee3de4c8a",
+      "source_group": "000032_airbag_mark_20260923_085859_575_b0e8dbf448",
+      "box": [
+        315,
+        158,
+        938,
+        713
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000002_airbag_mark_20260923_085852_905_cfb8670b02.jpg",
+      "sha256": "637d983c14d36ea44771dbe392c195dc45954cac58b5a5b44ade682017bb0f88",
+      "source_group": "000002_airbag_mark_20260923_085852_905_cfb8670b02",
+      "box": [
+        402,
+        7,
+        962,
+        498
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000113_airbag_mark_20260923_090054_054_e2cd04d187.jpg",
+      "sha256": "93799ced8e1ac2b6862404393540e779d932304a1cf90f742edeb0cf31290ef3",
+      "source_group": "000113_airbag_mark_20260923_090054_054_e2cd04d187",
+      "box": [
+        348,
+        159,
+        834,
+        598
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000083_airbag_mark_20260923_085825_929_daab4eef68.jpg",
+      "sha256": "dfd02aa4b31056d76fdb9c5c6cae221fa0f50317aba4ac1c64a59273dcaafb5c",
+      "source_group": "000083_airbag_mark_20260923_085825_929_daab4eef68",
+      "box": [
+        473,
+        97,
+        1020,
+        582
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000088_airbag_mark_20260923_085901_816_6e4b0782a2.jpg",
+      "sha256": "5368941e8cd305a41bfa15c1fb061f5f22d2a56c803bfefb960d884f6d5ec633",
+      "source_group": "000088_airbag_mark_20260923_085901_816_6e4b0782a2",
+      "box": [
+        350,
+        82,
+        976,
+        611
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000093_airbag_mark_20260923_090109_416_a0bfcb0056.jpg",
+      "sha256": "3d8821341790b27f74963d7bdb06abb35954f2fc23516c3a6900bbfcda98ee72",
+      "source_group": "000093_airbag_mark_20260923_090109_416_a0bfcb0056",
+      "box": [
+        341,
+        71,
+        913,
+        588
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000075_airbag_mark_20260923_090108_311_af94d2767e.jpg",
+      "sha256": "5c77272de1cff17ad3d6c1e593940d53494eb559a7114b6ea09d2e5f002e2885",
+      "source_group": "000075_airbag_mark_20260923_090108_311_af94d2767e",
+      "box": [
+        517,
+        12,
+        1126,
+        546
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000127_airbag_mark_20260923_085828_967_c3bf096722.jpg",
+      "sha256": "c1f0bb48741216f84bf3db31b75161083597fb2cb5c5a98c798e8802ff99f80f",
+      "source_group": "000127_airbag_mark_20260923_085828_967_c3bf096722",
+      "box": [
+        571,
+        118,
+        1119,
+        595
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000061_airbag_mark_20260923_090112_391_66bbe44a01.jpg",
+      "sha256": "702d815f233057692ae881f4881a2c5ca4bb77fddcf691b483bb5bb01ef8cf96",
+      "source_group": "000061_airbag_mark_20260923_090112_391_66bbe44a01",
+      "box": [
+        170,
+        109,
+        735,
+        624
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000120_airbag_mark_20260923_085848_630_a2ad0670bf.jpg",
+      "sha256": "4d465699f8029184f64bb08937fcf570021ad350378a513699606b7b8140c04d",
+      "source_group": "000120_airbag_mark_20260923_085848_630_a2ad0670bf",
+      "box": [
+        112,
+        11,
+        680,
+        506
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000042_airbag_mark_20260923_090040_247_e4317b0c94.jpg",
+      "sha256": "384178f4156ee891d93f99aa5583de51f6fba2ef9bc938c8dc9581fa88a68177",
+      "source_group": "000042_airbag_mark_20260923_090040_247_e4317b0c94",
+      "box": [
+        365,
+        58,
+        1089,
+        686
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000105_airbag_mark_20260923_090053_591_6e099e0590.jpg",
+      "sha256": "6c07e1ef8275b72bbc2405b2039f166d088b012f3faff788c363cbd2881a913b",
+      "source_group": "000105_airbag_mark_20260923_090053_591_6e099e0590",
+      "box": [
+        314,
+        178,
+        795,
+        609
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000151_airbag_mark_20260923_085836_535_898451a3b5.jpg",
+      "sha256": "cb182cb92022e30033595f515b88f1102790f7c5b3e310456a9d96f433d8275a",
+      "source_group": "000151_airbag_mark_20260923_085836_535_898451a3b5",
+      "box": [
+        552,
+        202,
+        1095,
+        688
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000057_airbag_mark_20260923_090103_240_5f272c08b2.jpg",
+      "sha256": "69ec2238c51054530d8749355e93a5f8bb41cf345a0c977c3603cd28715fb0f3",
+      "source_group": "000057_airbag_mark_20260923_090103_240_5f272c08b2",
+      "box": [
+        260,
+        62,
+        969,
+        652
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000124_airbag_mark_20260923_085932_503_91d21d4df7.jpg",
+      "sha256": "972e7404b395d69720ce8783c5c35f4a237ed27de464ab429628dc41dae5aaa9",
+      "source_group": "000124_airbag_mark_20260923_085932_503_91d21d4df7",
+      "box": [
+        338,
+        94,
+        1011,
+        693
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000007_airbag_mark_20260923_085831_832_7f43ff6fe8.jpg",
+      "sha256": "9d5c6225a5b1cc7ef5803dde67403332341d0609108b895d4c6184da6beecacb",
+      "source_group": "000007_airbag_mark_20260923_085831_832_7f43ff6fe8",
+      "box": [
+        676,
+        131,
+        1232,
+        620
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000134_airbag_mark_20260923_090053_095_5d43bad10b.jpg",
+      "sha256": "77b063531b22fcd261cc99b9b623584322e46529944d9b664cee555457c0f68b",
+      "source_group": "000134_airbag_mark_20260923_090053_095_5d43bad10b",
+      "box": [
+        396,
+        166,
+        860,
+        589
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000194_airbag_mark_20260923_085845_128_0d3f680292.jpg",
+      "sha256": "fd7dcd9b368c8ca5b64f0cf108577be17004e01883bb4d729daf0f3be631985c",
+      "source_group": "000194_airbag_mark_20260923_085845_128_0d3f680292",
+      "box": [
+        56,
+        110,
+        632,
+        609
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000195_airbag_mark_20260923_090105_577_59aa56c6b2.jpg",
+      "sha256": "b4dfa85d9eada12732adc821778fb55a9f980a7cc741225f156c939fe5724ead",
+      "source_group": "000195_airbag_mark_20260923_090105_577_59aa56c6b2",
+      "box": [
+        503,
+        103,
+        1125,
+        673
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000006_airbag_mark_20260923_090047_559_61fbe6960a.jpg",
+      "sha256": "755d692936e0528b7e3363ebee2df8d4a4c502291f6e1be2bbf08405d2ffb59a",
+      "source_group": "000006_airbag_mark_20260923_090047_559_61fbe6960a",
+      "box": [
+        429,
+        105,
+        1022,
+        627
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000056_airbag_mark_20260923_085902_487_cb6c88c7b9.jpg",
+      "sha256": "4bb54c31398b9d52813b7a7abeb7fe80e7643ab5f369c3909259167ab0504055",
+      "source_group": "000056_airbag_mark_20260923_085902_487_cb6c88c7b9",
+      "box": [
+        324,
+        88,
+        962,
+        624
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000001_airbag_mark_20260923_090008_327_627ce8d513.jpg",
+      "sha256": "ee3ba3cded2206899992d38398bff3f556a619690b7ec7540ee9b1ad67764c76",
+      "source_group": "000001_airbag_mark_20260923_090008_327_627ce8d513",
+      "box": [
+        561,
+        84,
+        950,
+        436
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000022_airbag_mark_20260923_085905_416_7834171ae0.jpg",
+      "sha256": "4824de8f07d55a3af0f706ed719831806e43b860d9b374f3c4b85b40e2cc6feb",
+      "source_group": "000022_airbag_mark_20260923_085905_416_7834171ae0",
+      "box": [
+        258,
+        76,
+        1001,
+        631
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000086_airbag_mark_20260923_090046_711_cabfd12439.jpg",
+      "sha256": "d84129e53f3e89df8318bcb173b733d64ae6ac6a85778ed15dd7abb3f7abee0d",
+      "source_group": "000086_airbag_mark_20260923_090046_711_cabfd12439",
+      "box": [
+        399,
+        91,
+        1053,
+        668
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000005_airbag_mark_20260923_085835_415_f7a009acad.jpg",
+      "sha256": "46e5c08735f392544e97cd84c1eb0f71504ec6a69f18238209ed7e68ca401fac",
+      "source_group": "000005_airbag_mark_20260923_085835_415_f7a009acad",
+      "box": [
+        583,
+        186,
+        1124,
+        667
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000100_airbag_mark_20260923_090017_830_7492e5d155.jpg",
+      "sha256": "762a1050f882509b20877bf0e8beeec4e70c091468cebac7e3f5f3da0e4eba0e",
+      "source_group": "000100_airbag_mark_20260923_090017_830_7492e5d155",
+      "box": [
+        26,
+        193,
+        482,
+        576
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000125_airbag_mark_20260923_090058_999_e5884df5f8.jpg",
+      "sha256": "0f04cbcae9b002070f0641c92893cda43cc32e55bd41ed92335984fa4a74da6e",
+      "source_group": "000125_airbag_mark_20260923_090058_999_e5884df5f8",
+      "box": [
+        28,
+        126,
+        656,
+        659
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000063_airbag_mark_20260923_085901_256_588ee0bd39.jpg",
+      "sha256": "09321479d2c6de6845aa9ab560294b13610ff53455e55ba9f81ef89524bb2290",
+      "source_group": "000063_airbag_mark_20260923_085901_256_588ee0bd39",
+      "box": [
+        344,
+        104,
+        946,
+        628
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000156_airbag_mark_20260923_085847_223_3558e02cbd.jpg",
+      "sha256": "360669f6ea4dfe8acfe4957246fb9f6eb6b36408d4b169ae813b2fc2eb5fe3fe",
+      "source_group": "000156_airbag_mark_20260923_085847_223_3558e02cbd",
+      "box": [
+        3,
+        25,
+        601,
+        532
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000094_airbag_mark_20260923_090013_271_a27f4da4c2.jpg",
+      "sha256": "ce7f001e71aafcdec3b41d510ef6321bd21e1808b9b219cb178cdc4ab4eb79ca",
+      "source_group": "000094_airbag_mark_20260923_090013_271_a27f4da4c2",
+      "box": [
+        491,
+        253,
+        886,
+        609
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000117_airbag_mark_20260923_090107_911_e305994251.jpg",
+      "sha256": "3973329ac5ba967b315ed4962c24d6fccebe21be4861cff5de55eaa1b59261a6",
+      "source_group": "000117_airbag_mark_20260923_090107_911_e305994251",
+      "box": [
+        581,
+        11,
+        1187,
+        548
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000202_airbag_mark_20260923_090041_447_a2af6268be.jpg",
+      "sha256": "fc1df3e522040ec36ec952d13a14c1a411e4c752865850c3bbf227588dcd1616",
+      "source_group": "000202_airbag_mark_20260923_090041_447_a2af6268be",
+      "box": [
+        236,
+        80,
+        916,
+        679
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000188_airbag_mark_20260923_090054_872_17d05a3d51.jpg",
+      "sha256": "89ec53508e8ac27c02e07b10187071b936b77a9f29616f0691852e1fedb01a00",
+      "source_group": "000188_airbag_mark_20260923_090054_872_17d05a3d51",
+      "box": [
+        482,
+        182,
+        959,
+        620
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000187_airbag_mark_20260923_085934_343_634ef0f825.jpg",
+      "sha256": "2edeff8ef1d5f91968e8a680c0949dbe8c2f33406ad1201cf6634446852d04d1",
+      "source_group": "000187_airbag_mark_20260923_085934_343_634ef0f825",
+      "box": [
+        372,
+        92,
+        1048,
+        673
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000022_airbag_mark_20260923_090018_199_cc04780328.jpg",
+      "sha256": "1cbc95369287fe5c32319eceb42e066adda03de4bf9cd95b3dc65dd04eeb3876",
+      "source_group": "000022_airbag_mark_20260923_090018_199_cc04780328",
+      "box": [
+        76,
+        160,
+        521,
+        547
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000098_airbag_mark_20260923_085851_063_f8c2ed11e2.jpg",
+      "sha256": "f432f69b8051377d37af291e3f9da641297d5ecf899714149205db2d1edcac27",
+      "source_group": "000098_airbag_mark_20260923_085851_063_f8c2ed11e2",
+      "box": [
+        264,
+        6,
+        820,
+        496
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000009_airbag_mark_20260923_085842_679_adbd4aee69.jpg",
+      "sha256": "a64a0b5f2e317522b7bda852424171cb5e72cd529c645f124cec6500a86c047d",
+      "source_group": "000009_airbag_mark_20260923_085842_679_adbd4aee69",
+      "box": [
+        108,
+        202,
+        672,
+        708
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000103_airbag_mark_20260923_085848_167_765a74b574.jpg",
+      "sha256": "7212375cee456a582025ac5686b8a6f80f3ef7c238a391fd53a64c6583c360ae",
+      "source_group": "000103_airbag_mark_20260923_085848_167_765a74b574",
+      "box": [
+        79,
+        14,
+        658,
+        515
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000008_airbag_mark_20260923_090024_247_9ef850e173.jpg",
+      "sha256": "3be7e39a0371b5dc5ef37b104f7154d730cb7513c06723190f025bde4e425f66",
+      "source_group": "000008_airbag_mark_20260923_090024_247_9ef850e173",
+      "box": [
+        397,
+        223,
+        834,
+        632
+      ]
+    }
+  ],
+  "excluded": [
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000004_airbag_mark_20260923_085930_327_55129447a1.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000006_airbag_mark_20260923_085957_766_fa284478da.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000010_airbag_mark_20260923_085948_758_3f29530a6d.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\test\\images\\000012_airbag_mark_20260923_085953_032_b57cce2df1.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000004_airbag_mark_20260923_085924_679_b4df056f2b.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000007_airbag_mark_20260923_085958_199_058ff35dd3.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000008_airbag_mark_20260923_085942_246_8c61351850.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000015_airbag_mark_20260923_085945_223_f8c6a51230.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000016_airbag_mark_20260923_085931_672_6894e6629e.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000019_airbag_mark_20260923_085915_911_326d00e818.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000023_airbag_mark_20260923_085853_367_e6fb540f23.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        437,
+        0,
+        996,
+        493
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000025_airbag_mark_20260923_085958_711_ceed051b66.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000027_airbag_mark_20260923_090101_239_a25a09251d.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        199,
+        149,
+        840,
+        719
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000029_airbag_mark_20260923_085921_912_dc9f89da14.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000033_airbag_mark_20260923_085911_336_d3f272a73c.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000036_airbag_mark_20260923_085931_000_b0205d568b.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000053_airbag_mark_20260923_085914_231_cbd9837532.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000066_airbag_mark_20260923_085957_303_8b5022e5e3.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000067_airbag_mark_20260923_085948_120_b7ffc5e95b.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000073_airbag_mark_20260923_085841_223_40b1351fba.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        204,
+        230,
+        763,
+        720
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000077_airbag_mark_20260923_085955_368_b7e030a757.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000082_airbag_mark_20260923_090002_982_c0095e4499.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        11,
+        1,
+        499,
+        406
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000102_airbag_mark_20260923_085928_488_e2e4126dfb.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        0,
+        0,
+        54,
+        331
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000107_airbag_mark_20260923_085923_287_a743aeebbc.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        1,
+        525,
+        224,
+        719
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000116_airbag_mark_20260923_085922_615_1a8f226b49.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        1,
+        550,
+        209,
+        720
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000118_airbag_mark_20260923_085912_328_9573f4d5de.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000119_airbag_mark_20260923_085916_647_aee95108f4.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000123_airbag_mark_20260923_085915_063_56533ae9d4.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000128_airbag_mark_20260923_090017_431_9cf0868a7d.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        1,
+        256,
+        450,
+        640
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000129_airbag_mark_20260923_085920_983_a69bb3594b.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000132_airbag_mark_20260923_085925_382_c538f3bdd2.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000137_airbag_mark_20260923_085929_128_7b7cb7ca17.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000146_airbag_mark_20260923_090107_224_7061edd3a3.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000148_airbag_mark_20260923_090104_041_f56d6e857e.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000150_airbag_mark_20260923_085917_481_9b90d35415.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000158_airbag_mark_20260923_085927_495_ad66c9bdf4.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000159_airbag_mark_20260923_085919_719_d9487150bd.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000161_airbag_mark_20260923_085946_298_12fce608bd.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000166_airbag_mark_20260923_085949_463_442fa1457c.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000169_airbag_mark_20260923_085853_735_3cdb4d7a60.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        469,
+        0,
+        1025,
+        493
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000170_airbag_mark_20260923_085929_624_ed433cbc7f.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000176_airbag_mark_20260923_090059_398_0d8f80fb5a.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        0,
+        23,
+        646,
+        605
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000181_airbag_mark_20260923_085945_754_2964e1fae3.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000192_airbag_mark_20260923_085926_055_ac1817fcb1.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000196_airbag_mark_20260923_085940_183_cc878ee6f2.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000198_airbag_mark_20260923_090003_622_c302bba5f2.jpg",
+      "reason": "part_clipped_by_frame",
+      "box": [
+        66,
+        0,
+        528,
+        388
+      ]
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000201_airbag_mark_20260923_085923_958_99b4157418.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000211_airbag_mark_20260923_085953_495_f076b62a5c.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\train\\images\\000212_airbag_mark_20260923_085947_497_d3ee1fc065.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000005_airbag_mark_20260923_085918_039_f7f10698f2.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000018_airbag_mark_20260923_085912_903_28ddb8d4e4.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000024_airbag_mark_20260923_085918_552_d5fdd9f6b6.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000030_airbag_mark_20260923_085920_343_629276f6a2.jpg",
+      "reason": "no_part"
+    },
+    {
+      "path": "D:\\Users\\dev06\\Desktop\\Airbag_Project\\05_train_new_object\\01_yolov8_exports\\Airbag_Toyota\\20260929_153627_auto_split\\valid\\images\\000040_airbag_mark_20260923_085926_760_91a67d471c.jpg",
+      "reason": "no_part"
+    }
+  ],
+  "validation_scores": [
+    1.1251531839370728,
+    1.004846215248108,
+    1.0105202198028564,
+    0.9049502611160278,
+    0.8103128671646118,
+    1.1276839971542358,
+    0.8147759437561035,
+    1.1072808504104614,
+    0.9510440826416016,
+    0.9263113141059875,
+    0.6659797430038452,
+    0.9970735311508179,
+    0.8025514483451843,
+    0.8239520192146301,
+    1.1915961503982544,
+    0.7702519297599792,
+    1.1337919235229492,
+    0.996873676776886,
+    0.6904897689819336,
+    1.187544822692871,
+    0.7896455526351929,
+    1.0734660625457764,
+    0.8054628372192383,
+    0.9361147880554199,
+    0.8212686777114868,
+    1.0130361318588257,
+    0.7288166284561157,
+    0.665777325630188,
+    1.1743146181106567,
+    2.0779078006744385,
+    1.0412750244140625,
+    0.7204239964485168,
+    0.8195826411247253,
+    0.9897631406784058,
+    0.7711058855056763,
+    1.1167309284210205,
+    2.3259825706481934,
+    0.9584752321243286,
+    0.6796526312828064,
+    0.7533599734306335,
+    0.7017940878868103,
+    0.811404824256897
+  ],
+  "threshold": 3.241011543273926,
+  "roi_policy": "shared_runtime_locator_complete_part"
+}

@@ -1,0 +1,25 @@
+{
+  "model_path": "D:\\Users\\is00001\\Desktop\\YOLO\\Airbag_Project\\models\\Airbag_Mark_best.pt",
+  "classes": [
+    "Airbag",
+    "Mark"
+  ],
+  "project_name": "Airbag Detector",
+  "train_log": "D:\\Users\\is00001\\Desktop\\YOLO\\Airbag_Project\\07_web_app\\logs\\train_jobs\\20260624_120910_airbag_detector.log",
+  "previous_detector_model": "D:\\Users\\is00001\\Desktop\\YOLO\\Airbag_Project\\05_train_new_object\\03_output\\Airbag_Mark_yolov8_combined\\runs\\detect\\Airbag_Mark_yolov8_train\\weights\\best.pt",
+  "activated_at": "2026-06-25T10:20:07",
+  "validation": {
+    "ok": true,
+    "path": "D:\\Users\\is00001\\Desktop\\YOLO\\Airbag_Project\\models\\Airbag_Mark_best.pt",
+    "classes": [
+      "Airbag",
+      "Mark"
+    ],
+    "expected_classes": [
+      "Airbag",
+      "Mark"
+    ],
+    "error": "",
+    "checked_at": "2026-06-25T10:20:07"
+  }
+}
